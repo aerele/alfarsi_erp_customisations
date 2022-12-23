@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include alfarsi_erp_customisations *.css
+recursive-include alfarsi_erp_customisations *.csv
+recursive-include alfarsi_erp_customisations *.html
+recursive-include alfarsi_erp_customisations *.ico
+recursive-include alfarsi_erp_customisations *.js
+recursive-include alfarsi_erp_customisations *.json
+recursive-include alfarsi_erp_customisations *.md
+recursive-include alfarsi_erp_customisations *.png
+recursive-include alfarsi_erp_customisations *.py
+recursive-include alfarsi_erp_customisations *.svg
+recursive-include alfarsi_erp_customisations *.txt
+recursive-exclude alfarsi_erp_customisations *.pyc
