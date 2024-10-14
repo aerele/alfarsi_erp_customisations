@@ -17,7 +17,7 @@ def custom_make_packing_slip(source_name, target_doc=None):
 			"Delivery Note": {
 				"doctype": "Packing Slip",
 				"field_map": {"name": "delivery_note", "letter_head": "letter_head"},
-                "validation": {"docstatus": ["in", [0, 1]]},
+				"validation": {"docstatus": ["in", [0, 1]]},
 			},
 			"Delivery Note Item": {
 				"doctype": "Packing Slip Item",
