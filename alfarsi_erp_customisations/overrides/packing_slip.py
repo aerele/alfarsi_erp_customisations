@@ -2,10 +2,10 @@ import frappe
 from erpnext.stock.doctype.packing_slip.packing_slip import PackingSlip
 
 class CustomPackingSlip(PackingSlip):
-    def validate_delivery_note(self):
+	def validate_delivery_note(self):
 		pass
 
-    def validate_items(self):
+	def validate_items(self):
 		for item in self.items:
 			if item.qty <= 0:
 				frappe.throw(_("Row {0}: Qty must be greater than 0.").format(item.idx))

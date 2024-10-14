@@ -30,8 +30,8 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {
-                "Delivery Note": "public/js/delivery_note.js",
-            }
+				"Delivery Note": "public/js/delivery_note.js",
+			}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -62,7 +62,7 @@ doctype_js = {
 #	"filters": "alfarsi_erp_customisations.utils.jinja_filters"
 # }
 jinja = {
-    "methods": "erpnext.accounts.party.get_dashboard_info"
+	"methods": "erpnext.accounts.party.get_dashboard_info"
 }
 
 # Installation
