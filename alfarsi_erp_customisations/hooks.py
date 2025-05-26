@@ -119,9 +119,9 @@ override_doctype_class = {
 # ---------------
 
 # scheduler_events = {
-#	"all": [
-#		"alfarsi_erp_customisations.tasks.all"
-#	],
+	# "0 20 * * *": [
+	# 		"alfarsi_erp_customisations.scheduler_events.daily_customer_visit_report_mail.send_daily_customer_visit_reports"
+	# 	]
 #	"daily": [
 #		"alfarsi_erp_customisations.tasks.daily"
 #	],
@@ -135,6 +135,14 @@ override_doctype_class = {
 #		"alfarsi_erp_customisations.tasks.monthly"
 #	],
 # }
+
+scheduler_events = {
+	"cron": {
+		"0 20 * * *": [
+			"alfarsi_erp_customisations.scheduler_events.daily_customer_visit_report_mail.send_daily_customer_visit_reports"
+		]
+	},
+}
 
 # Testing
 # -------

@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-26 15:24:01.893907",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "objective_of_the_visitmeeting",
+  "outcome_of_the_visitmeeting",
+  "action_plan",
+  "next_week_plan"
+ ],
+ "fields": [
+  {
+   "fieldname": "objective_of_the_visitmeeting",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Objective Of The Visit/Meeting"
+  },
+  {
+   "fieldname": "outcome_of_the_visitmeeting",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Outcome Of The Visit/Meeting"
+  },
+  {
+   "fieldname": "action_plan",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Action Plan"
+  },
+  {
+   "fieldname": "next_week_plan",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Next Week Plan"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-26 15:24:39.746811",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Daily Visit Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
