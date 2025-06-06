@@ -11,7 +11,6 @@ def send_daily_customer_visit_reports():
     )
 
     distinct_employees = list({v["employee"] for v in visits if v["employee"]})
-    print("employees :", distinct_employees)
     for employee in distinct_employees:
         data = frappe.db.sql("""
             SELECT
@@ -60,12 +59,11 @@ def send_daily_customer_visit_reports():
             </table>
         """
         
-        print("HTML Table : ",html_table)
-        # frappe.sendmail(
-        #     recipients=["anto@alfarsi.me", "afsalsyed12@gmail.com"], # "vinod@alfarsi.me", "director@alfarsi.me"
-        #     subject=f"Customer Visit Report – {employee} – {current_date}",
-        #     message=f"""
-        #         <p>Daily Customer Visit Report for <strong>{employee}</strong> on <strong>{current_date}</strong>:</p>
-        #         {html_table}
-        #     """
-        # )
+        frappe.sendmail(
+            recipients=["anto@alfarsi.me", "afsalsyed12@gmail.com"], # "vinod@alfarsi.me", "director@alfarsi.me"
+            subject=f"Customer Visit Report – {employee} – {current_date}",
+            message=f"""
+                <p>Daily Customer Visit Report for <strong>{employee}</strong> on <strong>{current_date}</strong>:</p>
+                {html_table}
+            """
+        )
