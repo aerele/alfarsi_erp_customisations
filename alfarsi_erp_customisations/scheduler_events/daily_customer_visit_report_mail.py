@@ -11,14 +11,13 @@ def send_daily_customer_visit_reports():
     )
 
     distinct_employees = list({v["employee"] for v in visits if v["employee"]})
-    print("employees :", distinct_employees)
     for employee in distinct_employees:
         data = frappe.db.sql("""
             SELECT
                 cv.name AS "Customer Visit ID",
                 cv.date_and_time AS "Date",
                 cv.employee_name AS "Employee Name",
-                cv.reference_name AS "Customer Name",
+                CONCAT(c.name, ' - ', c.customer_name) AS "Customer Name",
                 cv.territory AS "Territory",
                 cv.division AS "Division",
                 dvd.objective_of_the_visitmeeting AS "Objective",
@@ -30,6 +29,7 @@ def send_daily_customer_visit_reports():
                 `tabCustomer Visit` cv
             LEFT JOIN `tabDaily Visit Details` dvd ON dvd.parent = cv.name
             LEFT JOIN `tabCustomer Visit Items` ci ON ci.parent = cv.name
+            LEFT JOIN `tabCustomer` c ON c.name = cv.reference_name
             WHERE
                 cv.docstatus = 1
                 AND cv.employee = %(employee)s
@@ -60,12 +60,11 @@ def send_daily_customer_visit_reports():
             </table>
         """
         
-        print("HTML Table : ",html_table)
-        # frappe.sendmail(
-        #     recipients=["anto@alfarsi.me", "afsalsyed12@gmail.com"], # "vinod@alfarsi.me", "director@alfarsi.me"
-        #     subject=f"Customer Visit Report – {employee} – {current_date}",
-        #     message=f"""
-        #         <p>Daily Customer Visit Report for <strong>{employee}</strong> on <strong>{current_date}</strong>:</p>
-        #         {html_table}
-        #     """
-        # )
+        frappe.sendmail(
+            recipients=["anto@alfarsi.me", "vinod@alfarsi.me", "director@alfarsi.me" ],
+            subject=f"Customer Visit Report - {employee} - {data[0].get('Employee Name')} - {current_date}",
+            message=f"""
+                <p>Daily Customer Visit Report for <strong>{employee} - {data[0].get('Employee Name')}</strong> on <strong>{current_date}</strong>:</p>
+                {html_table}
+            """
+        )
