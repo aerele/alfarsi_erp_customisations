@@ -15,7 +15,8 @@
   "account_country",
   "version",
   "column_break_fvgh",
-  "enabled"
+  "enabled",
+  "country_code"
  ],
  "fields": [
   {
@@ -77,11 +78,17 @@
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": " Enabled"
+  },
+  {
+   "fetch_from": "account_country.code",
+   "fieldname": "country_code",
+   "fieldtype": "Data",
+   "label": "Country Code"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-31 09:06:53.117552",
+ "modified": "2025-07-31 17:26:32.529221",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Aramex",
