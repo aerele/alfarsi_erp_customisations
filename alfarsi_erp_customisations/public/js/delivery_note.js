@@ -37,7 +37,7 @@ frappe.ui.form.on("Delivery Note", {
 							read_only: 1,
 							in_list_view: 1,
 							label: "Item Name",
-							columns: 5,
+							columns: 4,
 						},
 						{
 							fieldtype: "Data",
@@ -45,7 +45,7 @@ frappe.ui.form.on("Delivery Note", {
 							read_only: 1,
 							in_list_view: 1,
 							columns: 1,
-							label: "Qctual Qty",
+							label: "Actual Qty",
 						},
 						{
 							fieldtype: "Link",
