@@ -141,6 +141,13 @@ frappe.ui.form.on("Delivery Note", {
 				in_list_view: 1,
 				label: "Batch",
 			},
+			{
+				fieldtype: "Link",
+				fieldname: "serial_no",
+				options: "Serial No",
+				in_list_view: 1,
+				label: "Serial No",
+			},
 		];
 		let dialog = new frappe.ui.Dialog({
 			title: __("Intercompany Stock Transfer"),
