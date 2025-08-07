@@ -150,10 +150,10 @@ frappe.ui.form.on("Delivery Note", {
 				options: "Batch",
 				in_list_view: 1,
 				label: "Batch",
-				get_query: () => {
+				get_query: (e) => {
 					return {
 						filters: {
-							item: ["in", items_code],
+							item: e.item_code,
 						},
 					};
 				},
@@ -180,6 +180,8 @@ frappe.ui.form.on("Delivery Note", {
 			primary_action: function () {
 				var data = dialog.get_value("intercompany_stock_transfer");
 				frappe.call({
+					freeze: true,
+					freeze_message: __("Intercompany Stock Transferring"),
 					method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.intercompany_stock_transfer.intercompany_stock_transfer.creat_intercompany_stock_transfer",
 					args: {
 						transfer_details: data,

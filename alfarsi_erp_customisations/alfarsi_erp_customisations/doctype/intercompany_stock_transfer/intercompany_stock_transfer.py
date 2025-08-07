@@ -134,7 +134,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn):
                 material_receipt_doc.stock_entry_type = "Material Receipt"
                 material_receipt_doc.company = in_company
                 material_receipt_doc.posting_date = posting_date
-                material_issue_doc.remarks = f"Material Receipt is done by {frappe.session.user} in reference to {dn} "
+                material_receipt_doc.remarks = f"Material Receipt is done by {frappe.session.user} in reference to {dn} "
 
                 material_receipt_doc.append(
                     "items",
@@ -153,7 +153,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn):
                 material_receipt_doc.save(ignore_permissions=True)
                 material_receipt_doc.submit()
         except Exception as e:
-            frappe.throw(e)
+            frappe.throw(str(e))
         return "Completed"
 
     else:
