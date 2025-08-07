@@ -6,7 +6,7 @@ frappe.ui.form.on("Delivery Note", {
 				function () {
 					frappe.model.open_mapped_doc({
 						method: "alfarsi_erp_customisations.overrides.delivery_note.custom_make_packing_slip",
-						frm: me.frm
+						frm: me.frm,
 					});
 				},
 				__("Create")
@@ -100,6 +100,10 @@ frappe.ui.form.on("Delivery Note", {
 		});
 	},
 	custom_intercompany_stock_transfer: function (frm) {
+		var items_code = [];
+		for (let index = 0; index < frm.doc.items.length; index++) {
+			items_code.push(frm.doc.items[index].item_code);
+		}
 		const fields = [
 			{
 				fieldtype: "Link",
@@ -109,7 +113,6 @@ frappe.ui.form.on("Delivery Note", {
 				label: "From Warehouse",
 				reqd: 1,
 			},
-
 			{
 				fieldtype: "Link",
 				fieldname: "t_warehouse",
@@ -125,6 +128,13 @@ frappe.ui.form.on("Delivery Note", {
 				in_list_view: 1,
 				label: "Item Code",
 				reqd: 1,
+				get_query: () => {
+					return {
+						filters: {
+							name: ["in", items_code],
+						},
+					};
+				},
 			},
 			{
 				fieldtype: "Float",
@@ -140,9 +150,16 @@ frappe.ui.form.on("Delivery Note", {
 				options: "Batch",
 				in_list_view: 1,
 				label: "Batch",
+				get_query: () => {
+					return {
+						filters: {
+							item: ["in", items_code],
+						},
+					};
+				},
 			},
 			{
-				fieldtype: "Link",
+				fieldtype: "Text",
 				fieldname: "serial_no",
 				options: "Serial No",
 				in_list_view: 1,
@@ -166,8 +183,14 @@ frappe.ui.form.on("Delivery Note", {
 					method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.intercompany_stock_transfer.intercompany_stock_transfer.creat_intercompany_stock_transfer",
 					args: {
 						transfer_details: data,
+						dn: frm.doc.name,
 					},
-					callback: function (r) {},
+					callback: function (r) {
+						if (r.message) {
+							dialog.hide();
+							frappe.msgprint(r.message);
+						}
+					},
 				});
 			},
 			primary_action_label: __("Stock Transfer"),
