@@ -1,7 +1,7 @@
 import frappe
 
-@frappe.whitelist()
-def enqueue_recommended_updates(batch_size=4000):
+def execute():
+    batch_size=4000
     group_recc = {
         "A-Silicone": ["WEB-ITM-4476", "WEB-ITM-4477", "WEB-ITM-7902", "WEB-ITM-7904"],
         "Absorbent Paper Points": [
