@@ -1,7 +1,7 @@
 frappe.ui.form.on('Quotation', {
     refresh: function (frm) {
         if(frm.doc.docstatus == 0 && frm.doc.medusa_quotation_id) {
-		frm.add_custom_button(__('Get Last Purchase Rate'), function(){
+		frm.add_custom_button(__('Get Last Sales Rate'), function(){
 			frappe.call({
 				method: "alfarsi_erp_customisations.public.py.last_purchase_rate_in_quotation.get_last_purchase_rates",
 				args: {
