@@ -1,0 +1,57 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-06 11:35:23.717787",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enable",
+  "table_npbv",
+  "role_allowed_to_transfer"
+ ],
+ "fields": [
+  {
+   "fieldname": "table_npbv",
+   "fieldtype": "Table",
+   "options": "Intercompany Stock Transfer Table"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable"
+  },
+  {
+   "fieldname": "role_allowed_to_transfer",
+   "fieldtype": "Table MultiSelect",
+   "label": "Role Allowed To Transfer",
+   "mandatory_depends_on": "eval:doc.enable",
+   "options": "Role Allowed To Transfer Table"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-08-22 12:49:42.307302",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Intercompany Stock Transfer",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
