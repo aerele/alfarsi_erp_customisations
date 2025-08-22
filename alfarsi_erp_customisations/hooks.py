@@ -31,6 +31,7 @@ app_license = "MIT"
 # include js in doctype views
 doctype_js = {
 				"Delivery Note": "public/js/delivery_note.js",
+                "Quotation": "public/js/quotation.js"
 			}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -115,8 +116,22 @@ override_doctype_class = {
 #	}
 # }
 
+doc_events = {
+	"Leave Application": {
+		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
+	}
+}
+
 # Scheduled Tasks
 # ---------------
+
+scheduler_events = {
+	"cron": {
+        "0 8 * * SAT": [
+            "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
+		]
+	},
+}
 
 # scheduler_events = {
 #	"all": [
