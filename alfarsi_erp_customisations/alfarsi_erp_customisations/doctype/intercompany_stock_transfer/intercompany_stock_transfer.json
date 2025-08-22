@@ -6,7 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "enable",
-  "table_npbv"
+  "table_npbv",
+  "role_allowed_to_transfer"
  ],
  "fields": [
   {
@@ -19,13 +20,20 @@
    "fieldname": "enable",
    "fieldtype": "Check",
    "label": "Enable"
+  },
+  {
+   "fieldname": "role_allowed_to_transfer",
+   "fieldtype": "Table MultiSelect",
+   "label": "Role Allowed To Transfer",
+   "mandatory_depends_on": "eval:doc.enable",
+   "options": "Role Allowed To Transfer Table"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-06 11:47:38.667456",
+ "modified": "2025-08-22 12:49:42.307302",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Intercompany Stock Transfer",

@@ -37,7 +37,7 @@ frappe.ui.form.on("Delivery Note", {
 							read_only: 1,
 							in_list_view: 1,
 							label: "Item Name",
-							columns: 4,
+							columns: 1,
 						},
 						{
 							fieldtype: "Data",
@@ -48,12 +48,37 @@ frappe.ui.form.on("Delivery Note", {
 							label: "Actual Qty",
 						},
 						{
+							fieldtype: "Data",
+							fieldname: "transfer_qty",
+							in_list_view: 1,
+							columns: 1,
+							label: "Transfer_qty",
+						},
+						{
+							fieldtype: "Link",
+							fieldname: "batch_no",
+							read_only: 1,
+							in_list_view: 1,
+							columns: 1,
+							options: "Batch",
+							label: "Batch",
+						},
+						{
+							fieldtype: "Data",
+							fieldname: "expiry_date",
+							read_only: 1,
+							in_list_view: 1,
+							label: "Expiry Date",
+							columns: 1,
+						},
+						{
 							fieldtype: "Link",
 							fieldname: "warehouse",
 							read_only: 1,
 							in_list_view: 1,
 							options: "warehouse",
 							label: "Warehouse",
+							columns: 1,
 						},
 						{
 							fieldtype: "Link",
@@ -62,16 +87,65 @@ frappe.ui.form.on("Delivery Note", {
 							in_list_view: 1,
 							options: "Company",
 							label: "Company",
+							columns: 1,
+						},
+						{
+							fieldtype: "Link",
+							fieldname: "to_warehouse",
+							label: "To Warehouse",
+							options: "Warehouse",
+							columns: 1,
+
+							in_list_view: 1,
+							get_query: (e) => {
+								return {
+									filters: {
+										company: frm.doc.company,
+									},
+								};
+							},
+						},
+						{
+							fieldtype: "Data",
+							fieldname: "supplier_batch_no",
+							read_only: 1,
+							label: "Supplier Batch No",
+							columns: 1,
+						},
+						{
+							fieldtype: "Link",
+							fieldname: "serial_no",
+							read_only: 1,
+							in_list_view: 1,
+							columns: 1,
+							options: "Serial No",
+							label: "Serial No",
+						},
+						{
+							fieldtype: "Data",
+							fieldname: "custom_supplier_serial_no",
+							read_only: 1,
+							label: "Supplier Serial No",
 						},
 					];
 					var data = r.message.map((d) => {
-						return {
+						var return_value = {
 							item_code: d.item_code,
 							actual_qty: d.actual_qty,
 							warehouse: d.warehouse,
 							company: d.company,
 							item_name: d.item_name,
+							batch_no: d.batch_no,
+							supplier_batch_no: d.supplier_batch_no,
+							expiry_date: d.expiry_date,
+							to_warehouse: d.to_warehouse,
+							serial_no: d.serial_no,
+							custom_supplier_serial_no: d.custom_supplier_serial_no,
 						};
+						if (d.serial_no) {
+							return_value["transfer_qty"] = 1;
+						}
+						return return_value;
 					});
 
 					let dialog = new frappe.ui.Dialog({
@@ -79,7 +153,6 @@ frappe.ui.form.on("Delivery Note", {
 						size: "extra-large",
 						fields: [
 							{
-								read_only: 1,
 								fieldname: "stock_in_other_companies",
 								fieldtype: "Table",
 								label: "Items",
@@ -92,6 +165,55 @@ frappe.ui.form.on("Delivery Note", {
 								fields: fields,
 							},
 						],
+						primary_action: function () {
+							var data =
+								cur_dialog.fields_dict[
+									"stock_in_other_companies"
+								].grid.get_selected_children();
+							if (!(data.length > 0)) {
+								frappe.throw("select atleast one row to transfer");
+							}
+							var throw_message = "";
+							for (let index = 0; index < data.length; index++) {
+								if (!data[index]["transfer_qty"]) {
+									throw_message =
+										throw_message +
+										"Transfer Qty  is Missing in Row " +
+										(index + 1).toString() +
+										"<br>";
+								}
+								if (
+									data[index]["transfer_qty"] &&
+									data[index]["transfer_qty"] > data[index]["actual_qty"]
+								) {
+									throw_message =
+										throw_message +
+										"Transfer Qty  Can not greater than Qctual Qty Row " +
+										(index + 1).toString() +
+										"<br>";
+								}
+							}
+							if (throw_message) {
+								frappe.throw(throw_message);
+							}
+							frappe.call({
+								freeze: true,
+								freeze_message: __("Intercompany Stock Transferring"),
+								method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.intercompany_stock_transfer.intercompany_stock_transfer.creat_intercompany_stock_transfer",
+								args: {
+									transfer_details: data,
+									dn: frm.doc.name,
+									in_company: frm.doc.company,
+								},
+								callback: function (r) {
+									if (r.message) {
+										dialog.hide();
+										frappe.msgprint(r.message);
+									}
+								},
+							});
+						},
+						primary_action_label: __("Stock Transfer"),
 					});
 
 					dialog.show();
