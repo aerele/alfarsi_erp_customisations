@@ -1,26 +1,26 @@
 import frappe
+from frappe import _
+from frappe.utils import get_url_to_form
 
-def check_dn(doc, method):
+def validate_return_delivery_note(doc, method=None):
     if doc.is_return:
-        delivery_notes = frappe.db.sql(
-            """
-            SELECT DISTINCT soi.delivery_note 
-            FROM `tabSales Invoice Item` soi
-            WHERE soi.parent = %s
-        """,
-            (doc.name,),
-            as_dict=True,
-        )
-        if not delivery_notes:
-            return
+        delivery_notes = frappe.get_all("Sales Invoice Item", {"parent": doc.name}, pluck="delivery_note")
+        missing_return_dns = []
         for delivery_note in delivery_notes:
-            dn_name = delivery_note.get("delivery_note")
-            if not dn_name:
-                continue
-            return_dn = frappe.db.get_value(
+            dn_return = frappe.db.get_value(
                 "Delivery Note",
-                {"return_against": dn_name, "is_return": 1},
+                {"return_against": delivery_note, "is_return": 1, "docstatus": 1},
                 "name"
             )
-            if not return_dn:
-               frappe.throw("Delivery Note {0} has no return Delivery Note".format(dn_name))
+            if not dn_return:
+                url = get_url_to_form("Delivery Note", delivery_note)
+                link = f'<a href="{url}">{delivery_note}</a>'
+                if not link in missing_return_dns:
+                    missing_return_dns.append(link)
+        if missing_return_dns:
+            frappe.throw(
+                _("The following Delivery Notes have no return Delivery Note:<br>{0}").format("<br>".join(missing_return_dns)),
+                title=_("Missing Return Delivery Notes")
+            )
+        if not doc.custom_return_approved_by_management:
+            frappe.throw(_("Sales Invoice Return has not been approved by Management"))
