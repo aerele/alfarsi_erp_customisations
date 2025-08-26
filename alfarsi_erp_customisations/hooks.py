@@ -119,6 +119,9 @@ override_doctype_class = {
 doc_events = {
 	"Leave Application": {
 		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
+	},
+    "Sales Invoice": {
+		"on_submit": "alfarsi_erp_customisations.public.py.sales_invoice.check_dn"
 	}
 }
 
