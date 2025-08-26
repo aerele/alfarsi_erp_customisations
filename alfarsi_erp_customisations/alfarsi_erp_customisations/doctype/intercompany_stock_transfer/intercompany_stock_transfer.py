@@ -36,19 +36,14 @@ class IntercompanyStockTransfer(Document):
             error += "<br>Company Cannot repeat<br>"
         if error:
             frappe.throw(error)
-        if self.role_allowed_to_transfer:
-            for role in self.role_allowed_to_transfer:
-                add_permission("Delivery Note", role.get("role"), 3)
-                update_permission_property(
-                    "Delivery Note", role.get("role"), 3, "read", 1
-                )
-                update_permission_property(
-                    "Delivery Note", role.get("role"), 3, "write", 1
-                )
 
 
 @frappe.whitelist()
 def get_stock_in_other_companies(item_list, current_company):
+    permeted_roles = frappe.get_all("Role Allowed To Transfer Table",{"parent":"Intercompany Stock Transfer"},["role"],pluck ="role")
+    session_role = frappe.get_all("Has Role", filters={"parent": frappe.session.user ,"role":["in",permeted_roles]}, fields=["role"],pluck ="role")
+    if not session_role:
+        frappe.throw("You Do Not Have Permission")
     item_list = json.loads(item_list)
 
     to_warehouse = {}
@@ -95,7 +90,6 @@ def get_stock_in_other_companies(item_list, current_company):
         )
         or []
     )
-    print(result, len(result))
 
     if result:
         new_result = []
@@ -144,7 +138,6 @@ def get_stock_in_other_companies(item_list, current_company):
             if append_flag and serial_no_flag:
                 new_result.append(details)
         result = new_result
-        print(result, len(result))
         return result
     frappe.msgprint("No Item Found  in another Company")
     return None
@@ -169,7 +162,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
                 "stock_in_account_booking",
             )
             if not in_expense_account:
-                frappe.thorw(
+                frappe.throw(
                     f"stock_in_account_booking not Founed in Intercompany Stock Transfer Table for Company {in_company}"
                 )
             material_receipt_doc = frappe.new_doc("Stock Entry")
@@ -177,7 +170,6 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
             material_receipt_doc.company = in_company
             material_receipt_doc.posting_date = posting_date
             material_receipt_doc.remarks = f"Material Receipt is done by {frappe.session.user} in reference to {dn} "
-            print("transfer_details", transfer_details)
             for transfer_detail in transfer_details:
                 transfer_detail_company = transfer_detail.get("company")
                 if transfer_detail_company in company_wise:
@@ -211,7 +203,6 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
             material_receipt_doc.save(ignore_permissions=True)
             material_receipt_doc.submit()
 
-            print(company_wise)
             for transfer_details in company_wise:
                 out_expense_account = frappe.db.get_value(
                     "Intercompany Stock Transfer Table",
@@ -222,7 +213,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
                     "stock_out_account_booking",
                 )
                 if not out_expense_account:
-                    frappe.thorw(
+                    frappe.throw(
                         f"stock_out_account_booking not Founed in Intercompany Stock Transfer Table for Company {transfer_details}"
                     )
                 if transfer_details == in_company:
@@ -233,7 +224,6 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
                 material_issue_doc.company = transfer_details
                 material_issue_doc.posting_date = posting_date
                 material_issue_doc.remarks = f"Material Issue is done by {frappe.session.user} in reference to {dn} "
-                print("company_wise[transfer_details]", company_wise[transfer_details])
                 for transfer_detail in company_wise[transfer_details]:
                     material_issue_doc.append(
                         "items",
