@@ -121,7 +121,7 @@ doc_events = {
 		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
 	},
     "Sales Invoice": {
-		"on_submit": "alfarsi_erp_customisations.public.py.sales_invoice.check_dn"
+		"on_submit": "alfarsi_erp_customisations.public.py.sales_invoice.validate_return_delivery_note"
 	}
 }
 
