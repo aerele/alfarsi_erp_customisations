@@ -32,7 +32,7 @@ def send_scheduled_sellout_mails():
 
             message = f"""
             <p>Hi Team,</p>
-            <p>Please find the attached sellout data.</p>
+            <p>Please find the attached sellout data for the month {add_months(today, -1).strftime("%B %Y")}.</p>
             {table}
             """
             frappe.sendmail(
@@ -42,6 +42,9 @@ def send_scheduled_sellout_mails():
                 message=message,
             )
         frappe.db.set_value("Brand Sellout Mail Settings", settings.name, "last_sent_on", getdate(nowdate()))
+        return {"success": True}
+
+    return {"success": False}
 
 def build_html_table(data):
     columns, rows = data

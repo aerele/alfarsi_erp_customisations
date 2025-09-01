@@ -7,10 +7,12 @@ frappe.ui.form.on('Brand Sellout Mail Settings', {
 			frappe.call({
 				method: "alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails",
 				callback: function(r) {
-					if (r.message) {
-						frappe.msgprint(r.message);
-					}
-				}
+                    if (r.message && r.message.success) {
+                        frappe.msgprint("Mail Sent Successfully");
+                    } else {
+                        frappe.msgprint("Mail not sent");
+                    }
+                }
 			})
 		})
 	}
