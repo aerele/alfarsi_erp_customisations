@@ -127,7 +127,8 @@ doc_events = {
 
 scheduler_events = {
     "daily": [
-		"alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"
+		"alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails",
+		"alfarsi_erp_customisations.public.py.update_operations_number_cards.update_operations_number_cards"
 	],
 	"cron": {
         "0 8 * * SAT": [

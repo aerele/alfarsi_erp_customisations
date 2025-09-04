@@ -1,0 +1,23 @@
+{
+ "creation": "2025-08-30 15:26:44.668434",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "dynamic_filters_json": "{}",
+ "filters_json": "{\n \"from_date\": \"2025-08-04\",\n \"to_date\": \"2025-09-04\"\n}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Total Sales Invoices",
+ "modified": "2025-09-04 14:50:14.751346",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Total Sales Invoices",
+ "owner": "Administrator",
+ "report_field": "total_sales_invoices",
+ "report_function": "Sum",
+ "report_name": "Sales person report for Sales Dashboard",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Report"
+}
