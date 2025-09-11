@@ -233,6 +233,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
                             "supplier_batch_no": transfer_detail.get(
                                 "supplier_batch_no"
                             ),
+                            "custom_supplier_serial_no":transfer_detail.get("custom_supplier_serial_no"),
                             "expiry_date": transfer_detail.get("expiry_date"),
                             "expense_account": out_expense_account,
                         },
