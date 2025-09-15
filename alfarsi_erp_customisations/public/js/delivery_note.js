@@ -14,7 +14,6 @@ frappe.ui.form.on("Delivery Note", {
 		}
 	},
 	custom_see_stock_in_other_companies: function (frm) {
-		if(frm.doc.docstatus ==0 && (!frm.doc.__unsaved)){	
 		frappe.call({
 			method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.intercompany_stock_transfer.intercompany_stock_transfer.get_stock_in_other_companies",
 			args: { item_list: frm.doc.items, current_company: frm.doc.company },
@@ -230,10 +229,6 @@ frappe.ui.form.on("Delivery Note", {
 				}
 			},
 		});
-		}
-		else{
-			frappe.throw("docstatus should be Draft and shoulder saved")
-		}
 	},
 	// custom_intercompany_stock_transfer: function (frm) {
 	// 	var items_code = [];
