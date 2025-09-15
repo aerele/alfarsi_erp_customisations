@@ -101,11 +101,8 @@ def get_stock_in_other_companies(item_list, current_company):
             )
             for details_batch_qty in add_to_result:
                 if details_batch_qty["qty"] > 0:
-                    expiry_date, supplier_batch_no = frappe.db.get_value(
-                        "Batch",
-                        details_batch_qty["batch_no"],
-                        ("expiry_date", "supplier_batch_no"),
-                    )
+                    expiry_date =frappe.db.get_value("Batch",details_batch_qty["batch_no"],"expiry_date")
+                    supplier_batch_no = frappe.db.get_value("Batch",details_batch_qty["batch_no"],"supplier_batch_no")
                     new_details = copy.deepcopy(details)
                     new_details["actual_qty"] = details_batch_qty["qty"]
                     new_details["batch_no"] = details_batch_qty["batch_no"]
