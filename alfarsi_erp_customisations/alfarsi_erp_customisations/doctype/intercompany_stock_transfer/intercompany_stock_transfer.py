@@ -207,7 +207,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in
             material_receipt_doc.save(ignore_permissions=True)
             if not create_in_draft:
                 material_receipt_doc.submit()
-            message += f"<br> <b>Material Receipt :{(get_link_to_form("Material Receipt",material_receipt_doc))} </b>"
+            message += f"""<br> <b>Material Receipt :{(get_link_to_form("Stock Entry",material_receipt_doc))} </b>"""
 
             for transfer_details in company_wise:
                 out_expense_account = frappe.db.get_value(
@@ -250,7 +250,7 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in
                 material_issue_doc.save(ignore_permissions=True)
                 if not create_in_draft:
                     material_issue_doc.submit()
-                message += f"<br> <b>Material Issue :{(get_link_to_form("Material Issue",material_receipt_doc))} </b>"
+                message += f"""<br> <b>Material Issue :{(get_link_to_form("Stock Entry",material_receipt_doc))} </b>"""
         except Exception as e:
             frappe.log_error(
                 title="creat_intercompany_stock_transfer",
