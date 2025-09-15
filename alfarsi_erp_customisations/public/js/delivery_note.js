@@ -127,6 +127,12 @@ frappe.ui.form.on("Delivery Note", {
 							read_only: 1,
 							label: "Supplier Serial No",
 						},
+						{
+							fieldtype: "Data",
+							fieldname: "reqired_qty",
+							read_only: 1,
+							label: "Reqired_qty",
+						},
 					];
 					var data = r.message.map((d) => {
 						var return_value = {
@@ -141,6 +147,7 @@ frappe.ui.form.on("Delivery Note", {
 							to_warehouse: d.to_warehouse,
 							serial_no: d.serial_no,
 							custom_supplier_serial_no: d.custom_supplier_serial_no,
+							reqired_qty:d.reqired_qty
 						};
 						if (d.serial_no) {
 							return_value["transfer_qty"] = 1;
@@ -153,6 +160,11 @@ frappe.ui.form.on("Delivery Note", {
 						size: "extra-large",
 						fields: [
 							{
+							fieldtype: "Check",
+							fieldname: "create_in_draft",
+							label: "Create In Draft",
+							default : 0},
+							{
 								fieldname: "stock_in_other_companies",
 								fieldtype: "Table",
 								label: "Items",
@@ -163,14 +175,7 @@ frappe.ui.form.on("Delivery Note", {
 									return data;
 								},
 								fields: fields,
-							},
-							{
-							fieldtype: "Check",
-							fieldname: "create_in_draft",
-							label: "Create In Draft",
-							default : 0
-
-						},
+							}
 						],
 						primary_action: function () {
 							var data =
@@ -182,7 +187,9 @@ frappe.ui.form.on("Delivery Note", {
 								frappe.throw("select atleast one row to transfer");
 							}
 							var throw_message = "";
+							var item_reqired_qty = {}
 							for (let index = 0; index < data.length; index++) {
+
 								if (!data[index]["transfer_qty"]) {
 									throw_message =
 										throw_message +
@@ -200,6 +207,29 @@ frappe.ui.form.on("Delivery Note", {
 										(index + 1).toString() +
 										"<br>";
 								}
+								if (data[index]["item_code"] in item_reqired_qty){
+									item_reqired_qty[data[index]["item_code"]]["transfer_qty"]+ data[index]["transfer_qty"]
+									if (item_reqired_qty[data[index]["item_code"]]["transfer_qty"] > item_reqired_qty[data[index]["item_code"]]["reqired_qty"])
+									{
+										throw_message =
+										throw_message +
+										"Transfer Qty  Can not greater than Reqired Qty Row " +
+										(index + 1).toString() +
+										"<br>";
+									}
+								}
+								else{
+									tem_reqired_qty[data[index]["item_code"]] = {"transfer_qty" :data[index]["transfer_qty"],"reqired_qty":  data[index]["reqired_qty"] }
+									if (item_reqired_qty[data[index]["item_code"]]["transfer_qty"] > item_reqired_qty[data[index]["item_code"]]["reqired_qty"])
+									{
+										throw_message =
+										throw_message +
+										"Transfer Qty  Can not greater than Reqired Qty Row " +
+										(index + 1).toString() +
+										"<br>";
+									}
+								}
+								
 							}
 							if (throw_message) {
 								frappe.throw(throw_message);

@@ -100,6 +100,7 @@ def get_stock_in_other_companies(item_list, current_company):
         new_result = []
         for details in result:
             details["to_warehouse"] = to_warehouse[details["item_code"]]
+            details["reqired_qty"] = reqired_qty.get(details["item_code"])
             append_flag = True
             add_to_result = get_batch_qty(
                 warehouse=details["warehouse"], item_code=details["item_code"]
@@ -146,9 +147,9 @@ def get_stock_in_other_companies(item_list, current_company):
 
 
 @frappe.whitelist()
-def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in_draft = False):
+def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in_draft):
     is_enable = frappe.db.get_singles_value("Intercompany Stock Transfer", "enable")
-
+    create_in_draft = int(create_in_draft)
     if is_enable:
         try:
             message =""
@@ -205,8 +206,6 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in
                     },
                 )
             material_receipt_doc.save(ignore_permissions=True)
-            if not create_in_draft:
-                material_receipt_doc.submit()
             message += f"""<br> <b>Material Receipt :{(get_link_to_form("Stock Entry",material_receipt_doc))} </b>"""
 
             for transfer_details in company_wise:
@@ -251,6 +250,8 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in
                 if not create_in_draft:
                     material_issue_doc.submit()
                 message += f"""<br> <b>Material Issue :{(get_link_to_form("Stock Entry",material_receipt_doc))} </b>"""
+            if not create_in_draft:
+                material_receipt_doc.submit()
         except Exception as e:
             frappe.log_error(
                 title="creat_intercompany_stock_transfer",
