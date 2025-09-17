@@ -10,7 +10,7 @@ from erpnext.stock.doctype.batch.batch import get_batch_qty
 from erpnext.stock.get_item_details import get_valuation_rate
 from frappe.model.document import Document
 from frappe.permissions import add_permission, update_permission_property
-
+from frappe.utils import get_link_to_form
 
 class IntercompanyStockTransfer(Document):
     def validate(self):
@@ -48,9 +48,14 @@ def get_stock_in_other_companies(item_list, current_company):
 
     to_warehouse = {}
     item_code_list = []
+    reqired_qty = {}
     for item_code in item_list:
-        item_code_list += [item_code["item_code"]]
-        to_warehouse[item_code["item_code"]] = item_code["warehouse"]
+        if item_code["qty"] > item_code["actual_qty"]:
+            item_code_list += [item_code["item_code"]]
+            to_warehouse[item_code["item_code"]] = item_code["warehouse"]
+            if item_code["item_code"] in reqired_qty:
+                reqired_qty[item_code["item_code"]] = reqired_qty[item_code["item_code"]] + (item_code["qty"] -  item_code["actual_qty"])
+            reqired_qty[item_code["item_code"]] = (item_code["qty"] -  item_code["actual_qty"])
     filter = ""
     company = frappe.get_all(
         "Intercompany Stock Transfer Table",
@@ -95,17 +100,15 @@ def get_stock_in_other_companies(item_list, current_company):
         new_result = []
         for details in result:
             details["to_warehouse"] = to_warehouse[details["item_code"]]
+            details["reqired_qty"] = reqired_qty.get(details["item_code"])
             append_flag = True
             add_to_result = get_batch_qty(
                 warehouse=details["warehouse"], item_code=details["item_code"]
             )
             for details_batch_qty in add_to_result:
                 if details_batch_qty["qty"] > 0:
-                    expiry_date, supplier_batch_no = frappe.db.get_value(
-                        "Batch",
-                        details_batch_qty["batch_no"],
-                        ("expiry_date", "supplier_batch_no"),
-                    )
+                    expiry_date =frappe.db.get_value("Batch",details_batch_qty["batch_no"],"expiry_date")
+                    supplier_batch_no = frappe.db.get_value("Batch",details_batch_qty["batch_no"],"supplier_batch_no")
                     new_details = copy.deepcopy(details)
                     new_details["actual_qty"] = details_batch_qty["qty"]
                     new_details["batch_no"] = details_batch_qty["batch_no"]
@@ -144,11 +147,12 @@ def get_stock_in_other_companies(item_list, current_company):
 
 
 @frappe.whitelist()
-def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
+def creat_intercompany_stock_transfer(transfer_details, dn, in_company,create_in_draft):
     is_enable = frappe.db.get_singles_value("Intercompany Stock Transfer", "enable")
-
+    create_in_draft = int(create_in_draft)
     if is_enable:
         try:
+            message =""
             transfer_details = json.loads(transfer_details)
             posting_date = date.today()
             posting_date = posting_date.strftime("%Y-%m-%d")
@@ -198,10 +202,11 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
                         "supplier_batch_no": transfer_detail.get("supplier_batch_no"),
                         "expense_account": in_expense_account,
                         "basic_rate": basic_rate,
+                        "custom_supplier_serial_no":transfer_detail.get("custom_supplier_serial_no"),
                     },
                 )
             material_receipt_doc.save(ignore_permissions=True)
-            material_receipt_doc.submit()
+            message += f"""<br> <b>Material Receipt :{(get_link_to_form("Stock Entry",material_receipt_doc))} </b>"""
 
             for transfer_details in company_wise:
                 out_expense_account = frappe.db.get_value(
@@ -236,19 +241,25 @@ def creat_intercompany_stock_transfer(transfer_details, dn, in_company):
                             "supplier_batch_no": transfer_detail.get(
                                 "supplier_batch_no"
                             ),
+                            "custom_supplier_serial_no":transfer_detail.get("custom_supplier_serial_no"),
                             "expiry_date": transfer_detail.get("expiry_date"),
                             "expense_account": out_expense_account,
                         },
                     )
                 material_issue_doc.save(ignore_permissions=True)
-                material_issue_doc.submit()
+                if not create_in_draft:
+                    material_issue_doc.submit()
+                message += f"""<br> <b>Material Issue :{(get_link_to_form("Stock Entry",material_receipt_doc))} </b>"""
+            if not create_in_draft:
+                material_receipt_doc.submit()
         except Exception as e:
             frappe.log_error(
                 title="creat_intercompany_stock_transfer",
                 message=frappe.get_traceback(with_context=1),
             )
-            frappe.throw(str(e))
-        return "Completed"
+        if not create_in_draft:
+            return "Intercompany Stock Transfer is Completed refer the documents"+message
+        return "Intercompany Stock Transfer documents are in Draft refer"+message
 
     else:
         frappe.throw("Intercompany Stock Transfer is disable")

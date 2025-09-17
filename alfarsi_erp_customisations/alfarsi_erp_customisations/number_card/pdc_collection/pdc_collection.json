@@ -1,0 +1,23 @@
+{
+ "creation": "2025-08-30 15:40:45.439296",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "dynamic_filters_json": "{}",
+ "filters_json": "{\n \"from_date\": \"2025-08-04\",\n \"to_date\": \"2025-09-04\"\n}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "PDC collection",
+ "modified": "2025-09-04 14:50:14.740971",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "PDC collection",
+ "owner": "Administrator",
+ "report_field": "pdc_collection",
+ "report_function": "Sum",
+ "report_name": "Sales person report for Sales Dashboard",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Report"
+}

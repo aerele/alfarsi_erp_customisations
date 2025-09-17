@@ -1,0 +1,41 @@
+{
+ "chart_name": "Sales person Activities",
+ "chart_type": "Report",
+ "creation": "2025-08-30 15:24:16.771707",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "dynamic_filters_json": "{\"from_date\":\"frappe.datetime.add_days(frappe.datetime.get_today(), -30)\",\"to_date\":\"frappe.datetime.get_today()\"}",
+ "filters_json": "{}",
+ "group_by_type": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "modified": "2025-08-30 15:46:17.986852",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Sales person Activities",
+ "number_of_groups": 0,
+ "owner": "Administrator",
+ "report_name": "Sales person report for Sales Dashboard",
+ "roles": [],
+ "time_interval": "Yearly",
+ "timeseries": 0,
+ "timespan": "Last Year",
+ "type": "Line",
+ "use_report_chart": 0,
+ "x_field": "sales_person",
+ "y_axis": [
+  {
+   "y_field": "total_sales_invoices"
+  },
+  {
+   "y_field": "outstanding_amount"
+  },
+  {
+   "y_field": "payments_collected"
+  },
+  {
+   "y_field": "pdc_collection"
+  }
+ ]
+}
