@@ -1,0 +1,108 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2025-07-24 12:47:53.158405",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "default": "AL FARSI MEDICAL SUPPLIES",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company Selection",
+   "mandatory": 1,
+   "options": "Company",
+   "wildcard_filter": 0
+  },
+  {
+   "default": "BODE Chemie",
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "mandatory": 0,
+   "options": "Brand",
+   "wildcard_filter": 0
+  },
+  {
+   "default": "No",
+   "fieldname": "include_all_items",
+   "fieldtype": "Select",
+   "label": "Include all Items",
+   "mandatory": 1,
+   "options": "Yes (Include all items from the selected brand)\nNo",
+   "wildcard_filter": 0
+  },
+  {
+   "default": "No",
+   "fieldname": "all_brands",
+   "fieldtype": "Select",
+   "label": "All Brands",
+   "mandatory": 0,
+   "options": "Yes (Include all the brand Items)\nNo",
+   "wildcard_filter": 0
+  },
+  {
+   "default": "6",
+   "fieldname": "select_period",
+   "fieldtype": "Select",
+   "label": "Select Period",
+   "mandatory": 1,
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12",
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Al Farsi Medical Supplies",
+ "modified": "2025-09-12 15:29:10.018560",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Purchasing and Reordering",
+ "owner": "anto@alfarsi.me",
+ "prepared_report": 0,
+ "query": "WITH\r\n\r\n-- Group Sales Order Item lines by SO + Item, sum qty and delivered_qty per SO+Item\r\nso_items AS (\r\n    SELECT\r\n        soi.parent AS so_no,\r\n        soi.item_code,\r\n        SUM(soi.qty) AS total_ordered_qty,\r\n        SUM(soi.delivered_qty) AS total_delivered_qty\r\n    FROM `tabSales Order Item` soi\r\n    INNER JOIN `tabSales Order` so ON so.name = soi.parent\r\n    WHERE so.docstatus = 1\r\n      AND so.status IN ('To Deliver', 'To Deliver and Bill', 'On Hold', 'Overdue')\r\n      AND so.customer_group = 'Government'\r\n      AND so.company = %(company)s\r\n    GROUP BY soi.parent, soi.item_code\r\n    HAVING (SUM(soi.qty) - SUM(soi.delivered_qty)) > 0\r\n),\r\n\r\n-- Calculate balance per SO+Item = total_ordered - total_delivered\r\n-- Then sum these balances per item_code\r\nso_balance AS (\r\n    SELECT\r\n        item_code,\r\n        SUM(total_ordered_qty - total_delivered_qty) AS so_balance\r\n    FROM so_items\r\n    GROUP BY item_code\r\n),\r\n\r\n-- Avg sales (Non-Govt)\r\navg_sales_data AS (\r\n    SELECT\r\n        sii.item_code,\r\n        ROUND(SUM(sii.qty) / %(select_period)s, 0) AS avg_sales_x_months\r\n    FROM `tabSales Invoice Item` sii\r\n    LEFT JOIN `tabSales Invoice` si ON sii.parent = si.name\r\n    WHERE si.docstatus = 1\r\n      AND si.posting_date >= DATE_SUB(CURDATE(), INTERVAL %(select_period)s MONTH)\r\n      AND si.customer_group != 'Government'\r\n      AND si.customer NOT IN ('C02192', 'CO1004')\r\n      AND si.company = %(company)s\r\n    GROUP BY sii.item_code\r\n),\r\n\r\n-- Current stock\r\nstock_data AS (\r\n    SELECT\r\n        b.item_code,\r\n        ROUND(SUM(b.actual_qty), 0) AS current_stock\r\n    FROM `tabBin` b\r\n    INNER JOIN `tabWarehouse` w ON b.warehouse = w.name\r\n    WHERE b.warehouse NOT IN (\r\n        'AP1-INDUSTORE - AFMS',\r\n        'Expiry Warehouse - AFMS',\r\n        'MAN-INDUSTORE - AFMS',\r\n        'Stores - AFMM',\r\n        'Stores - MDL',\r\n        'Stores - WSDC'\r\n    )\r\n      AND w.company = %(company)s\r\n    GROUP BY b.item_code\r\n),\r\n\r\n-- Last Purchase Order per item (latest excluding cancelled)\r\nlast_po_data AS (\r\n    SELECT\r\n        poi.item_code,\r\n        CONCAT('<a href=\"/app/purchase-order/', po.name, '\" target=\"_blank\">', po.name, '</a> - ', po.status) AS last_po_info\r\n    FROM `tabPurchase Order Item` poi\r\n    LEFT JOIN `tabPurchase Order` po ON po.name = poi.parent\r\n    WHERE po.company = %(company)s\r\n      AND po.status != 'Cancelled'\r\n    ORDER BY po.transaction_date DESC, po.creation DESC\r\n)\r\n\r\n-- MAIN REPORT QUERY\r\nSELECT\r\n    CONCAT('<a href=\"/app/item/', i.item_code, '\" target=\"_blank\">', i.item_code, ' - ', i.item_name, '</a>') AS \"Item\",\r\n\r\n    (\r\n        SELECT idf.default_supplier\r\n        FROM `tabItem Default` idf\r\n        WHERE idf.parent = i.item_code\r\n        LIMIT 1\r\n    ) AS \"Supplier\",\r\n\r\n    ROUND(COALESCE(sb.so_balance, 0), 0) AS \"SO Qty (Pending) - Govt\",\r\n    ROUND(COALESCE(sd.current_stock, 0), 0) AS \"Current Stock\",\r\n\r\n    COALESCE(asd.avg_sales_x_months, 0) AS \"Avg Sales (%(select_period)sM, Non-Govt)\",\r\n    ROUND(COALESCE(asd.avg_sales_x_months, 0) * 6, 0) AS \"6 Month Requirement\",\r\n\r\n    (\r\n        ROUND(COALESCE(sb.so_balance, 0), 0)\r\n        + ROUND(COALESCE(asd.avg_sales_x_months, 0) * 6, 0)\r\n    ) AS \"Total Requirement\",\r\n\r\n    GREATEST(\r\n        (\r\n            ROUND(COALESCE(sb.so_balance, 0), 0)\r\n            + ROUND(COALESCE(asd.avg_sales_x_months, 0) * 6, 0)\r\n            - ROUND(COALESCE(sd.current_stock, 0), 0)\r\n        ), 0\r\n    ) AS \"Net Requirement\",\r\n\r\n    (\r\n        SELECT lpd.last_po_info\r\n        FROM last_po_data lpd\r\n        WHERE lpd.item_code = i.item_code\r\n        LIMIT 1\r\n    ) AS \"Last Purchase Order\",\r\n\r\n    i.item_group AS \"Item Group\",\r\n\r\n    (\r\n        SELECT supplier_part_no\r\n        FROM `tabItem Supplier`\r\n        WHERE parent = i.item_code\r\n        LIMIT 1\r\n    ) AS \"Supp. Part No\"\r\n\r\nFROM `tabItem` i\r\nLEFT JOIN so_balance sb ON sb.item_code = i.item_code\r\nLEFT JOIN avg_sales_data asd ON asd.item_code = i.item_code\r\nLEFT JOIN stock_data sd ON sd.item_code = i.item_code\r\n\r\nWHERE\r\n    (\r\n        %(include_all_items)s = 'Yes (Include all items from the selected brand)'\r\n        OR COALESCE(sb.so_balance, 0) > 0\r\n        OR COALESCE(asd.avg_sales_x_months, 0) > 0\r\n    )\r\n    AND (\r\n        %(all_brands)s = 'Yes (Include all the brand Items)'\r\n        OR %(brand)s IS NULL\r\n        OR i.brand = %(brand)s\r\n    )\r\n\r\nGROUP BY\r\n    i.item_code, i.item_name, i.item_group,\r\n    asd.avg_sales_x_months, sd.current_stock, sb.so_balance\r\n\r\nUNION\r\n\r\n-- Include remaining enabled items if include_all_items = 'Yes' (EXCLUDING ones already in first query)\r\nSELECT\r\n    CONCAT('<a href=\"/app/item/', i.item_code, '\" target=\"_blank\">', i.item_code, ' - ', i.item_name, '</a>') AS \"Item\",\r\n\r\n    (\r\n        SELECT idf.default_supplier\r\n        FROM `tabItem Default` idf\r\n        WHERE idf.parent = i.item_code\r\n        LIMIT 1\r\n    ) AS \"Supplier\",\r\n\r\n    0 AS \"SO Qty (Pending) - Govt\",\r\n    0 AS \"Current Stock\",\r\n    0 AS \"Avg Sales (%(select_period)sM, Non-Govt)\",\r\n    0 AS \"6 Month Requirement\",\r\n    0 AS \"Total Requirement\",\r\n    0 AS \"Net Requirement\",\r\n\r\n    (\r\n        SELECT CONCAT('<a href=\"/app/purchase-order/', po.name, '\" target=\"_blank\">', po.name, '</a> - ', po.status)\r\n        FROM `tabPurchase Order Item` poi\r\n        LEFT JOIN `tabPurchase Order` po ON po.name = poi.parent\r\n        WHERE poi.item_code = i.item_code AND po.company = %(company)s AND po.status != 'Cancelled'\r\n        ORDER BY po.transaction_date DESC, po.creation DESC\r\n        LIMIT 1\r\n    ) AS \"Last Purchase Order\",\r\n\r\n    i.item_group AS \"Item Group\",\r\n\r\n    (\r\n        SELECT supplier_part_no\r\n        FROM `tabItem Supplier`\r\n        WHERE parent = i.item_code\r\n        LIMIT 1\r\n    ) AS \"Supp. Part No\"\r\n\r\nFROM `tabItem` i\r\nWHERE i.disabled = 0\r\n  AND i.item_code NOT IN (\r\n      SELECT i1.item_code\r\n      FROM `tabItem` i1\r\n      LEFT JOIN so_balance sb1 ON sb1.item_code = i1.item_code\r\n      LEFT JOIN avg_sales_data asd1 ON asd1.item_code = i1.item_code\r\n      WHERE %(include_all_items)s = 'Yes (Include all items from the selected brand)'\r\n         OR COALESCE(sb1.so_balance, 0) > 0\r\n         OR COALESCE(asd1.avg_sales_x_months, 0) > 0\r\n  )\r\n  AND %(include_all_items)s = 'Yes (Include all items from the selected brand)'\r\n  AND (\r\n      %(all_brands)s = 'Yes (Include all the brand Items)'\r\n      OR %(brand)s IS NULL\r\n      OR i.brand = %(brand)s\r\n  )\r\n\r\nORDER BY \"Net Requirement\" DESC, \"Item\" ASC;\r\n",
+ "ref_doctype": "Sales Order",
+ "report_name": "Purchasing and Reordering",
+ "report_script": "",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Maintenance User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Support Team"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Free Item Approval"
+  },
+  {
+   "role": "Sales Coordinator"
+  },
+  {
+   "role": "Accounts Manager"
+  }
+ ]
+}
