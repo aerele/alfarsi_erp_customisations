@@ -74,7 +74,7 @@ frappe.query_reports["Purchasing and Reordering"] = {
                             item_code: r.item,
                             supplier: r.supplier,
                             current_stock: r.current_stock || 0,
-                            total_requirement: r.total_requirement || 0,
+                            total_requirement: r.net_requirement || 0,
                             required_by: frappe.datetime.nowdate(),
                             rate: 0
                         })),
