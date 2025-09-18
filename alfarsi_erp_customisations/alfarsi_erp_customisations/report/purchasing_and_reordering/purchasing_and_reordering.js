@@ -123,7 +123,7 @@ frappe.query_reports["Purchasing and Reordering"] = {
                             {
                                 fieldtype: "Float",
                                 fieldname: "rate",
-                                label: "Rate",
+                                label: "Last Purchase Rate",
                                 in_list_view: 1,
                                 columns: 1,
                                 reqd: 1
