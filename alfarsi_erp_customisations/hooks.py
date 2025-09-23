@@ -132,6 +132,9 @@ scheduler_events = {
 	"cron": {
         "0 8 * * SAT": [
             "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
+		],
+        "0 20 * * *": [
+			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
 		]
 	},
 }
