@@ -23,13 +23,15 @@ def send_daily_customer_visit_reports():
                 dvd.objective_of_the_visitmeeting AS "Objective",
                 dvd.outcome_of_the_visitmeeting AS "Outcome",
                 dvd.action_plan AS "Action Plan",
-                GROUP_CONCAT(ci.item_name SEPARATOR ', ') AS "Items Discussed",
-                dvd.next_week_plan AS "Next Week Plan"
+                GROUP_CONCAT(phcv.item_name SEPARATOR ', ') AS "Items Discussed",
+                cwp.plan_for_the_day AS "Next Week Plan"
             FROM
                 `tabCustomer Visit` cv
             LEFT JOIN `tabDaily Visit Details` dvd ON dvd.parent = cv.name
             LEFT JOIN `tabCustomer Visit Items` ci ON ci.parent = cv.name
             LEFT JOIN `tabCustomer` c ON c.name = cv.reference_name
+            LEFT JOIN `tabComing week plans` cwp ON cwp.parent = cv.name
+            LEFT JOIN `tabProduct Handled on Customer Visit` phcv ON phcv.parent = cv.name
             WHERE
                 cv.docstatus = 1
                 AND cv.employee = %(employee)s
@@ -59,7 +61,7 @@ def send_daily_customer_visit_reports():
                 {table_rows}
             </table>
         """
-        
+       
         frappe.sendmail(
             recipients=["anto@alfarsi.me", "vinod@alfarsi.me", "director@alfarsi.me" ],
             subject=f"Customer Visit Report - {employee} - {data[0].get('Employee Name')} - {current_date}",
