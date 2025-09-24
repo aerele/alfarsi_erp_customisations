@@ -3,4 +3,3 @@
 
 [post_model_sync]
 alfarsi_erp_customisations.patches.route_modification_in_website_item #1
-alfarsi_erp_customisations.patches.website_item_rec_update #1

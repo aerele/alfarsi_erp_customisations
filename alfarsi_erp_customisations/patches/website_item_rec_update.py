@@ -1,6 +1,7 @@
 import frappe
 
-def execute():
+@frappe.whitelist()
+def update_website_item():
     batch_size=4000
     group_recc = {
         "A-Silicone": ["WEB-ITM-4476", "WEB-ITM-4477", "WEB-ITM-7902", "WEB-ITM-7904"],
