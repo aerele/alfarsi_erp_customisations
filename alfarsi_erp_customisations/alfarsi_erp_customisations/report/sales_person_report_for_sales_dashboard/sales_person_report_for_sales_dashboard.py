@@ -98,13 +98,14 @@ def get_data(filters):
             AND payment_collected_by LIKE %s
         """, (from_date, to_date, f"%{sp.employee}%"))[0][0] or 0
 
-        data.append({
-            "sales_person": sp.name,
-            "total_sales_invoices": total_invoices,
-            "outstanding_amount": outstanding,
-            "payments_collected": payments_collected,
-            "pdc_collection": pdc_collection
-        })
+        # Only append if at least one value is non-zero
+        if any([total_invoices, outstanding, payments_collected, pdc_collection]):
+            data.append({
+                "sales_person": sp.name,
+                "total_sales_invoices": total_invoices,
+                "outstanding_amount": outstanding,
+                "payments_collected": payments_collected,
+                "pdc_collection": pdc_collection
+            })
 
     return data
-    #TODO : fix dynamic date in dashboard number card
