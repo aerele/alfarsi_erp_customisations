@@ -41,7 +41,12 @@ def send_scheduled_sellout_mails():
 
         # Write headers
         for col_idx, col in enumerate(columns, 1):
-            ws.cell(row=1, column=col_idx, value=col['label'])
+            header = col['label']
+            if col.get('fieldname') == "item_code":
+                header = "Item Code"
+            elif col.get('fieldname') == "item_name":
+                header = "Item Name"
+            ws.cell(row=1, column=col_idx, value=header)
 
         # Write data rows
         for row_idx, row in enumerate(rows, 2):
