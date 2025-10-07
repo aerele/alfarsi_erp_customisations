@@ -41,5 +41,4 @@ def create_purchase_order(items):
         })
 
     po.set_missing_values()
-    po.insert()
-    return po.name
+    return {"doc": po.as_dict()}
