@@ -2,12 +2,11 @@ import os
 import frappe
 from frappe.utils import nowdate, getdate, add_months, get_last_day
 from openpyxl import Workbook
-from openpyxl.utils import get_column_letter
+from io import BytesIO
 
 @frappe.whitelist()
 def send_scheduled_sellout_mails():
     today = getdate(nowdate())
-
     settings = frappe.get_single("Brand Sellout Mail Settings")
 
     if int(settings.sent_mail_on) != today.day or (
@@ -35,15 +34,12 @@ def send_scheduled_sellout_mails():
         data = report.get_data(filters=filters)
         columns, rows = data
 
-        # Generate Excel file
         wb = Workbook()
         ws = wb.active
 
-        # Write headers
         for col_idx, col in enumerate(columns, 1):
             ws.cell(row=1, column=col_idx, value=col['label'])
 
-        # Write data rows
         for row_idx, row in enumerate(rows, 2):
             if isinstance(row, dict):
                 for col_idx, col in enumerate(columns, 1):
@@ -51,18 +47,24 @@ def send_scheduled_sellout_mails():
                     if isinstance(value, float) and value.is_integer():
                         value = int(value)
                     ws.cell(row=row_idx, column=col_idx, value=value)
-            else:  # if row is a list/tuple
+            else:
                 for col_idx, value in enumerate(row, 1):
                     if isinstance(value, float) and value.is_integer():
                         value = int(value)
                     ws.cell(row=row_idx, column=col_idx, value=value)
 
         file_name = f"brand_sellout_{mail_config.brand}_{today.strftime('%Y%m%d')}.xlsx"
-        file_path = f"/files/{file_name}"
-        full_path = os.path.join(frappe.get_site_path(), "public", file_path.lstrip("/"))
+        file_bytes = BytesIO()
+        wb.save(file_bytes)
+        file_bytes.seek(0)
 
-        os.makedirs(os.path.dirname(full_path), exist_ok=True)
-        wb.save(full_path)
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": file_name,
+            "is_private": 0,
+            "content": file_bytes.read()
+        })
+        file_doc.save() 
 
         subject = "Monthly Sellout Report"
         message = f"""
@@ -71,8 +73,7 @@ def send_scheduled_sellout_mails():
         Please find the attached sellout data for the month {add_months(today, -1).strftime('%B %Y')}.
         """
 
-        # Attach the file and send email
-        attachments = [{"file_url": file_path}]
+        attachments = [{"file_url": file_doc.file_url}]
         frappe.sendmail(
             recipients=to_list,
             cc=cc_list,
