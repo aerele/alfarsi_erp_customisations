@@ -135,17 +135,16 @@ frappe.query_reports["Purchasing and Reordering"] = {
                 primary_action(values) {
                     // Get edited rows
                     let items = d.fields_dict.items.grid.get_data();
-                    console.log("Edited Items:", items);
                     frappe.call({
                         method: "alfarsi_erp_customisations.public.py.purchasing_and_reordering_report.create_purchase_order",
                         args: {
                             items: items
                         },
                         callback: function(r) {
-                            if (!r.exc) {
-                                frappe.msgprint("Purchase Order created: " + r.message);
+                            if (!r.exc && r.message && r.message.doc) {
                                 d.hide();
-                                frappe.set_route("Form", "Purchase Order", r.message);
+                                let doc = frappe.model.sync(r.message.doc)[0];
+                                frappe.set_route("Form", "Purchase Order", doc.name);
                             }
                         }
                     });
