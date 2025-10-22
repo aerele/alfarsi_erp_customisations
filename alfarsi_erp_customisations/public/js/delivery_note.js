@@ -127,6 +127,12 @@ frappe.ui.form.on("Delivery Note", {
 							read_only: 1,
 							label: "Supplier Serial No",
 						},
+						{
+							fieldtype: "Data",
+							fieldname: "reqired_qty",
+							read_only: 1,
+							label: "Reqired_qty",
+						},
 					];
 					var data = r.message.map((d) => {
 						var return_value = {
@@ -141,6 +147,7 @@ frappe.ui.form.on("Delivery Note", {
 							to_warehouse: d.to_warehouse,
 							serial_no: d.serial_no,
 							custom_supplier_serial_no: d.custom_supplier_serial_no,
+							reqired_qty:d.reqired_qty
 						};
 						if (d.serial_no) {
 							return_value["transfer_qty"] = 1;
@@ -153,6 +160,11 @@ frappe.ui.form.on("Delivery Note", {
 						size: "extra-large",
 						fields: [
 							{
+							fieldtype: "Check",
+							fieldname: "create_in_draft",
+							label: "Create In Draft",
+							default : 0},
+							{
 								fieldname: "stock_in_other_companies",
 								fieldtype: "Table",
 								label: "Items",
@@ -163,18 +175,21 @@ frappe.ui.form.on("Delivery Note", {
 									return data;
 								},
 								fields: fields,
-							},
+							}
 						],
 						primary_action: function () {
 							var data =
 								cur_dialog.fields_dict[
 									"stock_in_other_companies"
 								].grid.get_selected_children();
+							
 							if (!(data.length > 0)) {
 								frappe.throw("select atleast one row to transfer");
 							}
 							var throw_message = "";
+							var item_reqired_qty = {}
 							for (let index = 0; index < data.length; index++) {
+
 								if (!data[index]["transfer_qty"]) {
 									throw_message =
 										throw_message +
@@ -192,6 +207,29 @@ frappe.ui.form.on("Delivery Note", {
 										(index + 1).toString() +
 										"<br>";
 								}
+								if (data[index]["item_code"] in item_reqired_qty){
+									item_reqired_qty[data[index]["item_code"]]["transfer_qty"]+ data[index]["transfer_qty"]
+									if (item_reqired_qty[data[index]["item_code"]]["transfer_qty"] > item_reqired_qty[data[index]["item_code"]]["reqired_qty"])
+									{
+										throw_message =
+										throw_message +
+										"Transfer Qty  Can not greater than Reqired Qty Row " +
+										(index + 1).toString() +
+										"<br>";
+									}
+								}
+								else{
+									tem_reqired_qty[data[index]["item_code"]] = {"transfer_qty" :data[index]["transfer_qty"],"reqired_qty":  data[index]["reqired_qty"] }
+									if (item_reqired_qty[data[index]["item_code"]]["transfer_qty"] > item_reqired_qty[data[index]["item_code"]]["reqired_qty"])
+									{
+										throw_message =
+										throw_message +
+										"Transfer Qty  Can not greater than Reqired Qty Row " +
+										(index + 1).toString() +
+										"<br>";
+									}
+								}
+								
 							}
 							if (throw_message) {
 								frappe.throw(throw_message);
@@ -204,6 +242,7 @@ frappe.ui.form.on("Delivery Note", {
 									transfer_details: data,
 									dn: frm.doc.name,
 									in_company: frm.doc.company,
+									create_in_draft :dialog.get_value("create_in_draft")
 								},
 								callback: function (r) {
 									if (r.message) {
@@ -221,104 +260,104 @@ frappe.ui.form.on("Delivery Note", {
 			},
 		});
 	},
-	custom_intercompany_stock_transfer: function (frm) {
-		var items_code = [];
-		for (let index = 0; index < frm.doc.items.length; index++) {
-			items_code.push(frm.doc.items[index].item_code);
-		}
-		const fields = [
-			{
-				fieldtype: "Link",
-				fieldname: "s_warehouse",
-				options: "Warehouse",
-				in_list_view: 1,
-				label: "From Warehouse",
-				reqd: 1,
-			},
-			{
-				fieldtype: "Link",
-				fieldname: "t_warehouse",
-				options: "Warehouse",
-				in_list_view: 1,
-				label: "To Warehouse",
-				reqd: 1,
-			},
-			{
-				fieldtype: "Link",
-				fieldname: "item_code",
-				options: "Item",
-				in_list_view: 1,
-				label: "Item Code",
-				reqd: 1,
-				get_query: () => {
-					return {
-						filters: {
-							name: ["in", items_code],
-						},
-					};
-				},
-			},
-			{
-				fieldtype: "Float",
-				fieldname: "qty",
-				default: 0,
-				read_only: 0,
-				in_list_view: 1,
-				label: __("Qty"),
-			},
-			{
-				fieldtype: "Link",
-				fieldname: "batch",
-				options: "Batch",
-				in_list_view: 1,
-				label: "Batch",
-				get_query: (e) => {
-					return {
-						filters: {
-							item: e.item_code,
-						},
-					};
-				},
-			},
-			{
-				fieldtype: "Text",
-				fieldname: "serial_no",
-				options: "Serial No",
-				in_list_view: 1,
-				label: "Serial No",
-			},
-		];
-		let dialog = new frappe.ui.Dialog({
-			title: __("Intercompany Stock Transfer"),
-			size: "extra-large",
-			fields: [
-				{
-					fieldname: "intercompany_stock_transfer",
-					fieldtype: "Table",
-					label: "Items",
-					fields: fields,
-				},
-			],
-			primary_action: function () {
-				var data = dialog.get_value("intercompany_stock_transfer");
-				frappe.call({
-					freeze: true,
-					freeze_message: __("Intercompany Stock Transferring"),
-					method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.intercompany_stock_transfer.intercompany_stock_transfer.creat_intercompany_stock_transfer",
-					args: {
-						transfer_details: data,
-						dn: frm.doc.name,
-					},
-					callback: function (r) {
-						if (r.message) {
-							dialog.hide();
-							frappe.msgprint(r.message);
-						}
-					},
-				});
-			},
-			primary_action_label: __("Stock Transfer"),
-		});
-		dialog.show();
-	},
+	// custom_intercompany_stock_transfer: function (frm) {
+	// 	var items_code = [];
+	// 	for (let index = 0; index < frm.doc.items.length; index++) {
+	// 		items_code.push(frm.doc.items[index].item_code);
+	// 	}
+	// 	const fields = [
+	// 		{
+	// 			fieldtype: "Link",
+	// 			fieldname: "s_warehouse",
+	// 			options: "Warehouse",
+	// 			in_list_view: 1,
+	// 			label: "From Warehouse",
+	// 			reqd: 1,
+	// 		},
+	// 		{
+	// 			fieldtype: "Link",
+	// 			fieldname: "t_warehouse",
+	// 			options: "Warehouse",
+	// 			in_list_view: 1,
+	// 			label: "To Warehouse",
+	// 			reqd: 1,
+	// 		},
+	// 		{
+	// 			fieldtype: "Link",
+	// 			fieldname: "item_code",
+	// 			options: "Item",
+	// 			in_list_view: 1,
+	// 			label: "Item Code",
+	// 			reqd: 1,
+	// 			get_query: () => {
+	// 				return {
+	// 					filters: {
+	// 						name: ["in", items_code],
+	// 					},
+	// 				};
+	// 			},
+	// 		},
+	// 		{
+	// 			fieldtype: "Float",
+	// 			fieldname: "qty",
+	// 			default: 0,
+	// 			read_only: 0,
+	// 			in_list_view: 1,
+	// 			label: __("Qty"),
+	// 		},
+	// 		{
+	// 			fieldtype: "Link",
+	// 			fieldname: "batch",
+	// 			options: "Batch",
+	// 			in_list_view: 1,
+	// 			label: "Batch",
+	// 			get_query: (e) => {
+	// 				return {
+	// 					filters: {
+	// 						item: e.item_code,
+	// 					},
+	// 				};
+	// 			},
+	// 		},
+	// 		{
+	// 			fieldtype: "Text",
+	// 			fieldname: "serial_no",
+	// 			options: "Serial No",
+	// 			in_list_view: 1,
+	// 			label: "Serial No",
+	// 		},
+	// 	];
+	// 	let dialog = new frappe.ui.Dialog({
+	// 		title: __("Intercompany Stock Transfer"),
+	// 		size: "extra-large",
+	// 		fields: [
+	// 			{
+	// 				fieldname: "intercompany_stock_transfer",
+	// 				fieldtype: "Table",
+	// 				label: "Items",
+	// 				fields: fields,
+	// 			},
+	// 		],
+	// 		primary_action: function () {
+	// 			var data = dialog.get_value("intercompany_stock_transfer");
+	// 			frappe.call({
+	// 				freeze: true,
+	// 				freeze_message: __("Intercompany Stock Transferring"),
+	// 				method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.intercompany_stock_transfer.intercompany_stock_transfer.creat_intercompany_stock_transfer",
+	// 				args: {
+	// 					transfer_details: data,
+	// 					dn: frm.doc.name,
+	// 				},
+	// 				callback: function (r) {
+	// 					if (r.message) {
+	// 						dialog.hide();
+	// 						frappe.msgprint(r.message);
+	// 					}
+	// 				},
+	// 			});
+	// 		},
+	// 		primary_action_label: __("Stock Transfer"),
+	// 	});
+	// 	dialog.show();
+	// },
 });
