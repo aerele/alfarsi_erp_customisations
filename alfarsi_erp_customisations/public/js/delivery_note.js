@@ -219,7 +219,7 @@ frappe.ui.form.on("Delivery Note", {
 									}
 								}
 								else{
-									tem_reqired_qty[data[index]["item_code"]] = {"transfer_qty" :data[index]["transfer_qty"],"reqired_qty":  data[index]["reqired_qty"] }
+									item_reqired_qty[data[index]["item_code"]] = {"transfer_qty" :data[index]["transfer_qty"],"reqired_qty":  data[index]["reqired_qty"] }
 									if (item_reqired_qty[data[index]["item_code"]]["transfer_qty"] > item_reqired_qty[data[index]["item_code"]]["reqired_qty"])
 									{
 										throw_message =
