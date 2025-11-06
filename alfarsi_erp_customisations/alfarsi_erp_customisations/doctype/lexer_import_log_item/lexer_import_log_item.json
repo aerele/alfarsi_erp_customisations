@@ -1,0 +1,59 @@
+{
+ "actions": [],
+ "creation": "2025-11-06 15:26:03.231905",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_name",
+  "qty",
+  "part_number",
+  "purchase_rate",
+  "sales_rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Name"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty"
+  },
+  {
+   "fieldname": "part_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Part Number"
+  },
+  {
+   "fieldname": "purchase_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Purchase Rate"
+  },
+  {
+   "fieldname": "sales_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Sales Rate"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-06 15:26:03.231905",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Lexer Import Log Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
