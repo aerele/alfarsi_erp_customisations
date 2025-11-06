@@ -3,7 +3,6 @@
 
 import frappe
 from frappe.model.document import Document
-import json
 class LexerImportLog(Document):
 	pass
 

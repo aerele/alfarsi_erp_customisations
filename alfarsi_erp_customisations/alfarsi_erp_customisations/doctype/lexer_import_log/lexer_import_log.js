@@ -5,9 +5,8 @@ frappe.ui.form.on('Lexer Import Log', {
                 method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.lexer_import_log.lexer_import_log.validate_items",
                 args: { docname: frm.doc.name },
                 callback() {
-
-                    frappe.msgprint("Item codes validated & updated successfully.");
                     frm.reload_doc();
+                    frappe.msgprint("Item codes validated & updated successfully.");
                 }
             });
         });
@@ -22,4 +21,3 @@ frappe.ui.form.on('Lexer Import Log', {
         });
     },
 });
-
