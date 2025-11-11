@@ -89,7 +89,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 115,
+=======
+   "idx": 116,
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -139,6 +143,70 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+   "creation": "2025-11-11 14:59:04.065976",
+   "default": null,
+   "depends_on": "eval: doc.customer_group=\"Government\";",
+   "description": null,
+   "docstatus": 0,
+   "dt": "Sales Invoice Item",
+   "fetch_from": null,
+   "fetch_if_empty": 0,
+   "fieldname": "custom_cust_sr_no",
+   "fieldtype": "Data",
+   "hidden": 0,
+   "hide_border": 0,
+   "hide_days": 0,
+   "hide_seconds": 0,
+   "idx": 2,
+   "ignore_user_permissions": 0,
+   "ignore_xss_filter": 0,
+   "in_global_search": 0,
+   "in_list_view": 0,
+   "in_preview": 0,
+   "in_standard_filter": 0,
+   "insert_after": "sr_no",
+   "is_system_generated": 0,
+   "is_virtual": 0,
+   "label": "Cust. Sr No.",
+   "length": 0,
+   "mandatory_depends_on": null,
+   "modified": "2025-11-11 14:59:04.065976",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Sales Invoice Item-custom_cust_sr_no",
+   "no_copy": 0,
+   "non_negative": 0,
+   "options": null,
+   "owner": "Administrator",
+   "parent": null,
+   "parentfield": null,
+   "parenttype": null,
+   "permlevel": 0,
+   "precision": "",
+   "print_hide": 0,
+   "print_hide_if_no_value": 0,
+   "print_width": null,
+   "read_only": 0,
+   "read_only_depends_on": null,
+   "report_hide": 0,
+   "reqd": 0,
+   "search_index": 0,
+   "sort_options": 0,
+   "translatable": 0,
+   "unique": 0,
+   "width": null
+  },
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "allow_in_quick_entry": 0,
+   "allow_on_submit": 1,
+   "bold": 0,
+   "collapsible": 0,
+   "collapsible_depends_on": null,
+   "columns": 0,
    "creation": "2025-03-10 19:16:57.527673",
    "default": null,
    "depends_on": null,
@@ -153,7 +221,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 117,
+=======
+   "idx": 118,
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -217,7 +289,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 118,
+=======
+   "idx": 119,
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -281,7 +357,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 107,
+=======
+   "idx": 115,
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -345,7 +425,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 116,
+=======
+   "idx": 117,
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -409,7 +493,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 80,
+=======
+   "idx": 93,
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -1170,7 +1258,11 @@
    "field_name": "barcode",
    "idx": 0,
    "is_system_generated": 1,
+<<<<<<< HEAD
    "modified": "2025-08-21 09:04:27.556818",
+=======
+   "modified": "2025-10-22 22:44:14.576059",
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "modified_by": "Administrator",
    "module": null,
    "name": "Sales Invoice Item-barcode-hidden",
@@ -1196,7 +1288,11 @@
    "field_name": "discount_account",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2025-08-21 09:04:27.574769",
+=======
+   "modified": "2025-10-22 22:44:14.585901",
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "modified_by": "Administrator",
    "module": null,
    "name": "Sales Invoice Item-discount_account-hidden",
@@ -1222,7 +1318,11 @@
    "field_name": "discount_account",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2025-08-21 09:04:27.591297",
+=======
+   "modified": "2025-10-22 22:44:14.595812",
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "modified_by": "Administrator",
    "module": null,
    "name": "Sales Invoice Item-discount_account-mandatory_depends_on",
@@ -1240,7 +1340,11 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2023-11-06 13:14:03.969670",
+=======
+   "creation": "2025-11-11 14:59:03.703668",
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "default_value": null,
    "doc_type": "Sales Invoice Item",
    "docstatus": 0,
@@ -1248,7 +1352,11 @@
    "field_name": null,
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2025-08-21 09:04:27.608765",
+=======
+   "modified": "2025-11-11 14:59:03.703668",
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "modified_by": "Administrator",
    "module": null,
    "name": "Sales Invoice Item-main-field_order",
@@ -1259,7 +1367,11 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
+<<<<<<< HEAD
    "value": "[\"barcode\", \"has_item_scanned\", \"item_code\", \"col_break1\", \"item_name\", \"customer_item_code\", \"description_section\", \"description\", \"item_group\", \"brand\", \"image_section\", \"image\", \"image_view\", \"quantity_and_rate\", \"qty\", \"stock_uom\", \"col_break2\", \"uom\", \"conversion_factor\", \"stock_qty\", \"section_break_17\", \"price_list_rate\", \"base_price_list_rate\", \"discount_and_margin\", \"margin_type\", \"margin_rate_or_amount\", \"rate_with_margin\", \"column_break_19\", \"discount_percentage\", \"discount_amount\", \"base_rate_with_margin\", \"section_break1\", \"rate\", \"amount\", \"item_tax_template\", \"col_break3\", \"base_rate\", \"base_amount\", \"pricing_rules\", \"stock_uom_rate\", \"is_free_item\", \"grant_commission\", \"section_break_21\", \"net_rate\", \"net_amount\", \"column_break_24\", \"base_net_rate\", \"base_net_amount\", \"drop_ship\", \"delivered_by_supplier\", \"accounting\", \"income_account\", \"is_fixed_asset\", \"asset\", \"finance_book\", \"col_break4\", \"expense_account\", \"discount_account\", \"deferred_revenue\", \"deferred_revenue_account\", \"service_stop_date\", \"enable_deferred_revenue\", \"column_break_50\", \"service_start_date\", \"service_end_date\", \"section_break_18\", \"weight_per_unit\", \"total_weight\", \"column_break_21\", \"weight_uom\", \"warehouse_and_reference\", \"warehouse\", \"target_warehouse\", \"quality_inspection\", \"batch_no\", \"incoming_rate\", \"col_break5\", \"allow_zero_valuation_rate\", \"serial_no\", \"custom_supplier_serial_no\", \"item_tax_rate\", \"actual_batch_qty\", \"actual_qty\", \"edit_references\", \"sales_order\", \"so_detail\", \"sales_invoice_item\", \"column_break_74\", \"delivery_note\", \"dn_detail\", \"delivered_qty\", \"internal_transfer_section\", \"purchase_order\", \"column_break_92\", \"purchase_order_item\", \"accounting_dimensions_section\", \"cost_center\", \"dimension_col_break\", \"project\", \"section_break_54\", \"page_break\"]"
+=======
+   "value": "[\"barcode\", \"sr_no\", null, \"has_item_scanned\", \"item_code\", \"allow_alternative_item\", \"col_break1\", \"item_name\", \"delivery_date\", \"customer_item_code\", \"description_section\", \"description\", \"tax_code\", \"tax_rate\", \"tax_amount\", \"total_amount\", \"is_zero_rated\", \"is_exempt\", \"item_group\", \"brand\", \"image_section\", \"image\", \"image_view\", \"quantity_and_rate\", \"qty\", \"stock_uom\", \"col_break2\", \"uom\", \"conversion_factor\", \"stock_qty\", \"section_break_17\", \"price_list_rate\", \"base_price_list_rate\", \"discount_and_margin\", \"margin_type\", \"margin_rate_or_amount\", \"rate_with_margin\", \"column_break_19\", \"discount_percentage\", \"discount_amount\", \"base_rate_with_margin\", \"section_break1\", \"rate\", \"amount\", \"item_tax_template\", \"col_break3\", \"base_rate\", \"base_amount\", \"pricing_rules\", \"stock_uom_rate\", \"is_free_item\", \"grant_commission\", \"section_break_21\", \"net_rate\", \"net_amount\", \"foc_amount\", \"column_break_24\", \"base_net_rate\", \"base_net_amount\", \"drop_ship\", \"delivered_by_supplier\", \"accounting\", \"income_account\", \"is_fixed_asset\", \"asset\", \"finance_book\", \"col_break4\", \"expense_account\", \"discount_account\", \"deferred_revenue\", \"deferred_revenue_account\", \"service_stop_date\", \"enable_deferred_revenue\", \"column_break_50\", \"service_start_date\", \"service_end_date\", \"section_break_18\", \"weight_per_unit\", \"total_weight\", \"column_break_21\", \"weight_uom\", \"warehouse_and_reference\", \"warehouse\", \"target_warehouse\", \"quality_inspection\", \"batch_no\", \"supplier_batch_no\", \"expiry_date\", \"incoming_rate\", \"col_break5\", \"allow_zero_valuation_rate\", \"serial_no\", \"custom_supplier_serial_no\", \"item_tax_rate\", \"actual_batch_qty\", \"actual_qty\", \"edit_references\", \"sales_order\", \"so_detail\", \"sales_invoice_item\", \"column_break_74\", \"delivery_note\", \"dn_detail\", \"delivered_qty\", \"internal_transfer_section\", \"purchase_order\", \"column_break_92\", \"purchase_order_item\", \"accounting_dimensions_section\", \"cost_center\", \"dimension_col_break\", \"project\", \"section_break_54\", \"page_break\", \"custom_item_warranty_period_in_days_\", \"custom_batch_no_ministry\", \"custom_serial_no_ministry\", \"custom_expiry_date_ministry\", \"custom_item_description_ministry\"]"
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
   },
   {
    "_assign": null,
@@ -1274,7 +1386,11 @@
    "field_name": "target_warehouse",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2025-08-21 09:04:27.625914",
+=======
+   "modified": "2025-10-22 22:44:14.614998",
+>>>>>>> 33a096b (ticket no:133-add sr_no field in sales invoice)
    "modified_by": "Administrator",
    "module": null,
    "name": "Sales Invoice Item-target_warehouse-hidden",
