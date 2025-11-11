@@ -11,6 +11,7 @@ def get_sales_order_items(supplier, customer_group=None, item_code=None):
             soi.item_name,
             soi.uom,
             (SUM(soi.qty) - SUM(soi.delivered_qty)) AS pending_qty,
+            b.actual_qty AS available_qty,
             DATEDIFF(CURDATE(), MAX(so.transaction_date)) AS aging,
             soi.parent AS sales_order
         FROM
@@ -19,6 +20,11 @@ def get_sales_order_items(supplier, customer_group=None, item_code=None):
             `tabSales Order` so ON soi.parent = so.name
         JOIN
             `tabCustomer` c ON so.customer = c.name
+        LEFT JOIN
+            `tabBin` b ON b.item_code = soi.item_code AND b.warehouse IN (
+                SELECT set_warehouse
+                FROM `tabSales Order`
+            )
         WHERE
             so.docstatus = 1
             AND so.status NOT IN ('Draft', 'Cancelled', 'Completed', 'Closed')
