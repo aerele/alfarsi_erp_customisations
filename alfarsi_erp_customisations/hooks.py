@@ -31,7 +31,8 @@ app_license = "MIT"
 # include js in doctype views
 doctype_js = {
 				"Delivery Note": "public/js/delivery_note.js",
-                "Quotation": "public/js/quotation.js"
+                "Quotation": "public/js/quotation.js",
+                "Purchase Order": "public/js/purchase_order.js"
 			}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -126,9 +127,15 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
+    "daily": [
+		"alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"
+	],
 	"cron": {
         "0 8 * * SAT": [
             "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
+		],
+        "0 20 * * *": [
+			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
 		]
 	},
 }

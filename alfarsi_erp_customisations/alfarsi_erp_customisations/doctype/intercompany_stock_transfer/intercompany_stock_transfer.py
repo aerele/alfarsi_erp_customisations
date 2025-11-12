@@ -79,23 +79,26 @@ def get_stock_in_other_companies(item_list, current_company):
     elif len(item_code_list) >1:
         item_code_list = tuple(item_code_list)
         filter += f"And bin.item_code in {item_code_list}"
-    result = frappe.db.sql(f"""select
-                        bin.item_code,
-                        i.item_name,
-                        bin.actual_qty,
-                        bin.warehouse,
-                        c.name as company
-                        from `tabBin` as bin
-                        join `tabWarehouse` as w on bin.warehouse = w.name
-                        join `tabCompany` as c on c.name = w.company
-                        join `tabItem` as i on i.name = bin.item_code
-                        where c.name != '{current_company}'
-
-                        {filter}
-                        And
-                        bin.actual_qty > 0
-                        """,as_dict=1,debug =1) or []
-        
+    result = (
+        frappe.db.sql(f"""select
+															bin.item_code,
+															i.item_name,
+															bin.actual_qty,
+															bin.warehouse,
+															c.name as company
+															from `tabBin` as bin
+															join `tabWarehouse` as w on bin.warehouse = w.name
+															join `tabCompany` as c on c.name = w.company
+															join `tabItem` as i on i.name = bin.item_code
+															where c.name != '{current_company}'
+															{filter}
+															And
+															bin.actual_qty > 0
+															""",
+            as_dict=1,
+        )
+        or []
+    )
 
     if result:
         new_result = []
