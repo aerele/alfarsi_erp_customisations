@@ -51,11 +51,17 @@ def get_stock_in_other_companies(item_list, current_company):
     reqired_qty = {}
     for item_code in item_list:
         if item_code["qty"] > item_code["actual_qty"]:
-            item_code_list += [item_code["item_code"]]
-            to_warehouse[item_code["item_code"]] = item_code["warehouse"]
+            if item_code["item_code"] not in item_code_list:
+                item_code_list.append(item_code["item_code"])
+            if item_code["item_code"] not in to_warehouse:
+                to_warehouse[item_code["item_code"]] = item_code["warehouse"]
             if item_code["item_code"] in reqired_qty:
-                reqired_qty[item_code["item_code"]] = reqired_qty[item_code["item_code"]] + (item_code["qty"] -  item_code["actual_qty"])
-            reqired_qty[item_code["item_code"]] = (item_code["qty"] -  item_code["actual_qty"])
+                reqired_qty[item_code["item_code"]] = reqired_qty[item_code["item_code"]] + (item_code.get("qty") -  item_code.get("actual_qty",0))
+            else:
+                reqired_qty[item_code["item_code"]] = (item_code["qty"] -  item_code["actual_qty"])
+    if not item_code_list:
+        frappe.msgprint("No Item Found  in another Company")
+        return None 
     filter = ""
     company = frappe.get_all(
         "Intercompany Stock Transfer Table",
@@ -65,17 +71,16 @@ def get_stock_in_other_companies(item_list, current_company):
     )
     if company:
         if len(company) == 1:
-            filter += f" And c.name = '{company[0]}'"
+            filter += f" And c.name = '{company[0]}' "
         else:
             filter += f" And c.name in  {tuple(company)} "
     if len(item_code_list) == 1:
-        filter += f" And bin.item_code = '{item_code_list[0]}'"
-    else:
+        filter += f" And bin.item_code = '{item_code_list[0]}' "
+    elif len(item_code_list) >1:
         item_code_list = tuple(item_code_list)
         filter += f"And bin.item_code in {item_code_list}"
     result = (
-        frappe.db.sql(
-            f"""select
+        frappe.db.sql(f"""select
 															bin.item_code,
 															i.item_name,
 															bin.actual_qty,
@@ -86,7 +91,6 @@ def get_stock_in_other_companies(item_list, current_company):
 															join `tabCompany` as c on c.name = w.company
 															join `tabItem` as i on i.name = bin.item_code
 															where c.name != '{current_company}'
-
 															{filter}
 															And
 															bin.actual_qty > 0
