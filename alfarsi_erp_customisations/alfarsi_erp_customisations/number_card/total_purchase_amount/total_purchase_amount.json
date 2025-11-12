@@ -1,0 +1,23 @@
+{
+ "creation": "2025-08-30 16:02:25.127273",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "dynamic_filters_json": "{}",
+ "filters_json": "{\n \"from_date\": \"2025-08-04\",\n \"to_date\": \"2025-09-04\"\n}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Total Purchase Amount",
+ "modified": "2025-09-04 14:50:14.734988",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Total Purchase Amount",
+ "owner": "Administrator",
+ "report_field": "total_purchases",
+ "report_function": "Sum",
+ "report_name": "Supplier purchase report for Dashboard",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Report"
+}

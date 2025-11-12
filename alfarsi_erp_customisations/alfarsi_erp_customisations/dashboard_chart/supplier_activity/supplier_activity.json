@@ -1,0 +1,38 @@
+{
+ "chart_name": "Supplier Activity",
+ "chart_type": "Report",
+ "creation": "2025-08-30 15:45:33.225440",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "dynamic_filters_json": "{\"from_date\":\"frappe.datetime.add_days(frappe.datetime.get_today(), -30)\",\"to_date\":\"frappe.datetime.get_today()\"}",
+ "filters_json": "{}",
+ "group_by_type": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "modified": "2025-09-26 18:05:43.260394",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Supplier Activity",
+ "number_of_groups": 0,
+ "owner": "Administrator",
+ "report_name": "Supplier purchase report for Dashboard",
+ "roles": [],
+ "time_interval": "Yearly",
+ "timeseries": 0,
+ "timespan": "Last Year",
+ "type": "Bar",
+ "use_report_chart": 0,
+ "x_field": "supplier",
+ "y_axis": [
+  {
+   "y_field": "outstanding_amount"
+  },
+  {
+   "y_field": "last_paid_amount"
+  },
+  {
+   "y_field": "total_purchases"
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "charts": [
+  {
+   "chart_name": "Sales person Activities",
+   "label": "Sales person Activities"
+  },
+  {
+   "chart_name": "Supplier Activity",
+   "label": "Supplier Activity"
+  }
+ ],
+ "content": "[{\"id\":\"IL8PX0QQ07\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Operations</span>\",\"col\":12}},{\"id\":\"LKdtoDcioB\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Sales Invoices\",\"col\":3}},{\"id\":\"Uq82r4NqR8\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Outstanding amount\",\"col\":3}},{\"id\":\"_r9O7lyaWq\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Payments Collected\",\"col\":3}},{\"id\":\"WgsAcAJQ0G\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"PDC collection\",\"col\":3}},{\"id\":\"zlhEQepiUw\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales person Activities\",\"col\":12}},{\"id\":\"yKhqOV92rJ\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Purchase Amount\",\"col\":4}},{\"id\":\"MMlkcBam9k\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Purchase Outstanding Amount\",\"col\":4}},{\"id\":\"wuB7KqkiHI\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Supplier Activity\",\"col\":12}}]",
+ "creation": "2025-08-30 15:50:25.961613",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "getting-started",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Operations",
+ "links": [],
+ "modified": "2025-09-26 18:06:41.755060",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Operations",
+ "number_cards": [
+  {
+   "label": "Total Sales Invoices",
+   "number_card_name": "Total Sales Invoices"
+  },
+  {
+   "label": "Outstanding amount",
+   "number_card_name": "Outstanding amount"
+  },
+  {
+   "label": "Payments Collected",
+   "number_card_name": "Payments Collected"
+  },
+  {
+   "label": "PDC collection",
+   "number_card_name": "PDC collection"
+  },
+  {
+   "label": "Purchase Outstanding Amount",
+   "number_card_name": "Purchase Outstanding Amount"
+  },
+  {
+   "label": "Total Purchase Amount",
+   "number_card_name": "Total Purchase Amount"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 29.0,
+ "shortcuts": [],
+ "title": "Operations"
+}
