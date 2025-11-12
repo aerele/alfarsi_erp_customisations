@@ -51,11 +51,14 @@ def get_stock_in_other_companies(item_list, current_company):
     reqired_qty = {}
     for item_code in item_list:
         if item_code["qty"] > item_code["actual_qty"]:
-            item_code_list += [item_code["item_code"]]
-            to_warehouse[item_code["item_code"]] = item_code["warehouse"]
+            if item_code["item_code"] not in item_code_list:
+                item_code_list.append(item_code["item_code"])
+            if item_code["item_code"] not in to_warehouse:
+                to_warehouse[item_code["item_code"]] = item_code["warehouse"]
             if item_code["item_code"] in reqired_qty:
-                reqired_qty[item_code["item_code"]] = reqired_qty[item_code["item_code"]] + (item_code["qty"] -  item_code["actual_qty"])
-            reqired_qty[item_code["item_code"]] = (item_code["qty"] -  item_code["actual_qty"])
+                reqired_qty[item_code["item_code"]] = reqired_qty[item_code["item_code"]] + (item_code.get("qty") -  item_code.get("actual_qty",0))
+            else:
+                reqired_qty[item_code["item_code"]] = (item_code["qty"] -  item_code["actual_qty"])
     if not item_code_list:
         frappe.msgprint("No Item Found  in another Company")
         return None 
