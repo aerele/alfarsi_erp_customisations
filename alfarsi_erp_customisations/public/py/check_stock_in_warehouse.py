@@ -1,9 +1,9 @@
 import frappe
 
 def check_stock(doc, method):
-    customer_email = frappe.db.get_value("Customer", doc.customer, "account_manager")
-    if not customer_email:
-        customer_email = "sales@alfarsi.me"
+    # customer_email = frappe.db.get_value("Customer", doc.customer, "account_manager")
+    # if not customer_email:
+        # customer_email = "sales@alfarsi.me"
 
     out_of_stock_items = []
     exclude_items_in_warehouse=['AP1-INDUSTORE - AFMS','Expiry Warehouse - AFMS','MAN-INDUSTORE - AFMS','Stores - AFMM','Stores - MDL','Stores - WSDC']
@@ -22,7 +22,7 @@ def check_stock(doc, method):
                 "reserved_qty": reserved_qty
             })
     if out_of_stock_items:
-        users = [customer_email, "purchase@alfarsi.me", "director@alfarsi.me"]
+        users = [doc.owner, "purchase@alfarsi.me", "director@alfarsi.me"]
         rows = "".join(
             f"""
             <tr>
