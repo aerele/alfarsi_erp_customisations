@@ -1,0 +1,54 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2025-08-23 10:39:19.197454",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Al Farsi Medical Supplies",
+ "modified": "2025-09-04 14:28:11.507580",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Sales person report for Sales Dashboard",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Sales Invoice",
+ "report_name": "Sales person report for Sales Dashboard",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Invoice Update"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Account User - Wassan"
+  },
+  {
+   "role": "Account User - Mumtaz"
+  },
+  {
+   "role": "Employee Self Service"
+  }
+ ]
+}
