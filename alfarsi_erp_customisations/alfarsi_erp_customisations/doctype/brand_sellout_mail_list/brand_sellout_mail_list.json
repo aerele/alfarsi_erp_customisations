@@ -7,8 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "brand",
+  "frequency",
   "sent_mail_to",
-  "cc_to"
+  "cc_to",
+  "last_send_date"
  ],
  "fields": [
   {
@@ -31,12 +33,23 @@
    "fieldtype": "Small Text",
    "in_list_view": 1,
    "label": "CC To"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "last_send_date",
+   "fieldtype": "Date",
+   "label": "Last Send Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-08-30 23:01:02.117230",
+ "modified": "2025-11-17 12:12:18.852067",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Brand Sellout Mail List",
