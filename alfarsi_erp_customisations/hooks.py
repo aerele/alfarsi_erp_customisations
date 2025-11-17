@@ -136,7 +136,11 @@ scheduler_events = {
 		],
         "0 20 * * *": [
 			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
-		]
+		],
+           "0 0 * * * SAT": [
+            "alfarsi_erp_customisations.public.py.weekly_report_for_dn.get_weekly_report_for_dn"
+        ]
+
 	},
 }
 
