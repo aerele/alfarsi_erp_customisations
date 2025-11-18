@@ -7,44 +7,20 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "sent_mail_on",
-  "column_break_qpt9d",
-  "last_sent_on",
-  "section_break_9ae4r",
   "mail_configuration"
  ],
  "fields": [
-  {
-   "description": "Day of the month on which the mail should be sent (1\u201331)",
-   "fieldname": "sent_mail_on",
-   "fieldtype": "Int",
-   "label": "Sent Mail On"
-  },
-  {
-   "fieldname": "last_sent_on",
-   "fieldtype": "Date",
-   "label": "Last Sent On",
-   "read_only": 1
-  },
   {
    "fieldname": "mail_configuration",
    "fieldtype": "Table",
    "label": "Mail Configuration",
    "options": "Brand Sellout Mail List"
-  },
-  {
-   "fieldname": "column_break_qpt9d",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_9ae4r",
-   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-09-01 09:05:37.709379",
+ "modified": "2025-11-17 11:55:28.543968",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Brand Sellout Mail Settings",
