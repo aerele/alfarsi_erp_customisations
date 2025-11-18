@@ -12,10 +12,6 @@ def send_scheduled_sellout_mails():
     if not settings.mail_configuration:
         return {"success": False}
 
-    last_month = add_months(today, -1)
-    first_day_last_month = getdate(f"{last_month.year}-{last_month.month}-01")
-    last_day_last_month = get_last_day(first_day_last_month)
-
     for config_row in settings.mail_configuration:
         if not config_row.last_send_date:
             should_send = True
@@ -24,20 +20,25 @@ def send_scheduled_sellout_mails():
             should_send = today >= getdate(next_send_date)
 
         if not should_send:
-            continue   
+            continue
+        if not config_row.last_send_date:
+            start_date = add_days(today, -config_row.frequency)
+        else:
+            start_date = getdate(config_row.last_send_date)
+
+        end_date = today
         to_list = [mail.strip() for mail in config_row.sent_mail_to.split(",") if mail.strip()]
         cc_list = [mail.strip() for mail in config_row.cc_to.split(",") if mail.strip()]
 
         filters = {
-            "from_date": first_day_last_month,
-            "to_date": last_day_last_month,
+            "from_date": start_date,
+            "to_date": end_date,
             "brand": config_row.brand,
             "include_all_items": "Need all items from the selected brand"
         }
 
         report = frappe.get_doc("Report", "Sellout Report")
         columns, report_rows = report.get_data(filters=filters)
-
         wb = Workbook()
         ws = wb.active
 
@@ -74,14 +75,13 @@ def send_scheduled_sellout_mails():
             "content": file_bytes.read()
         })
         file_doc.save()
-
-        subject = "Monthly Sellout Report"
+        subject = "Sellout Report"
         message = f"""
         Hi Team,
 
-        Please find the attached sellout data for the month {last_month.strftime('%B %Y')}.
+        Please find the attached sellout data for the period:
+        {start_date} → {end_date}
         """
-
         frappe.sendmail(
             recipients=to_list,
             cc=cc_list,
