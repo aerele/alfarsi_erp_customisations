@@ -3,7 +3,6 @@ from frappe.utils.pdf import get_pdf
 
 @frappe.whitelist()
 def get_weekly_report_for_dn():
-    #this report is only for director
     report_name = "missing_field_in_dn"
 
     to_date = frappe.utils.add_days(frappe.utils.today(), -1)
@@ -96,5 +95,3 @@ def get_weekly_report_for_dn():
                 - Signed & Stamped Delivery Note Copy<br><br>
                 """
             )
-    frappe.msgprint("Weekly PDF Report Sent Successfully.")
-    return "Weekly PDF Report Sent Successfully"
