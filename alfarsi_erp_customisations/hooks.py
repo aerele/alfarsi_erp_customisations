@@ -139,6 +139,9 @@ scheduler_events = {
 		],
         "0 0 * * 6": [
             "alfarsi_erp_customisations.public.py.weekly_report_for_dn.get_weekly_report_for_dn"
+        ],
+         "0 0 * * 6": [
+            "alfarsi_erp_customisations.public.py.weekly_report_for_dn_owners.send_pending_dn_mails"
         ]
 	},
 }

@@ -3,13 +3,7 @@ from frappe.utils.pdf import get_pdf
 
 @frappe.whitelist()
 def get_weekly_report_for_dn():
-
-    cur_user = frappe.session.user if frappe.session.user else "Administrator"
-    cur_user_mail = frappe.get_value("User", cur_user, "email") or "admin@example.com"
-
-    if cur_user == "Guest":
-        frappe.throw("Please log in to access this feature.")
-
+    #this report is only for director
     report_name = "missing_field_in_dn"
 
     to_date = frappe.utils.add_days(frappe.utils.today(), -1)
@@ -43,7 +37,7 @@ def get_weekly_report_for_dn():
 
     html += "</tbody></table>"
     pdf_content = get_pdf(html)
-    recipients = [cur_user_mail, "director@alfarsi.me"]
+    recipients = ["director@alfarsi.me"]
     frappe.sendmail(
         recipients=recipients,
         subject="Weekly Delivery Note Report (PDF)",
