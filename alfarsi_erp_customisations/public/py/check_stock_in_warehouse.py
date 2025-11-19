@@ -4,7 +4,8 @@ def check_stock(doc, method):
     # customer_email = frappe.db.get_value("Customer", doc.customer, "account_manager")
     # if not customer_email:
         # customer_email = "sales@alfarsi.me"
-
+    if doc.customer != "C02279":
+        return
     out_of_stock_items = []
     exclude_items_in_warehouse=['AP1-INDUSTORE - AFMS','Expiry Warehouse - AFMS','MAN-INDUSTORE - AFMS','Stores - AFMM','Stores - MDL','Stores - WSDC']
 
