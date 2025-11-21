@@ -12,8 +12,6 @@
   "purchase_date",
   "sale_date",
   "po_no",
-  "po_required_by",
-  "so_delivery_date",
   "vatin_number",
   "items",
   "linked_documents_tab",
@@ -127,16 +125,6 @@
    "label": "Customer Purchase Number"
   },
   {
-   "fieldname": "po_required_by",
-   "fieldtype": "Date",
-   "label": "Purchase Order Required by"
-  },
-  {
-   "fieldname": "so_delivery_date",
-   "fieldtype": "Date",
-   "label": "Sales Order Delivery Date"
-  },
-  {
    "fieldname": "vatin_number",
    "fieldtype": "Data",
    "label": "Customer Vattin Number"
@@ -145,7 +133,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-12 12:13:13.302177",
+ "modified": "2025-11-21 14:17:03.718546",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",

@@ -80,7 +80,7 @@ def duplicate_reference_docs_from_settings(doc):
                 "rate": item.purchase_rate
             })
         new_po.transaction_date = getdate(doc.get("purchase_date"))
-        new_po.schedule_date = getdate(doc.get("po_required_by"))
+        new_po.schedule_date = getdate(doc.get("purchase_date"))
         new_po.payment_schedule = []
         new_po.insert()
 
@@ -96,8 +96,9 @@ def duplicate_reference_docs_from_settings(doc):
         pr = frappe.get_doc({
             "doctype": "Purchase Receipt",
             "supplier": new_po.supplier,
-            "posting_date": getdate(doc.get("po_required_by")),
             "currency": supplier_currency,
+            "set_posting_time": 1,
+            "posting_date": getdate(doc.get("purchase_date")),
             "items": pr_items,
 
         })
@@ -122,10 +123,11 @@ def duplicate_reference_docs_from_settings(doc):
         pi = frappe.get_doc({
             "doctype": "Purchase Invoice",
             "supplier": new_po.supplier,
-            "due_date": frappe.utils.add_years(frappe.utils.nowdate(), 1),
+            "set_posting_time": 1,
+            "due_date": frappe.utils.add_years(getdate(doc.get("purchase_date")), 1),
             "bill_no": doc.get("invoice_number"),
-            "posting_date": frappe.utils.nowdate(),
-            "bill_date":  frappe.utils.nowdate(),
+            "posting_date": getdate(doc.get("purchase_date")),
+            "bill_date":  getdate(doc.get("purchase_date")),
             "currency": supplier_currency,
             "cost_center": cost_center,
             "custom_vatin_number": doc.get("vatin_number"),
@@ -148,7 +150,7 @@ def duplicate_reference_docs_from_settings(doc):
             })
         new_so.po_no= doc.get("cust_po_no")
         new_so.transaction_date = getdate(doc.get("sale_date"))
-        new_so.delivery_date = getdate(doc.get("so_delivery_date"))
+        new_so.delivery_date = getdate(doc.get("sale_date"))
         new_so.payment_schedule = []
         new_so.insert()
 
@@ -169,11 +171,12 @@ def duplicate_reference_docs_from_settings(doc):
                 "so_detail": matched_so_item.name if matched_so_item else None,
                 "against_sales_order": new_so.name
             })
-  
+        print(doc.get("delivery_date"))
         dn = frappe.get_doc({
             "doctype": "Delivery Note",
             "customer": new_so.customer,
-            "posting_date":  doc.get("so_delivery_date"),
+            "set_posting_time": 1,
+            "posting_date":  getdate(doc.get("sale_date")),
             "items": dn_items
         })
         dn.insert()
@@ -191,7 +194,9 @@ def duplicate_reference_docs_from_settings(doc):
             "doctype": "Sales Invoice",
             "customer": new_so.customer,
             "items": si_items,
-            "due_date": frappe.utils.add_years(frappe.utils.nowdate(), 1),
+            "set_posting_time": 1,
+            "posting_date": getdate(doc.get("sale_date")),
+            "due_date": frappe.utils.add_years(getdate(doc.get("sale_date")), 1),
         })
         si.insert()
         frappe.msgprint(f"All Documents Created Successfully!!")
