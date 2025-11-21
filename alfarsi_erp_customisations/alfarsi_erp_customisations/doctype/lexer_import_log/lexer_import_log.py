@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import getdate
 class LexerImportLog(Document):
 	pass
 
@@ -78,8 +79,8 @@ def duplicate_reference_docs_from_settings(doc):
                 "qty": item.qty,
                 "rate": item.purchase_rate
             })
-        new_po.transaction_date = doc.get("purchase_date")
-        new_po.schedule_date = doc.get("po_required_by")
+        new_po.transaction_date = getdate(doc.get("purchase_date"))
+        new_po.schedule_date = getdate(doc.get("po_required_by"))
         new_po.payment_schedule = []
         new_po.insert()
 
@@ -95,7 +96,7 @@ def duplicate_reference_docs_from_settings(doc):
         pr = frappe.get_doc({
             "doctype": "Purchase Receipt",
             "supplier": new_po.supplier,
-            "posting_date": doc.get("po_required_by"),
+            "posting_date": getdate(doc.get("po_required_by")),
             "currency": supplier_currency,
             "items": pr_items,
 
@@ -146,8 +147,8 @@ def duplicate_reference_docs_from_settings(doc):
                 "rate": item.sales_rate
             })
         new_so.po_no= doc.get("cust_po_no")
-        new_so.transaction_date = doc.get("sale_date")
-        new_so.delivery_date = doc.get("so_delivery_date")
+        new_so.transaction_date = getdate(doc.get("sale_date"))
+        new_so.delivery_date = getdate(doc.get("so_delivery_date"))
         new_so.payment_schedule = []
         new_so.insert()
 
