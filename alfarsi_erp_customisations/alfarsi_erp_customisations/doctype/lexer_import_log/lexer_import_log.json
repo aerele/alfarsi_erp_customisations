@@ -133,7 +133,7 @@
   },
   {
    "fieldname": "so_delivery_date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "Sales Order Delivery Date"
   },
   {
