@@ -54,6 +54,8 @@ def validate_items(docname):
                     "profit_margin": 0,
                 }
             )
+            row.item_code = new_item_code
+            row.db_update()
             new_item.insert()
             frappe.msgprint(f"Created new Item: {new_item_code} - {new_item_name}")
     doc.save()
