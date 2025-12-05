@@ -11,6 +11,10 @@ from playwright.async_api import async_playwright
 class MOHAutomation(Document):
     pass
 
+
+# ----------------------------------------------------------
+# MAIN API – Called from ListView Button
+# ----------------------------------------------------------
 @frappe.whitelist()
 def automate_moh_registration(selected_items):
     selected_items = json.loads(selected_items)
@@ -25,11 +29,15 @@ def automate_moh_registration(selected_items):
 
     return "\n".join(results)
 
+
+# ----------------------------------------------------------
+# MAIN AUTOMATION SCRIPT
+# ----------------------------------------------------------
 async def submit_google_form(item):
 
     LOGIN_URL = (
         "https://moh.gov.om/en/account/pki-login/"
-        "?returnUrl=https%3A%2F%2Feportal.moh.gov.om%2FMedicalDevice%2FRegistration"
+        "?returnUrl=https%3A%2F%2Feportal.moh.gov.om%2FINRMD%2F"
     )
 
     async with async_playwright() as p:
@@ -39,23 +47,23 @@ async def submit_google_form(item):
         page = await context.new_page()
 
         try:
-            # STEP 1
-            await page.goto(LOGIN_URL, timeout=90000)
+            # STEP 1 — Open Login Page
+            await page.goto(LOGIN_URL, timeout=150000)
             await page.wait_for_load_state("domcontentloaded")
 
-            # STEP 2
+            # STEP 2 — Click National ID Login
             await page.locator("text=National ID Login").click(no_wait_after=True)
 
-            # STEP 3
-            for _ in range(200):
+            # STEP 3 — Wait for SSO Page
+            for _ in range(300):
                 if "idp.pki.ita.gov.om" in page.url:
                     break
                 await asyncio.sleep(1)
 
-            # STEP 4 – unlock audio
+            # STEP 4 — Unlock audio
             await page.mouse.click(10, 10)
 
-            # STEP 5 – alarm
+            # STEP 5 — Play alarm
             await page.evaluate("""
                 try {
                     window.alarmAudio = new Audio(
@@ -66,13 +74,13 @@ async def submit_google_form(item):
                 } catch (e) {}
             """)
 
-            # STEP 6 – wait login
-            for _ in range(300):
-                if "MedicalDevice/Registration" in page.url:
+            # STEP 6 — Wait for SSO login completion
+            for _ in range(450):
+                if "INRMD" in page.url:
                     break
                 await asyncio.sleep(1)
 
-            # STOP ALARM
+            # STOP alarm
             await page.evaluate("""
                 if (window.alarmAudio) {
                     window.alarmAudio.pause();
@@ -80,17 +88,65 @@ async def submit_google_form(item):
                 }
             """)
 
-            # STEP 7 – wait dropdown
-            await page.wait_for_selector("#b20-EstDropdown", timeout=120000)
-
-            # STEP 8 – select establishment
+            # STEP 7 — Establishment Info
+            await page.wait_for_selector("#b20-EstDropdown", timeout=180000)
             await page.select_option("#b20-EstDropdown", value="0")
-
-            # STEP 9 – Verify
             await page.click("#b20-VerifyBtn")
 
-            # STEP 10 – wait for CR number
-            await page.wait_for_selector("#b20-CR_Number", timeout=120000)
+            await page.wait_for_selector("#b20-CR_Number:not([value=''])", timeout=240000)
+
+            # Click Next
+            print("Waiting for Next button to be enabled...")
+            for _ in range(600):
+                disabled = await page.evaluate("""document.querySelector('#NextBtn')?.disabled""")
+                if disabled is False:
+                    break
+                await asyncio.sleep(1)
+
+            await page.click("#NextBtn")
+            print("Next button clicked successfully!")
+
+            # --------------------------------------------------------
+            # MEDICAL DEVICE INFO PAGE — UPDATED WITH CORRECT SELECTORS
+            # --------------------------------------------------------
+            print("Filling Medical Device Info Page...")
+
+            await page.wait_for_load_state("domcontentloaded")
+
+            # -------- Manufacturer Details --------
+
+            # Manufacturer Name
+            await page.fill("#b22-Input_manu_name", item.get("manufacturer_name"))
+
+            # Manufacturer Country (search dropdown)
+            await page.click("#b22-b2-DropdownSearch .vscomp-toggle-button")
+            await page.fill("div.vscomp-search-input input", item.get("manufacturer_country", ""))
+            await page.keyboard.press("Enter")
+
+            # -------- Medical Device Details --------
+
+            await page.fill("#b23-Input_MedDevName", item.get("medical_device_name"))
+            await page.fill("#b23-Input_MedDevModel", item.get("medical_device_model"))
+
+            await page.select_option("#b23-Dropdown1",
+                                     label=item.get("medical_device_category", ""))
+
+            await page.select_option("#b23-MedicalDeviceClassificationDropdown",
+                                     label=item.get("medical_device_classification", ""))
+
+            # --------------------------------------------------------
+            # CLICK NEXT BUTTON ON MEDICAL DEVICE PAGE (CORRECT: NextBtn2)
+            # --------------------------------------------------------
+            print("Waiting for Next button on Device Info page...")
+
+            for _ in range(300):
+                disabled = await page.evaluate("""document.querySelector('#NextBtn2')?.disabled""")
+                if disabled is False:
+                    break
+                await asyncio.sleep(1)
+
+            await page.click("#NextBtn2")
+            print("Medical Device Info Page Completed!")
 
         except Exception as e:
             frappe.log_error(f"Automation crashed: {str(e)}", "MOH Automation")
