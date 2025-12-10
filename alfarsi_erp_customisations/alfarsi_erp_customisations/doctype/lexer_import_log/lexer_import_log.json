@@ -22,7 +22,13 @@
   "sales_order",
   "delivery_note",
   "sales_invoice",
-  "amended_from"
+  "amended_from",
+  "po_link",
+  "pr_link",
+  "pi_link",
+  "so_link",
+  "dn_link",
+  "si_link"
  ],
  "fields": [
   {
@@ -128,12 +134,79 @@
    "fieldname": "vatin_number",
    "fieldtype": "Data",
    "label": "Customer Vattin Number"
+  },
+  {
+   "fieldname": "po_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Po link",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "pr_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Pr link",
+   "options": "Purchase Receipt"
+  },
+  {
+   "fieldname": "pi_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "pi link",
+   "options": "Purchase Invoice"
+  },
+  {
+   "fieldname": "so_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "so link",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "dn_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "dn link",
+   "options": "Delivery Note"
+  },
+  {
+   "fieldname": "si_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "si link",
+   "options": "Sales Invoice"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2025-11-21 14:17:03.718546",
+ "links": [
+  {
+   "link_doctype": "Purchase Order",
+   "link_fieldname": "custom_lexer_doc"
+  },
+  {
+   "link_doctype": "Purchase Receipt",
+   "link_fieldname": "custom_lexer_link_pr"
+  },
+  {
+   "link_doctype": "Purchase Invoice",
+   "link_fieldname": "custom_lexer_link_in_pi"
+  },
+  {
+   "link_doctype": "Sales Order",
+   "link_fieldname": "custom_lexer_link_in_so"
+  },
+  {
+   "link_doctype": "Delivery Note",
+   "link_fieldname": "custom_lexer_link_in_dn"
+  },
+  {
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_lexer_in_si"
+  }
+ ],
+ "modified": "2025-12-09 22:29:43.585620",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",

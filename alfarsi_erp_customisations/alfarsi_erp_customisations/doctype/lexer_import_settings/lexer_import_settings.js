@@ -1,7 +1,19 @@
-// Copyright (c) 2025, Alfarsi and contributors
-// For license information, please see license.txt
-
 frappe.ui.form.on("Lexer Import Settings", {
-	// refresh: function(frm) {
-	// }
+    refresh(frm) {
+        frm.set_query("reference_purchase_order", () => {
+            return {
+                filters: {
+                    company: "AL FARSI MEDICAL MANUFACTURING"
+                }
+            };
+        });
+
+        frm.set_query("reference_sales_order", () => {
+            return {
+                filters: {
+                    company: "AL FARSI MEDICAL MANUFACTURING"
+                }
+            };
+        });
+    }
 });
