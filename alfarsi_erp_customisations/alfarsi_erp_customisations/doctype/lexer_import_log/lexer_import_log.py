@@ -77,7 +77,7 @@ def create_documents(docname):
         item_doc = frappe.get_doc("Item", row.item_code)
         if item_doc.workflow_state != "Approved":
             frappe.throw(
-                f"Item {row.item_code} is not approved. Please approve it before continuing."
+                "Some items are not approved. Please approve them before continuing."
             )
 
         company_name = "AL FARSI MEDICAL MANUFACTURING"
