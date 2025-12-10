@@ -18,6 +18,7 @@ frappe.ui.form.on("Lexer Import Log", {
 				frappe.call({
 					method: "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.lexer_import_log.lexer_import_log.create_documents",
 					args: { docname: frm.doc.name },
+					freeze: true,
 				});
 			});
 		}
