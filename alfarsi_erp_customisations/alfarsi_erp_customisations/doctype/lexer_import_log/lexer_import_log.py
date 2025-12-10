@@ -104,15 +104,7 @@ def duplicate_reference_docs_from_settings(doc):
         new_po.name = None
         new_po.company="AL FARSI MEDICAL MANUFACTURING"
         new_po.items = []
-        new_po.taxes = []
-        new_po.append("taxes", {
-            "charge_type": "Actual",
-            "account_head": "Freight Inward - AFMM",
-            "cost_center": new_po.cost_center or frappe.db.get_value("Company", new_po.company, "cost_center"),
-            "description": "Freight Charges",
-            "tax_amount": doc.purchase_tax_amount 
-        })
-                     
+        new_po.taxes = []       
         new_po.discount_amount = 0             
         new_po.base_discount_amount = 0
         new_po.apply_discount_on = None
@@ -160,6 +152,13 @@ def duplicate_reference_docs_from_settings(doc):
         
         new_po.schedule_date = getdate(doc.get("purchase_date"))
         new_po.payment_schedule = []
+        new_po.append("taxes", {
+            "charge_type": "Actual",
+            "account_head": "Freight Inward - AFMM",
+            "cost_center": new_po.cost_center or frappe.db.get_value("Company", new_po.company, "cost_center"),
+            "description": "Freight Charges",
+            "tax_amount": doc.purchase_tax_amount 
+        })
         new_po.set_missing_values()
         new_po.calculate_taxes_and_totals()   
         new_po.custom_lexer_doc = doc.name
@@ -194,6 +193,13 @@ def duplicate_reference_docs_from_settings(doc):
                 "items": pr_items,
             }
         )
+        pr.append("taxes", {
+            "charge_type": "Actual",
+            "account_head": "Freight Inward - AFMM",
+            "cost_center": pr.cost_center or frappe.db.get_value("Company", pr.company, "cost_center"),
+            "description": "Freight Charges",
+            "tax_amount": doc.purchase_tax_amount 
+        })
         pr.set_missing_values()
         pr.calculate_taxes_and_totals()
         pr.insert()
@@ -228,9 +234,6 @@ def duplicate_reference_docs_from_settings(doc):
                 "company": "AL FARSI MEDICAL MANUFACTURING",
                 "supplier": new_po.supplier,
                 "set_posting_time": 1,
-                "due_date": frappe.utils.add_years(
-                    getdate(doc.get("purchase_date")), 1
-                ),
                 "bill_no": doc.get("invoice_number"),
                 "posting_date": getdate(doc.get("purchase_date")),
                 "bill_date": getdate(doc.get("purchase_date")),
@@ -241,6 +244,13 @@ def duplicate_reference_docs_from_settings(doc):
                 "items": pi_items,
             }
         )
+        pi.append("taxes", {
+            "charge_type": "Actual",
+            "account_head": "Freight Inward - AFMM",
+            "cost_center": pi.cost_center or frappe.db.get_value("Company", pi.company, "cost_center"),
+            "description": "Freight Charges",
+            "tax_amount": doc.purchase_tax_amount 
+        })
         pi.set_missing_values()
         pi.calculate_taxes_and_totals()
         pi.insert()
@@ -361,7 +371,6 @@ def duplicate_reference_docs_from_settings(doc):
                 "currency": new_so.currency,
                 "set_posting_time": 1,
                 "posting_date": getdate(doc.get("sale_date")),
-                "due_date": frappe.utils.add_years(getdate(doc.get("sale_date")), 1),
             }
         )
         si.set_missing_values()
