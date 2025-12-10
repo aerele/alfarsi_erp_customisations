@@ -13,6 +13,7 @@
   "sale_date",
   "po_no",
   "vatin_number",
+  "purchase_tax_amount",
   "items",
   "linked_documents_tab",
   "purchase_order",
@@ -22,13 +23,13 @@
   "sales_order",
   "delivery_note",
   "sales_invoice",
-  "amended_from",
   "po_link",
   "pr_link",
   "pi_link",
   "so_link",
   "dn_link",
-  "si_link"
+  "si_link",
+  "amended_from"
  ],
  "fields": [
   {
@@ -176,6 +177,11 @@
    "hidden": 1,
    "label": "si link",
    "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "purchase_tax_amount",
+   "fieldtype": "Currency",
+   "label": "Purchase Tax Amount"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -206,7 +212,7 @@
    "link_fieldname": "custom_lexer_in_si"
   }
  ],
- "modified": "2025-12-09 22:29:43.585620",
+ "modified": "2025-12-10 16:39:16.391373",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",

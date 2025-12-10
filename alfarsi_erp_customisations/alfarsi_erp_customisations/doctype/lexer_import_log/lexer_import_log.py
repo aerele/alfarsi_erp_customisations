@@ -30,19 +30,20 @@ def validate_items(docname):
         if item:
             row.item_code = item["name"]
             row.db_update()
+
         else:
             new_item_name = f"Trusta {row.item_name or ''} ANE - {part_number}"
             last_code = frappe.db.sql(
                 """
-                SELECT MAX(CAST(SUBSTRING(item_code, 3) AS SIGNED))
-                FROM `tabItem` WHERE item_code LIKE '38%'
-            """,
-                as_list=True,
+                SELECT MAX(CAST(SUBSTRING(item_code, 4) AS UNSIGNED))
+                FROM `tabItem`
+                WHERE item_code LIKE '383%'
+                """,
+                as_list=True
             )
 
-            next_number = (last_code[0][0] or 0) + 1 if last_code else 3800001
-            new_item_code = f"38{next_number}"
-
+            next_number = (last_code[0][0] or 0) + 1 if last_code else 1  
+            new_item_code = f"383{next_number:04d}"
             new_item = frappe.get_doc(
                 {
                     "doctype": "Item",
@@ -53,10 +54,11 @@ def validate_items(docname):
                     "stock_uom": "Each",
                     "disabled": 1,
                     "profit_margin": 0,
+                    "has_batch_no": 1,
+                    "create_new_batch": 1,
                 }
             )
-            new_item.has_batch_no = 1
-            new_item.create_new_batch = 1
+
             row.item_code = new_item_code
             row.db_update()
             new_item.insert()
@@ -102,7 +104,15 @@ def duplicate_reference_docs_from_settings(doc):
         new_po.name = None
         new_po.company="AL FARSI MEDICAL MANUFACTURING"
         new_po.items = []
-        new_po.taxes = []                      
+        new_po.taxes = []
+        new_po.append("taxes", {
+            "charge_type": "Actual",
+            "account_head": "Freight Inward - AFMM",
+            "cost_center": new_po.cost_center or frappe.db.get_value("Company", new_po.company, "cost_center"),
+            "description": "Freight Charges",
+            "tax_amount": doc.purchase_tax_amount  # your amount
+        })
+                     
         new_po.discount_amount = 0             
         new_po.base_discount_amount = 0
         new_po.apply_discount_on = None
@@ -270,12 +280,13 @@ def duplicate_reference_docs_from_settings(doc):
                     "rate": item.sales_rate,
                 },
             )
-        new_so.po_no = doc.get("cust_po_no")
+        new_so.po_no = doc.get("po_no")
         new_so.transaction_date = getdate(doc.get("sale_date"))
         new_so.delivery_date = getdate(doc.get("sale_date"))
         new_so.payment_schedule = []
         new_so.set_missing_values()
         new_so.calculate_taxes_and_totals()
+        new_so.ignore_lexer_validation = 1
         new_so.insert(ignore_permissions=True)
         new_so.custom_lexer_link_in_so = doc.name
         new_so.save()
