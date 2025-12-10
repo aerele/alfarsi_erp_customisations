@@ -110,7 +110,7 @@ def duplicate_reference_docs_from_settings(doc):
             "account_head": "Freight Inward - AFMM",
             "cost_center": new_po.cost_center or frappe.db.get_value("Company", new_po.company, "cost_center"),
             "description": "Freight Charges",
-            "tax_amount": doc.purchase_tax_amount  # your amount
+            "tax_amount": doc.purchase_tax_amount 
         })
                      
         new_po.discount_amount = 0             
