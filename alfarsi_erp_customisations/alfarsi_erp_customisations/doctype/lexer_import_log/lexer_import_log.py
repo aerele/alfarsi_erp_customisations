@@ -2,9 +2,9 @@
 # For license information, please see license.txt
 
 import frappe
+from erpnext.stock.doctype.item.item import set_item_default
 from frappe.model.document import Document
 from frappe.utils import getdate
-from erpnext.stock.doctype.item.item import set_item_default
 
 
 class LexerImportLog(Document):
@@ -14,7 +14,7 @@ class LexerImportLog(Document):
 @frappe.whitelist()
 def validate_items(docname):
     doc = frappe.get_doc("Lexer Import Log", docname)
-    
+
     for row in doc.items:
         part_number = row.part_number
         if not part_number:
@@ -70,15 +70,21 @@ def create_documents(docname):
 
     for row in doc.items:
         if not frappe.db.exists("Item", row.item_code):
-            frappe.throw(f"Item {row.item_name} not found. Please validate the items first.")
+            frappe.throw(
+                f"Item {row.item_name} not found. Please validate the items first."
+            )
 
         item_doc = frappe.get_doc("Item", row.item_code)
         if item_doc.workflow_state != "Approved":
-            frappe.throw(f"Item {row.item_code} is not approved. Please approve it before continuing.")
+            frappe.throw(
+                f"Item {row.item_code} is not approved. Please approve it before continuing."
+            )
 
         company_name = "AL FARSI MEDICAL MANUFACTURING"
         default_warehouse = "Stores - AFMM"
-        set_item_default(row.item_code, company_name, "default_warehouse", default_warehouse)
+        set_item_default(
+            row.item_code, company_name, "default_warehouse", default_warehouse
+        )
 
     duplicate_reference_docs_from_settings(doc)
 
@@ -94,7 +100,7 @@ def duplicate_reference_docs_from_settings(doc):
         new_po.name = None
         new_po.items = []
         new_po.currency = orig_po.currency
-        new_po.supplier=orig_po.supplier
+        new_po.supplier = orig_po.supplier
         for item in doc.items:
             new_po.append(
                 "items",
@@ -114,22 +120,24 @@ def duplicate_reference_docs_from_settings(doc):
                 if supplier_found.get("supplier_part_no") != item.part_number:
                     supplier_found.supplier_part_no = item.part_number
             else:
-                supplier_item.append("supplier_items", {
-                    "supplier": new_po.supplier,
-                    "supplier_part_no": item.part_number,
-                })
+                supplier_item.append(
+                    "supplier_items",
+                    {
+                        "supplier": new_po.supplier,
+                        "supplier_part_no": item.part_number,
+                    },
+                )
             supplier_item.save()
 
         new_po.transaction_date = getdate(doc.get("purchase_date"))
         new_po.schedule_date = getdate(doc.get("purchase_date"))
         new_po.payment_schedule = []
-        new_po.custom_lexer_doc= doc.name
+        new_po.custom_lexer_doc = doc.name
         new_po.insert()
         frappe.set_value("Lexer Import Log", doc.name, "po_link", new_po.name)
         new_po.submit()
 
-
-        supplier_currency = new_po.get("currency") 
+        supplier_currency = new_po.get("currency")
         pr_items = []
         for item in new_po.items:
             item_doc = frappe.get_doc("Item", item.item_code)
@@ -140,8 +148,10 @@ def duplicate_reference_docs_from_settings(doc):
                 "purchase_order": new_po.name,
             }
             if item_doc.has_batch_no == 1:
-                pr_item["supplier_batch_no"] = doc.get('invoice_number')
-            pr_item["expiry_date"] = frappe.db.get_value("Item", item.item_code, "end_of_life") or None
+                pr_item["supplier_batch_no"] = doc.get("invoice_number")
+            pr_item["expiry_date"] = (
+                frappe.db.get_value("Item", item.item_code, "end_of_life") or None
+            )
             pr_items.append(pr_item)
         pr = frappe.get_doc(
             {
@@ -154,10 +164,10 @@ def duplicate_reference_docs_from_settings(doc):
             }
         )
         pr.insert()
-        pr.custom_lexer_link_pr=doc.name
+        pr.custom_lexer_link_pr = doc.name
         frappe.set_value("Lexer Import Log", doc.name, "pr_link", pr.name)
         pr.submit()
-  
+
         pi_items = []
         for item in new_po.items:
             pi_items.append(
@@ -170,7 +180,9 @@ def duplicate_reference_docs_from_settings(doc):
                 }
             )
 
-        cost_center = new_po.get("cost_center") or frappe.db.get_value("Company", new_po.company, "cost_center")
+        cost_center = new_po.get("cost_center") or frappe.db.get_value(
+            "Company", new_po.company, "cost_center"
+        )
         if not cost_center:
             frappe.throw("Cost Center is not set in the Purchase Order.")
 
@@ -223,14 +235,18 @@ def duplicate_reference_docs_from_settings(doc):
         new_so.delivery_date = getdate(doc.get("sale_date"))
         new_so.payment_schedule = []
         new_so.insert(ignore_permissions=True)
-        new_so.custom_lexer_link_in_so= doc.name
+        new_so.custom_lexer_link_in_so = doc.name
         frappe.set_value("Lexer Import Log", doc.name, "so_link", new_so.name)
         new_so.submit()
 
         dn_items = []
         for item in new_so.items:
             matched_so_item = next(
-                (so_item for so_item in new_so.items if so_item.item_code == item.item_code),
+                (
+                    so_item
+                    for so_item in new_so.items
+                    if so_item.item_code == item.item_code
+                ),
                 None,
             )
             if not matched_so_item:
@@ -239,12 +255,15 @@ def duplicate_reference_docs_from_settings(doc):
             dn_items.append(
                 {
                     "item_code": item.item_code,
-                    "qty": item.qty,  
+                    "qty": item.qty,
                     "rate": item.rate,
                     "sales_order": new_so.name,
                     "so_detail": matched_so_item.name,
                     "against_sales_order": new_so.name,
-                    "expiry_date": frappe.db.get_value("Item", item.item_code, "end_of_life") or None,
+                    "expiry_date": frappe.db.get_value(
+                        "Item", item.item_code, "end_of_life"
+                    )
+                    or None,
                 }
             )
         dn = frappe.get_doc(
@@ -288,7 +307,7 @@ def duplicate_reference_docs_from_settings(doc):
             }
         )
         si.insert()
-        si.custom_lexer_in_si=doc.name
+        si.custom_lexer_in_si = doc.name
         si.save()
         frappe.set_value("Lexer Import Log", doc.name, "si_link", si.name)
         frappe.msgprint("All Documents Created Successfully!!")
