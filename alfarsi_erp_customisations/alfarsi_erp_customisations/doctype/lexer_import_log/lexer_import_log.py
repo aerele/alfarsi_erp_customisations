@@ -99,6 +99,18 @@ def duplicate_reference_docs_from_settings(doc):
         new_po = frappe.copy_doc(orig_po)
         new_po.name = None
         new_po.items = []
+        new_po.taxes = []                      
+        new_po.discount_amount = 0             
+        new_po.base_discount_amount = 0
+        new_po.apply_discount_on = None
+        new_po.total = 0
+        new_po.base_total = 0
+        new_po.net_total = 0
+        new_po.base_net_total = 0
+        new_po.rounded_total = 0
+        new_po.base_rounded_total = 0
+        new_po.grand_total = 0
+        new_po.base_grand_total = 0
         new_po.currency = orig_po.currency
         new_po.supplier = orig_po.supplier
         for item in doc.items:
@@ -110,12 +122,15 @@ def duplicate_reference_docs_from_settings(doc):
                     "rate": item.purchase_rate,
                 },
             )
+
+            # Update supplier_items
             supplier_item = frappe.get_doc("Item", item.item_code)
             supplier_found = None
             for s in supplier_item.get("supplier_items"):
                 if s.get("supplier") == new_po.supplier:
                     supplier_found = s
                     break
+
             if supplier_found:
                 if supplier_found.get("supplier_part_no") != item.part_number:
                     supplier_found.supplier_part_no = item.part_number
@@ -128,12 +143,13 @@ def duplicate_reference_docs_from_settings(doc):
                     },
                 )
             supplier_item.save()
-
         new_po.transaction_date = getdate(doc.get("purchase_date"))
         new_po.schedule_date = getdate(doc.get("purchase_date"))
         new_po.payment_schedule = []
+        new_po.set_missing_values()
+        new_po.calculate_taxes_and_totals()   
         new_po.custom_lexer_doc = doc.name
-        new_po.insert()
+        new_po.insert(ignore_permissions=True)
         frappe.set_value("Lexer Import Log", doc.name, "po_link", new_po.name)
         new_po.submit()
 
@@ -217,9 +233,23 @@ def duplicate_reference_docs_from_settings(doc):
         new_so = frappe.copy_doc(orig_so)
         new_so.name = None
         new_so.items = []
+        new_so.taxes = []                      
+        new_so.discount_amount = 0
+        new_so.base_discount_amount = 0
+        new_so.apply_discount_on = None
+        new_so.total = 0
+        new_so.net_total = 0
+        new_so.grand_total = 0
+        new_so.rounded_total = 0
+        new_so.base_total = 0
+        new_so.base_net_total = 0
+        new_so.base_grand_total = 0
+        new_so.base_rounded_total = 0
+
         new_so.order_contains_free_item = 0
         new_so.workflow_state = "Draft"
         new_so.currency = orig_so.currency
+
         for item in doc.items:
             new_so.append(
                 "items",
@@ -229,13 +259,15 @@ def duplicate_reference_docs_from_settings(doc):
                     "rate": item.sales_rate,
                 },
             )
-
         new_so.po_no = doc.get("cust_po_no")
         new_so.transaction_date = getdate(doc.get("sale_date"))
         new_so.delivery_date = getdate(doc.get("sale_date"))
         new_so.payment_schedule = []
+        new_so.set_missing_values()
+        new_so.calculate_taxes_and_totals()
         new_so.insert(ignore_permissions=True)
         new_so.custom_lexer_link_in_so = doc.name
+        new_so.save()
         frappe.set_value("Lexer Import Log", doc.name, "so_link", new_so.name)
         new_so.submit()
 
