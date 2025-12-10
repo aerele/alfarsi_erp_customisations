@@ -1,0 +1,23 @@
+{
+ "creation": "2025-08-30 15:39:52.734952",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "dynamic_filters_json": "{}",
+ "filters_json": "{\n \"from_date\": \"2025-08-04\",\n \"to_date\": \"2025-09-04\"\n}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Payments Collected",
+ "modified": "2025-09-04 14:50:14.683211",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Payments Collected",
+ "owner": "Administrator",
+ "report_field": "payments_collected",
+ "report_function": "Sum",
+ "report_name": "Sales person report for Sales Dashboard",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Report"
+}

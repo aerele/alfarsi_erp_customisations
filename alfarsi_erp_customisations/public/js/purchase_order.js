@@ -5,7 +5,7 @@ frappe.ui.form.on("Purchase Order", {
 
                 let d = new frappe.ui.Dialog({
                     title: 'Select Sales Orders Items',
-                    size: 'large',
+                    size: 'extra-large',
                     fields: [
                         {
                             fieldtype: 'Link',
@@ -52,14 +52,16 @@ frappe.ui.form.on("Purchase Order", {
                             label: 'Items',
                             cannot_add_rows: 1,
                             cannot_delete_rows: 1,
-                            in_place_edit: true,
                             data: [],
                             fields: [
-                                { fieldtype: 'Data', fieldname: 'item_code', label: 'Item Code', in_list_view: 1, read_only: 1 },
-                                { fieldtype: 'Data', fieldname: 'item_name', label: 'Item Name', in_list_view: 1, read_only: 1 },
-                                { fieldtype: 'Int', fieldname: 'pending_qty', label: 'Pending Qty', in_list_view: 1, read_only: 1 },
-                                { fieldtype: 'Int', fieldname: 'to_order_qty', label: 'To Order Qty', in_list_view: 1 },
-                                { fieldtype: 'Int', fieldname: 'aging', label: 'Aging (Days)', in_list_view: 1, read_only: 1 },
+                                { fieldtype: 'Data', fieldname: 'item_code', label: 'Item Code', in_list_view: 1, read_only: 1, columns: 2},
+                                { fieldtype: 'Data', fieldname: 'item_name', label: 'Item Name', in_list_view: 1, read_only: 1,columns: 2 },
+                                { fieldtype: 'Int', fieldname: 'pending_qty', label: 'Pending Qty', in_list_view: 1, read_only: 1, columns: 2 },
+                                { fieldtype: 'Int', fieldname: 'to_order_qty', label: 'To Order Qty', in_list_view: 1, columns: 1 },
+                                { fieldtype: 'Int', fieldname: 'available_qty', label: 'Available Qty', in_list_view: 1,read_only: 0, columns: 1},
+                                { fieldtype: 'Int', fieldname: 'aging', label: 'Aging (Days)', in_list_view: 1, read_only: 1, columns: 1 },
+                                
+
                             ]
                         }
                     ],
@@ -93,7 +95,7 @@ frappe.ui.form.on("Purchase Order", {
                 });
 
                 d.show();
-
+                d.$wrapper.find('.modal-dialog').css("width", "1000px");
                 fetch_sales_order_items(frm, d);
 
                 function fetch_sales_order_items(frm, dialog) {
@@ -116,7 +118,9 @@ frappe.ui.form.on("Purchase Order", {
                                     pending_qty: row.pending_qty,
                                     to_order_qty: row.pending_qty,
                                     aging: row.aging,
-                                    uom: row.uom
+                                    uom: row.uom,
+                                    available_qty: row.available_qty
+
                                 }));
                                 dialog.fields_dict.sales_order_mapping.grid.refresh();
                             } else {

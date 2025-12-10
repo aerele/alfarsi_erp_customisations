@@ -120,6 +120,12 @@ override_doctype_class = {
 doc_events = {
 	"Leave Application": {
 		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
+	},
+  "Sales Order": {
+    "on_submit": "alfarsi_erp_customisations.public.py.check_stock_in_warehouse.check_stock",
+  },
+  "Sales Invoice": {
+		"on_submit": "alfarsi_erp_customisations.public.py.sales_invoice.validate_return_delivery_note",
 	}
 }
 
@@ -128,15 +134,22 @@ doc_events = {
 
 scheduler_events = {
     "daily": [
-		"alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"
+		"alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails",
+		"alfarsi_erp_customisations.public.py.update_operations_number_cards.update_operations_number_cards"
 	],
 	"cron": {
-        "0 8 * * SAT": [
+        "0 8 * * 6": [
             "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
 		],
         "0 20 * * *": [
 			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
-		]
+		],
+        "0 0 * * 6": [
+            "alfarsi_erp_customisations.public.py.weekly_report_for_dn.get_weekly_report_for_dn"
+        ],
+         "0 0 * * 6": [
+            "alfarsi_erp_customisations.public.py.weekly_report_for_dn_owners.send_pending_dn_mails"
+        ]
 	},
 }
 
