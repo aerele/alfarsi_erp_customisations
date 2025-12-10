@@ -55,6 +55,8 @@ def validate_items(docname):
                     "profit_margin": 0,
                 }
             )
+            new_item.has_batch_no = 1
+            new_item.create_new_batch = 1
             row.item_code = new_item_code
             row.db_update()
             new_item.insert()
@@ -98,6 +100,7 @@ def duplicate_reference_docs_from_settings(doc):
         orig_po = frappe.get_doc("Purchase Order", reference_purchase_order)
         new_po = frappe.copy_doc(orig_po)
         new_po.name = None
+        new_po.company="AL FARSI MEDICAL MANUFACTURING"
         new_po.items = []
         new_po.taxes = []                      
         new_po.discount_amount = 0             
@@ -144,6 +147,7 @@ def duplicate_reference_docs_from_settings(doc):
                 )
             supplier_item.save()
         new_po.transaction_date = getdate(doc.get("purchase_date"))
+        
         new_po.schedule_date = getdate(doc.get("purchase_date"))
         new_po.payment_schedule = []
         new_po.set_missing_values()
@@ -172,6 +176,7 @@ def duplicate_reference_docs_from_settings(doc):
         pr = frappe.get_doc(
             {
                 "doctype": "Purchase Receipt",
+                "company": "AL FARSI MEDICAL MANUFACTURING",
                 "supplier": new_po.supplier,
                 "currency": supplier_currency,
                 "set_posting_time": 1,
@@ -179,6 +184,8 @@ def duplicate_reference_docs_from_settings(doc):
                 "items": pr_items,
             }
         )
+        pr.set_missing_values()
+        pr.calculate_taxes_and_totals()
         pr.insert()
         pr.custom_lexer_link_pr = doc.name
         frappe.set_value("Lexer Import Log", doc.name, "pr_link", pr.name)
@@ -208,6 +215,7 @@ def duplicate_reference_docs_from_settings(doc):
         pi = frappe.get_doc(
             {
                 "doctype": "Purchase Invoice",
+                "company": "AL FARSI MEDICAL MANUFACTURING",
                 "supplier": new_po.supplier,
                 "set_posting_time": 1,
                 "due_date": frappe.utils.add_years(
@@ -223,6 +231,8 @@ def duplicate_reference_docs_from_settings(doc):
                 "items": pi_items,
             }
         )
+        pi.set_missing_values()
+        pi.calculate_taxes_and_totals()
         pi.insert()
         pi.custom_lexer_link_in_pi = doc.name
         pi.save()
@@ -232,6 +242,7 @@ def duplicate_reference_docs_from_settings(doc):
         orig_so = frappe.get_doc("Sales Order", reference_sales_order)
         new_so = frappe.copy_doc(orig_so)
         new_so.name = None
+        new_so.company="AL FARSI MEDICAL MANUFACTURING"
         new_so.items = []
         new_so.taxes = []                      
         new_so.discount_amount = 0
@@ -301,6 +312,7 @@ def duplicate_reference_docs_from_settings(doc):
         dn = frappe.get_doc(
             {
                 "doctype": "Delivery Note",
+                "company": "AL FARSI MEDICAL MANUFACTURING",
                 "customer": new_so.customer,
                 "currency": new_so.currency,
                 "set_posting_time": 1,
@@ -308,6 +320,8 @@ def duplicate_reference_docs_from_settings(doc):
                 "items": dn_items,
             }
         )
+        dn.set_missing_values()
+        dn.calculate_taxes_and_totals()
         dn.insert()
         dn.custom_lexer_link_in_dn = doc.name
         dn.save()
@@ -330,6 +344,7 @@ def duplicate_reference_docs_from_settings(doc):
         si = frappe.get_doc(
             {
                 "doctype": "Sales Invoice",
+                "company": "AL FARSI MEDICAL MANUFACTURING",
                 "customer": new_so.customer,
                 "items": si_items,
                 "currency": new_so.currency,
@@ -338,6 +353,8 @@ def duplicate_reference_docs_from_settings(doc):
                 "due_date": frappe.utils.add_years(getdate(doc.get("sale_date")), 1),
             }
         )
+        si.set_missing_values()
+        si.calculate_taxes_and_totals()
         si.insert()
         si.custom_lexer_in_si = doc.name
         si.save()
