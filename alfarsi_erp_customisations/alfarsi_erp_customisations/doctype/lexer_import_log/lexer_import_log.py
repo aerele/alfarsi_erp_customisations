@@ -22,7 +22,10 @@ def validate_items(docname):
 
         item = frappe.db.get_value(
             "Item",
-            {"description": ["like", f"%{part_number}%"]},
+            {
+                "item_name": ["like", "Trusta%"],
+                "description": ["like", f"%{part_number}%"]
+            },
             ["name", "item_name"],
             as_dict=True,
         )
