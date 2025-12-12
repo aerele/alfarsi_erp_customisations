@@ -1,0 +1,243 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "creation": "2025-12-12 17:56:23.151186",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "invoice_number",
+  "purchase_date",
+  "sale_date",
+  "po_no",
+  "vatin_number",
+  "purchase_tax_amount",
+  "items",
+  "linked_documents_tab",
+  "purchase_order",
+  "purchase_receipt",
+  "purchase_invoice",
+  "column_break_o2yfm",
+  "sales_order",
+  "delivery_note",
+  "sales_invoice",
+  "po_link",
+  "pr_link",
+  "pi_link",
+  "so_link",
+  "dn_link",
+  "si_link",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "invoice_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Invoice Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "purchase_date",
+   "fieldtype": "Date",
+   "label": "Purchase Date"
+  },
+  {
+   "fieldname": "sale_date",
+   "fieldtype": "Date",
+   "label": "Sale Date"
+  },
+  {
+   "fieldname": "po_no",
+   "fieldtype": "Data",
+   "label": "Customer Purchase Number"
+  },
+  {
+   "fieldname": "vatin_number",
+   "fieldtype": "Data",
+   "label": "Customer Vattin Number"
+  },
+  {
+   "fieldname": "purchase_tax_amount",
+   "fieldtype": "Currency",
+   "label": "Purchase Tax Amount"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Lexer Import Log Item"
+  },
+  {
+   "fieldname": "linked_documents_tab",
+   "fieldtype": "Tab Break",
+   "label": "Linked Documents"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_receipt",
+   "fieldtype": "Link",
+   "label": "Purchase Receipt",
+   "options": "Purchase Receipt",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_o2yfm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "delivery_note",
+   "fieldtype": "Link",
+   "label": "Delivery Note",
+   "options": "Delivery Note",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "po_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Po link",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "pr_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Pr link",
+   "options": "Purchase Receipt"
+  },
+  {
+   "fieldname": "pi_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "pi link",
+   "options": "Purchase Invoice"
+  },
+  {
+   "fieldname": "so_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "so link",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "dn_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "dn link",
+   "options": "Delivery Note"
+  },
+  {
+   "fieldname": "si_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "si link",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Lexer Import Log",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Lexer Import Log",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "custom": 1,
+   "link_doctype": "Purchase Invoice",
+   "link_fieldname": "custom_lexer_link_in_pi"
+  },
+  {
+   "custom": 1,
+   "link_doctype": "Purchase Order",
+   "link_fieldname": "custom_lexer_doc"
+  },
+  {
+   "custom": 1,
+   "link_doctype": "Purchase Receipt",
+   "link_fieldname": "custom_lexer_link_pr"
+  },
+  {
+   "custom": 1,
+   "link_doctype": "Sales Order",
+   "link_fieldname": "custom_lexer_link_in_so"
+  },
+  {
+   "custom": 1,
+   "link_doctype": "Delivery Note",
+   "link_fieldname": "custom_lexer_link_in_dn"
+  },
+  {
+   "custom": 1,
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_lexer_in_si"
+  }
+ ],
+ "modified": "2025-12-12 18:23:50.501824",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Lexer Import Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
