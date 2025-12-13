@@ -155,7 +155,7 @@ def duplicate_reference_docs_from_settings(doc):
                     "supplier_items",
                     {
                         "supplier": new_po.supplier,
-                        "supplier_part_no": row.part_number,
+                        "supplier_part_no": f"ANE - {row.part_number}",
                     }
                 )
             supplier_item.save()
