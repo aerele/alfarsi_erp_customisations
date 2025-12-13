@@ -55,7 +55,7 @@ def validate_items(docname):
                     "doctype": "Item",
                     "item_name": new_item_name,
                     "item_code": new_item_code,
-                    "description": part_number,
+                    "description": new_item_name,
                     "item_group": "All Item Groups",
                     "stock_uom": "Each",
                     "purchase_uom": "Each",
