@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Alfarsi and contributors
+// For license information, please see license.txt
+
 frappe.ui.form.on("Lexer Import Log", {
 	refresh: function (frm) {
 		if (!frm.is_new()) {
