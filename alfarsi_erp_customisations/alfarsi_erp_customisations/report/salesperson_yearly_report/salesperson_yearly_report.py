@@ -34,11 +34,18 @@ def get_date(filters=None):
     filters = filters or {}
     year = filters.get("year") or str(datetime.date.today().year)
 
+    pinned_salespersons = [
+        'Praveen P',
+        'Bibin Skaria',
+        'Immanuel',
+        'Ginu George',
+        'Ramdas'
+    ]
+
     sales_persons = frappe.get_all("Sales Person", {"enabled" : 1}, pluck="name")
     rows = []
 
     for sp in sales_persons:
-        # name of sales person is saved in a child table inside sales invoice 'sales_team'
         sales_data = frappe.db.sql("""
             SELECT
                 COALESCE(SUM(CASE WHEN MONTH(posting_date) = 1 THEN grand_total ELSE 0 END),0) AS jan,
@@ -88,4 +95,11 @@ def get_date(filters=None):
             row["jul"], row["aug"], row["sep"], row["oct"], row["nov"], row["dec_"], row["sales_order_pending"]
         ])
         rows.append(row)
-    return rows
+    
+    pinned_rows = [row for row in rows if row["salesperson"] in pinned_salespersons]
+    other_rows = [row for row in rows if row["salesperson"] not in pinned_salespersons]
+    
+    pinned_rows.sort(key=lambda x: pinned_salespersons.index(x["salesperson"]))
+    other_rows.sort(key=lambda x: x["total_sales"], reverse=True)
+    
+    return pinned_rows + other_rows
