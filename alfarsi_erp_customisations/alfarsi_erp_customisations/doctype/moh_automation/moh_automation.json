@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:medical_device_item_code",
+ "creation": "2025-12-29 13:56:47.962060",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "manufacturer_name",
+  "manufacturer_country",
+  "medical_device_item_code",
+  "medical_device_name",
+  "column_break_vc3sx",
+  "medical_device_model",
+  "medical_device_classification",
+  "medical_device_category",
+  "moh_application_no",
+  "moh_approval_no"
+ ],
+ "fields": [
+  {
+   "fieldname": "manufacturer_name",
+   "fieldtype": "Link",
+   "label": "Manufacturer Name",
+   "options": "Manufacturer"
+  },
+  {
+   "fieldname": "manufacturer_country",
+   "fieldtype": "Data",
+   "label": "Manufacturer Country"
+  },
+  {
+   "fieldname": "medical_device_item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Medical Device Item Code",
+   "options": "Item",
+   "unique": 1
+  },
+  {
+   "fetch_from": "medical_device_item_code.item_name",
+   "fieldname": "medical_device_name",
+   "fieldtype": "Data",
+   "label": "Medical Device Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_vc3sx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "medical_device_model",
+   "fieldtype": "Data",
+   "label": "Medical Device Model"
+  },
+  {
+   "fieldname": "medical_device_classification",
+   "fieldtype": "Select",
+   "label": "Medical Device Classification",
+   "options": "\nClass A\nClass B\nClass C\nClass D"
+  },
+  {
+   "fieldname": "medical_device_category",
+   "fieldtype": "Select",
+   "label": "Medical Device Category",
+   "options": "\nIVD\nMD"
+  },
+  {
+   "fieldname": "moh_application_no",
+   "fieldtype": "Data",
+   "label": "MOH Application No"
+  },
+  {
+   "fieldname": "moh_approval_no",
+   "fieldtype": "Data",
+   "label": "MOH Approval No"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-12-29 13:56:47.962060",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "MOH Automation",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
