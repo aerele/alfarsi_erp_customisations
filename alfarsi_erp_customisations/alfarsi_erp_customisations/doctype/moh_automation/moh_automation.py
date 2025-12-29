@@ -18,7 +18,7 @@ def automate_moh_registration(selected_items):
     results = []
     for item in selected_items:
         try:
-            asyncio.run(submit_google_form(item))
+            asyncio.run(run_moh_automation(item))
             results.append(f"{item} → SUCCESS")
         except Exception as e:
             frappe.log_error(f"Error processing {item}: {str(e)}", "MOH Automation")
@@ -27,7 +27,7 @@ def automate_moh_registration(selected_items):
 
 
 
-async def submit_google_form(item):
+async def run_moh_automation(item):
 
     LOGIN_URL = (
         "https://moh.gov.om/en/account/pki-login/"
