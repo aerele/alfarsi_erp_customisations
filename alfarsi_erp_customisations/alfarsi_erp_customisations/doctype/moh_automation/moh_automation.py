@@ -96,13 +96,8 @@ async def run_moh_automation(item):
                     break
                 await asyncio.sleep(1)
             await page.click("#NextBtn")
-
-
-            # --------------------------------------------------------
             # MEDICAL DEVICE INFO PAGE
-            # --------------------------------------------------------
             await page.wait_for_load_state("domcontentloaded")
-
             await page.fill("#b22-Input_manu_name", item.get("manufacturer_name"))
             await page.click("#b22-b2-DropdownSearch .vscomp-toggle-button")
             await page.fill("div.vscomp-search-input input", item.get("manufacturer_country", ""))
@@ -112,8 +107,7 @@ async def run_moh_automation(item):
             await page.fill("#b23-Input_MedDevModel", item.get("medical_device_model"))
 
             await page.select_option("#b23-Dropdown1", label=item.get("medical_device_category", ""))
-            await page.select_option("#b23-MedicalDeviceClassificationDropdown",
-                                     label=item.get("medical_device_classification", ""))
+            await page.select_option("#b23-MedicalDeviceClassificationDropdown",label=item.get("medical_device_classification", ""))
 
             for _ in range(300):
                 disabled = await page.evaluate("document.querySelector('#NextBtn2')?.disabled")
@@ -124,11 +118,7 @@ async def run_moh_automation(item):
 
             await page.click("#NextBtn4")
             await page.wait_for_load_state("domcontentloaded")
-
-
-            # --------------------------------------------------------
             # DECLARATION + SUBMIT
-            # --------------------------------------------------------
             await page.wait_for_selector("#b39-Checkbox", timeout=20000)
             await page.check("#b39-Checkbox")
 
@@ -155,10 +145,7 @@ async def run_moh_automation(item):
                     ?.click()
                 """)
 
-
-            # --------------------------------------------------------
             # EXTRACT APPLICATION NUMBER
-            # --------------------------------------------------------
             await page.wait_for_selector("#b7-ApplicationNumber", timeout=20000)
             application_number = (await page.inner_text("#b7-ApplicationNumber")).strip()
 
@@ -166,11 +153,7 @@ async def run_moh_automation(item):
             doc = frappe.get_doc("MOH Automation", item.get("medical_device_item_code"))
             doc.moh_application_no = application_number
             doc.save()
-
-
-            # --------------------------------------------------------
             # OPEN "MY APPLICATIONS"
-            # --------------------------------------------------------
             await page.wait_for_selector("#b7-MyApplications", timeout=20000)
             try:
                 await page.click("#b7-MyApplications")
@@ -180,10 +163,7 @@ async def run_moh_automation(item):
             await page.wait_for_load_state("networkidle")
             await asyncio.sleep(2)
 
-
-            # --------------------------------------------------------
             # SEARCH BY APPLICATION NUMBER
-            # --------------------------------------------------------
             await page.wait_for_selector("#DrpdownSearchBy", timeout=20000)
             await page.select_option("#DrpdownSearchBy", value="0")
 
@@ -197,10 +177,7 @@ async def run_moh_automation(item):
             await page.wait_for_load_state("networkidle")
             await asyncio.sleep(3)
 
-
-            # --------------------------------------------------------
             # OPEN THE APPLICATION FROM THE TABLE
-            # --------------------------------------------------------
             row_selector = f"a:has-text('{application_number}')"
             await page.wait_for_selector(row_selector, timeout=20000)
             await page.click(row_selector)
