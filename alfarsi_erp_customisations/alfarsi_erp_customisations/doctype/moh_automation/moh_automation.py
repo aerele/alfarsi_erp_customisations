@@ -179,7 +179,7 @@ async def run_moh_automation(item):
 
             # OPEN THE APPLICATION FROM THE TABLE
             row_selector = f"a:has-text('{application_number}')"
-            await page.wait_for_selector(row_selector, timeout=20000)
+            await page.wait_for_selector(row_selector, timeout=20000) 
             await page.click(row_selector)
 
             await page.wait_for_selector(
