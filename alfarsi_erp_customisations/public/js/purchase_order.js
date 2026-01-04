@@ -130,5 +130,10 @@ frappe.ui.form.on("Purchase Order", {
 
             }, __('Get Items From'));
         }
+       if (frm.doc.docstatus === 1) {
+            frm.add_custom_button(__('Go To MOH Automation'), function () {
+                frappe.new_doc('MOH Automation', { source_purchase_order: frm.doc.name });
+            });
+        }
     }
 });

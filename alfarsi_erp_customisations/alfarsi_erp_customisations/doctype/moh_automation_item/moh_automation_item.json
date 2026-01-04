@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-03 17:00:24.675590",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "medical_device_item_code",
+  "medical_device_name",
+  "medical_device_category",
+  "medical_device_classification",
+  "medical_device_model",
+  "moh_application_no",
+  "moh_approval_no"
+ ],
+ "fields": [
+  {
+   "fieldname": "medical_device_item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Medical Device Item Code",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "medical_device_item_code.item_name",
+   "fieldname": "medical_device_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Medical Device Name"
+  },
+  {
+   "fetch_from": "medical_device_item_code.custom_medical_device_category",
+   "fieldname": "medical_device_category",
+   "fieldtype": "Data",
+   "label": "Medical Device Category"
+  },
+  {
+   "fetch_from": "medical_device_item_code.custom_medical_device_classification",
+   "fieldname": "medical_device_classification",
+   "fieldtype": "Data",
+   "label": "Medical Device Classification"
+  },
+  {
+   "fetch_from": "medical_device_item_code.custom_medical_device_model",
+   "fieldname": "medical_device_model",
+   "fieldtype": "Data",
+   "label": "Medical Device Model"
+  },
+  {
+   "fetch_from": "medical_device_item_code.custom_moh_application_no",
+   "fieldname": "moh_application_no",
+   "fieldtype": "Data",
+   "label": "MOH Application No"
+  },
+  {
+   "fetch_from": "medical_device_item_code.custom_moh_approval_no",
+   "fieldname": "moh_approval_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "MOH Approval No"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-01-04 12:50:00.472202",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "MOH Automation Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
