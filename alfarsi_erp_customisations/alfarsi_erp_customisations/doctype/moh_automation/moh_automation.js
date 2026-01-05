@@ -20,7 +20,7 @@ frappe.ui.form.on('MOH Automation', {
 
                 (r.message.items || []).forEach(item => {
                     let row = frm.add_child('medical_devices');
-                    row.medical_device_item_code = item.item_code;
+                    row.medical_device_item_code = item.medical_device_item_code || '';
                     row.medical_device_name = item.item_name || '';
                     row.medical_device_category = item.medical_device_category || '';
                     row.medical_device_classification = item.medical_device_classification || '';
@@ -108,8 +108,6 @@ frappe.ui.form.on('MOH Automation', {
                 ],
                 primary_action_label: __('Automate Registration'),
                 primary_action() {
-
-                    // Built-in row selection
                     const rows =
                         d.fields_dict.items.grid.get_selected_children();
 
