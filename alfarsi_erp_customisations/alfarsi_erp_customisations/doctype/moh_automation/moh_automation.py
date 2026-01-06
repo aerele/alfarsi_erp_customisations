@@ -49,7 +49,7 @@ async def run_moh_automation(item):
     )
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(headless=False)
         context = await browser.new_context(ignore_https_errors=True)
         page = await context.new_page()
 
