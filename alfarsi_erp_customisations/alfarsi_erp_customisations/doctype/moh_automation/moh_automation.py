@@ -38,16 +38,9 @@ def automate_moh_registration(selected_items):
     selected_items = json.loads(selected_items)
 
     for item in selected_items:
-        frappe.enqueue(
-            "alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.moh_automation.moh_automation.run_moh_automation_job",
-            queue="long",
-            timeout=3600,
-            item=item
-        )
+        asyncio.run(run_moh_automation(item))
     return "MOH Registration automation started. Chromium will open on server."
 
-def run_moh_automation_job(item):
-    asyncio.run(run_moh_automation(item))
 async def run_moh_automation(item):
 
     LOGIN_URL = (
