@@ -323,7 +323,7 @@ import frappe
 import requests
 from frappe.model.document import Document
 
-NGROK_URL = "https://intercessional-dryly-roselle.ngrok-free.dev/run"
+NGROK_URL = "https://nonmeteorologically-blastular-deloise.ngrok-free.dev/run"
 
 
 class MOHAutomation(Document):
