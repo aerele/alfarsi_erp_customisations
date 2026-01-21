@@ -6,6 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+"register_with_moh",
   "medical_device_item_code",
   "medical_device_name",
   "medical_device_category",
@@ -15,6 +16,15 @@
   "moh_approval_no"
  ],
  "fields": [
+    {
+    "fieldname": "register_with_moh",
+    "fieldtype": "Check",
+    "label": "Register with MOH",
+    "default": "1",
+    "in_list_view": 1,
+    "description": "Uncheck to skip this item during MOH automation"
+
+ },
   {
    "fieldname": "medical_device_item_code",
    "fieldtype": "Link",
