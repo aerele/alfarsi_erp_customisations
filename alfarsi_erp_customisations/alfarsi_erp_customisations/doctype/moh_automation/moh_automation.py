@@ -356,7 +356,7 @@ def trigger_moh(moh_doc):
     requests.post(
         NGROK_URL,
         json={"moh_doc": moh_doc},
-        timeout=50
+        timeout=240
     )
     return "MOH automation started"
 
