@@ -370,21 +370,33 @@ def get_moh_doc(moh_doc):
 
 # PC sends back MOH result
 @frappe.whitelist()
-def update_moh_result(moh_doc, item_code, application_no):
-    doc = frappe.get_doc("MOH Automation", moh_doc)
+def update_moh_result(
+    moh_doc,
+    item_code,
+    application_no,
+    approval_no=None,
+    medical_device_name=None,
+):
 
-    for row in doc.medical_devices:
+    doc = frappe.get_doc("MOH Automation", moh_doc)
+    for row in doc.items:
         if row.medical_device_item_code == item_code:
             row.moh_application_no = application_no
-
+            row.moh_approval_no = approval_no
     doc.save(ignore_permissions=True)
-    frappe.db.commit()
 
     frappe.db.set_value(
         "Item",
         item_code,
-        "custom_moh_application_no",
-        application_no
+        {
+            "custom_moh_application_no": application_no,
+            "custom_moh_approval_no": approval_no,
+            "custom_medical_device_name": medical_device_name,
+        }
     )
-
-    return "Saved"
+    return {
+        "status": "success",
+        "application_no": application_no,
+        "approval_no": approval_no,
+        "medical_device_name": medical_device_name,
+    }
