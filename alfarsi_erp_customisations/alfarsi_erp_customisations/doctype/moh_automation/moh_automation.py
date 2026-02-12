@@ -379,7 +379,7 @@ def update_moh_result(
 ):
 
     doc = frappe.get_doc("MOH Automation", moh_doc)
-    for row in doc.items:
+    for row in doc.medical_devices:
         if row.medical_device_item_code == item_code:
             row.moh_application_no = application_no
             row.moh_approval_no = approval_no
