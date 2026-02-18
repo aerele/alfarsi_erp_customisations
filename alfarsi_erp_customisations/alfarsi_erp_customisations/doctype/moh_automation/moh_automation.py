@@ -378,8 +378,8 @@ def get_moh_doc(moh_doc):
     return doc.as_dict()
 
 @frappe.whitelist()
-def get_po_doc(moh_doc):
-    doc = frappe.get_doc("Purchase Order", moh_doc)
+def get_po_doc(po):
+    doc = frappe.get_doc("Purchase Order", po)
     return doc.as_dict()
 
 # PC sends back MOH result
