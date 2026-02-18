@@ -1,5 +1,6 @@
 frappe.ui.form.on("Purchase Order", {
     refresh: function(frm) {
+
         if (frm.doc.docstatus === 0) {
             frm.add_custom_button(__('Sales Order'), function() {
 
@@ -84,7 +85,6 @@ frappe.ui.form.on("Purchase Order", {
                             child.uom = row.uom;
                         });
 
-                        // Remove empty rows
                         frm.doc.items = frm.doc.items.filter(item => item.item_code);
 
                         frm.refresh_field("items");
@@ -93,7 +93,6 @@ frappe.ui.form.on("Purchase Order", {
                 });
 
                 d.show();
-
                 fetch_sales_order_items(frm, d);
 
                 function fetch_sales_order_items(frm, dialog) {
@@ -130,10 +129,21 @@ frappe.ui.form.on("Purchase Order", {
 
             }, __('Get Items From'));
         }
-       if (frm.doc.docstatus === 1) {
+
+        if (frm.doc.docstatus === 1) {
             frm.add_custom_button(__('Go To MOH Automation'), function () {
                 frappe.new_doc('MOH Automation', { source_purchase_order: frm.doc.name });
             });
         }
+
+        if (frm.doc.docstatus === 1) {
+            frm.add_custom_button(__('GO TO MOH CLEARANCE'), function () {
+                frappe.call({
+                    method: 'alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.moh_automation.moh_automation.trigger_po',
+                    args: { po: frm.doc.name }
+                });
+            });
+        }
+
     }
 });
