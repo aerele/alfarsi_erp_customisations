@@ -323,7 +323,8 @@ import frappe
 import requests
 from frappe.model.document import Document
 
-NGROK_URL = "https://mechelle-skirtless-tinley.ngrok-free.dev/run"
+NGROK_URL_MOH = "https://mechelle-skirtless-tinley.ngrok-free.dev/moh"
+NGROK_URL_CLR = "https://mechelle-skirtless-tinley.ngrok-free.dev/clr"
 
 
 class MOHAutomation(Document):
@@ -354,11 +355,20 @@ def get_po_data(purchase_order):
 @frappe.whitelist()
 def trigger_moh(moh_doc):
     requests.post(
-        NGROK_URL,
+        NGROK_URL_MOH,
         json={"moh_doc": moh_doc},
         timeout=240
     )
     return "MOH automation started"
+
+@frappe.whitelist()
+def trigger_po(po):
+    requests.post(
+        NGROK_URL_CLR,
+        json={"po": po},
+        timeout=240
+    )
+    return "CLR automation started"
 
 
 # PC fetches MOH Automation doc
@@ -367,6 +377,10 @@ def get_moh_doc(moh_doc):
     doc = frappe.get_doc("MOH Automation", moh_doc)
     return doc.as_dict()
 
+@frappe.whitelist()
+def get_po_doc(moh_doc):
+    doc = frappe.get_doc("Purchase Order", moh_doc)
+    return doc.as_dict()
 
 # PC sends back MOH result
 @frappe.whitelist()
