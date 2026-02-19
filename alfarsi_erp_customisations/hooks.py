@@ -36,7 +36,7 @@ doctype_js = {
                 "MOH Automation": "public/js/moh_automation.js"
 			}
 
-fixtures = ["Custom Field" ]
+
 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 doctype_list_js = {"Item" : "public/js/item_list.js"}
