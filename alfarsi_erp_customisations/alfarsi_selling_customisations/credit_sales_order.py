@@ -5,9 +5,12 @@ from frappe.utils import nowdate, getdate
 def validate(doc,method):
     SellingCreditControl(doc).validate()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     # SellingCreditControl(doc).check_submit_permissions()
 >>>>>>> 099b7b0 (feat:add customer credit limit control based on outstanding)
+=======
+>>>>>>> d489912 (fix:add changes to credit control and allow submit on lexer import)
 
 
 class SellingCreditControl():
@@ -156,10 +159,14 @@ class SellingCreditControl():
             "Customer",
             self.customer,
 <<<<<<< HEAD
+<<<<<<< HEAD
             "customer_approval_role"
 =======
             "custom_approval_role"
 >>>>>>> 099b7b0 (feat:add customer credit limit control based on outstanding)
+=======
+            "customer_approval_role"
+>>>>>>> d489912 (fix:add changes to credit control and allow submit on lexer import)
         )
         if not approval_role:
             approval_role = frappe.db.get_single_value("Credit Control Settings", "default_approval_role")
