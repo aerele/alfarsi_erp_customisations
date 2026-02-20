@@ -5,10 +5,14 @@ def create_custom_fields():
     from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b85bfc4 (fix:add changes to patches)
     customer_custom_fields = get_custom_fields("customer_custom_fields.json")
     create_custom_fields(customer_custom_fields)
     sales_order_custom_fields = get_custom_fields("sales_order_custom_fields.json")
     create_custom_fields(sales_order_custom_fields)
+<<<<<<< HEAD
 
 # def get_custom_fields():
 #     path = frappe.get_app_path("alfarsi_erp_customisations", "alfarsi_selling_customisations", "custom", "customer_custom_fields.json",)
@@ -25,10 +29,22 @@ def get_custom_fields(json_file):
 =======
     custom_fields = get_custom_fields()
     create_custom_fields(custom_fields)
+=======
+>>>>>>> b85bfc4 (fix:add changes to patches)
 
+# def get_custom_fields():
+#     path = frappe.get_app_path("alfarsi_erp_customisations", "alfarsi_selling_customisations", "custom", "customer_custom_fields.json",)
+#     custom_fields = frappe.get_file_json(path)
+#     return custom_fields
 
-def get_custom_fields():
-    path = frappe.get_app_path("alfarsi_erp_customisations", "alfarsi_selling_customisations", "custom", "customer_custom_fields.json")
+def get_custom_fields(json_file):
+    path = frappe.get_app_path("alfarsi_erp_customisations", "alfarsi_selling_customisations", "custom", json_file,)
     custom_fields = frappe.get_file_json(path)
     return custom_fields
+<<<<<<< HEAD
 >>>>>>> 099b7b0 (feat:add customer credit limit control based on outstanding)
+=======
+
+# customer_fields = get_custom_fields("customer_custom_fields.json")
+# sales_order_fields = get_custom_fields("sales_order_custom_fields.json")
+>>>>>>> b85bfc4 (fix:add changes to patches)
