@@ -4,7 +4,6 @@ from frappe.utils import nowdate, getdate
 
 def validate(doc,method):
     SellingCreditControl(doc).validate()
-    # SellingCreditControl(doc).check_submit_permissions()
 
 
 class SellingCreditControl():
@@ -152,7 +151,7 @@ class SellingCreditControl():
         approval_role = frappe.db.get_value(
             "Customer",
             self.customer,
-            "custom_approval_role"
+            "customer_approval_role"
         )
         if not approval_role:
             approval_role = frappe.db.get_single_value("Credit Control Settings", "default_approval_role")
