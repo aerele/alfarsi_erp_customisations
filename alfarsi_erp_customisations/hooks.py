@@ -120,13 +120,7 @@ override_doctype_class = {
 doc_events = {
 	"Leave Application": {
 		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
-	},
-    "Sales Order": {
-        "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.credit_sales_order.validate",
-	},
-    "Customer": {
-        "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_permission.validate",
-        }
+	}
 }
 
 # Scheduled Tasks

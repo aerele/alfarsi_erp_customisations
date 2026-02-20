@@ -1,6 +1,0 @@
-[pre_model_sync]
-[post_model_sync]
-alfarsi_erp_customisations.alfarsi_selling_customisations.patches.create_customer_custom_fields #17
-alfarsi_erp_customisations.alfarsi_selling_customisations.patches.create_roles_credit_control
-alfarsi_erp_customisations.alfarsi_selling_customisations.patches.setup_credit_control_roles #19Feb2517
-
