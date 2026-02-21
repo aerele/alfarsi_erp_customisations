@@ -130,6 +130,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "po_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -137,6 +138,7 @@
    "options": "Purchase Order"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pr_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -144,6 +146,7 @@
    "options": "Purchase Receipt"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pi_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -151,6 +154,7 @@
    "options": "Purchase Invoice"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "so_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -158,6 +162,7 @@
    "options": "Sales Order"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "dn_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -165,6 +170,7 @@
    "options": "Delivery Note"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "si_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -270,7 +276,7 @@
    "link_fieldname": "custom_lexer_in_si"
   }
  ],
- "modified": "2026-02-18 18:01:44.639734",
+ "modified": "2026-02-20 17:24:52.676475",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",
