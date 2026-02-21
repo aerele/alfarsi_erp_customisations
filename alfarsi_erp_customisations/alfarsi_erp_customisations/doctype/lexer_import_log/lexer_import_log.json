@@ -14,6 +14,14 @@
   "po_no",
   "vatin_number",
   "purchase_tax_amount",
+  "naming_column_break_column",
+  "purchase_order_series",
+  "purchase_receipt_series",
+  "purchase_invoice_series",
+  "sales_order_series",
+  "delivery_note_series",
+  "sales_invoice_series",
+  "section_break_be3ob",
   "items",
   "linked_documents_tab",
   "purchase_order",
@@ -188,6 +196,50 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "naming_column_break_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "purchase_order_series",
+   "fieldtype": "Select",
+   "label": "Purchase Order Series",
+   "options": "PUR-ORD-.YYYY.-\nPUR-ORD-.2023.-\nPUR-ORD-.{transaction_date}.\nMDL-PUR-ORD-.YYYY.-\nWSDC-PUR-ORD-.YYYY.-\nAFMS-PUR-ORD-.YYYY.-\nANMS-PUR-ORD-.YYYY.-"
+  },
+  {
+   "fieldname": "purchase_receipt_series",
+   "fieldtype": "Select",
+   "label": "Purchase Receipt Series",
+   "options": "MAT-PRE-.YYYY.-\nMAT-PR-RET-.YYYY.-"
+  },
+  {
+   "fieldname": "purchase_invoice_series",
+   "fieldtype": "Select",
+   "label": "Purchase Invoice Series",
+   "options": "ACC-PINV-.YYYY.-\nWSDC-PINV-.YYYY.-\nAFMS-PINV-.YYYY.-\nAFMM-PINV-.YYYY.-\nANMS-PINV-.YYYY.-\nMDL-PINV-.YYYY.-\nACC-PINV-RET-.YYYY.-\nACC-PINV-.2021.-\nACC-PINV-.2022.-\nACC-PINV-.2023.-\nACC-PINV-.2024.-\nAFMS-PINV-RET-.YYYY.-\nWSDC-PINV-RET-.YYYY.-\nMDL-PINV-RET-.YYYY.-\nAFMM-PINV-RET-.YYYY.-\nANMS-PINV-RET-.YYYY.-"
+  },
+  {
+   "fieldname": "sales_order_series",
+   "fieldtype": "Select",
+   "label": "Sales Order Series",
+   "options": "SAL-ORD-.YYYY.-\nSAL-ORD-.2023.-"
+  },
+  {
+   "fieldname": "delivery_note_series",
+   "fieldtype": "Select",
+   "label": "Delivery Note Series",
+   "options": "MAT-DN-.YYYY.-\nMAT-DN-RET-.YYYY.-"
+  },
+  {
+   "fieldname": "sales_invoice_series",
+   "fieldtype": "Select",
+   "label": "Sales Invoice Series",
+   "options": "SINV-.YYYY.-\nSINV-RET-.YYYY.-\nSINV-.2023.-\nAFMM-SINV-.YYYY.-"
+  },
+  {
+   "fieldname": "section_break_be3ob",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
