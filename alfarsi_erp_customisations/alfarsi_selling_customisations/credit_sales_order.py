@@ -94,13 +94,11 @@ class SellingCreditControl():
             frappe.db.set_value("Customer", self.customer, "is_frozen", 1)
             self.doc.custom_within_tolerance_amount = 1
             self.notify_limit_manager()
-            frappe.msgprint("The customer has exceeded the approved credit limit; however, the excess is within the permitted tolerance level. Please obtain approval from the Chief Mentor before proceeding with this Sales Order.")
+            frappe.msgprint("Credit limit exceeded. Chief Mentors Approval required to proceed.\nThe account is currently on credit hold as it has exceeded the approved credit limit. Kindly arrange payment of the outstanding amount to proceed further.")
 
         else:
             self.limit_status = "exceeded"
-            frappe.throw("Customer’s account is on hold as the credit exposure exceeds the approved limit beyond tolerance. "
-                        "This transaction cannot proceed until dues are settled. "
-                        "Kindly contact the Finance Manager.")
+            frappe.throw("The account is currently on credit hold as it has exceeded the approved credit limit. Kindly arrange payment of the outstanding amount to proceed further.")
 
 
     def validate_credit_days(self):
@@ -140,12 +138,10 @@ class SellingCreditControl():
             frappe.db.set_value("Customer", self.customer, "is_frozen", 1)
             self.doc.custom_within_tolerance_days = 1
             self.notify_limit_manager()
-            frappe.msgprint("Customer’s account is on hold as the approved credit days have been exceeded. "
-                            "The order is within the allowed tolerance; however, Chief Mentor approval is required to proceed.")
+            frappe.msgprint("Credit days exceeded. Chief Mentor’s approval is required to proceed.\nThe account has surpassed the approved credit period. Kindly obtain approval to continue processing this order.")
         else:
             self.days_status = "exceeded"
-            frappe.throw("Customer’s account is on hold as the approved credit days have been exceeded beyond the allowed tolerance. "
-                        "Outstanding payment must be cleared before this order can be processed. Kindly contact the Finance Manager.")
+            frappe.throw("The account is currently on credit hold as it has exceeded the approved credit period beyond the permitted tolerance. Kindly arrange payment of the outstanding dues to proceed further.")
 
     def notify_limit_manager(self):
         approval_role = frappe.db.get_value(
