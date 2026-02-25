@@ -1,0 +1,88 @@
+<h2 style="color:#b02a37;">
+    Customer Credit Limit Exceeded – Approval Required
+</h2>
+{% set doc_link = frappe.utils.get_url_to_form('Sales Order', doc.name) %}
+
+<div style="text-align:left; margin-top:25px;">
+    <a href="{{ doc_link }}"
+       style="
+          background-color:#198754;
+          color:white;
+          padding:12px 24px;
+          text-decoration:none;
+          border-radius:8px;
+          font-weight:bold;
+          font-size:14px;
+       "
+       target="_blank">
+       Review & Approve Sales Order
+    </a>
+</div>
+
+<br>
+
+<p>Dear Chief Mentor,</p>
+
+<p>
+The following Sales Order requires your approval as the customer has exceeded
+their approved credit limit but is still within the allowed tolerance.
+</p>
+
+<hr>
+
+<h3>Customer & Order Details</h3>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%" style="border-collapse: collapse;">
+    <tr>
+        <td><strong>Customer Name</strong></td>
+        <td>{{ customer }}</td>
+    </tr>
+    <tr>
+        <td><strong>Sales Order</strong></td>
+        <td>{{ doc.name }}</td>
+    </tr>
+    <tr>
+        <td><strong>Order Date</strong></td>
+        <td>{{ doc.transaction_date }}</td>
+    </tr>
+</table>
+
+<br>
+
+<h3>Credit Summary</h3>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%" style="border-collapse: collapse;">
+    <tr>
+        <td><strong>Approved Credit Limit</strong></td>
+        <td>{{ credit_limit }}</td>
+    </tr>
+    <tr>
+        <td><strong>Current Outstanding Amount</strong></td>
+        <td>{{ outstanding_amount }}</td>
+    </tr>
+    <tr>
+        <td><strong>New Order Amount</strong></td>
+        <td>{{ order_amount }}</td>
+    </tr>
+    <tr>
+        <td><strong>Total Exposure (Outstanding + Order)</strong></td>
+        <td>{{ outstanding_amount + order_amount }}</td>
+    </tr>
+    <tr>
+        <td><strong>Exceeded Amount</strong></td>
+        <td style="color:red;"><strong>{{ "%.2f"|format(credit_difference) }}</strong></td>
+    </tr>
+</table>
+
+<br>
+
+<p>
+The exceeded amount is within the permitted tolerance level.  
+Kindly review the order and provide your approval to proceed.
+</p>
+
+<br>
+
+<p>
+You may review the Sales Order in the system for further details.
+</p>
