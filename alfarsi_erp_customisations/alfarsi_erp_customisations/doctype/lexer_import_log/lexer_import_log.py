@@ -204,7 +204,6 @@ def duplicate_reference_docs_from_settings(doc):
         if doc.get("apply_additional_discount_on"):
             new_po.apply_discount_on = doc.apply_additional_discount_on
 
-        # if doc.get("additional_discount_amount_company_currency")
         if doc.get("additional_discount_percentage"):
             new_po.additional_discount_percentage = doc.additional_discount_percentage
             new_po.discount_amount = 0
@@ -406,7 +405,7 @@ def duplicate_reference_docs_from_settings(doc):
                 "customer": new_so.customer,
                 "currency": new_so.currency,
                 "set_posting_time": 1,
-                    "posting_date": getdate(doc.get("sale_date")),
+                "posting_date": getdate(doc.get("sale_date")),
                 "items": dn_items,
             }
         )
