@@ -201,37 +201,37 @@
    "fieldname": "purchase_order_series",
    "fieldtype": "Select",
    "label": "Purchase Order Series",
-   "options": "PUR-ORD-.YYYY.-\nPUR-ORD-.2023.-\nPUR-ORD-.{transaction_date}.\nMDL-PUR-ORD-.YYYY.-\nWSDC-PUR-ORD-.YYYY.-\nAFMS-PUR-ORD-.YYYY.-\nANMS-PUR-ORD-.YYYY.-"
+   "options": "PUR-ORD-.YYYY.-\nPUR-ORD-.2023.-\nPUR-ORD-.2025.-\nAFMM-PUR-ORD-.2025.-\nAFMM-PUR-ORD-.YYYY.-\nMDL-PUR-ORD-.YYYY.-\nWSDC-PUR-ORD-.YYYY.-\nAFMS-PUR-ORD-.YYYY.-\nANMS-PUR-ORD-.YYYY.-"
   },
   {
    "fieldname": "purchase_receipt_series",
    "fieldtype": "Select",
    "label": "Purchase Receipt Series",
-   "options": "MAT-PRE-.YYYY.-\nMAT-PR-RET-.YYYY.-"
+   "options": "MAT-PRE-.YYYY.-\nMAT-PR-RET-.YYYY.-\nAFMM-MAT-PRE-.2025.-\nAFMM-MAT-PRE-.YYYY.-"
   },
   {
    "fieldname": "purchase_invoice_series",
    "fieldtype": "Select",
    "label": "Purchase Invoice Series",
-   "options": "ACC-PINV-.YYYY.-\nWSDC-PINV-.YYYY.-\nAFMS-PINV-.YYYY.-\nAFMM-PINV-.YYYY.-\nANMS-PINV-.YYYY.-\nMDL-PINV-.YYYY.-\nACC-PINV-RET-.YYYY.-\nACC-PINV-.2021.-\nACC-PINV-.2022.-\nACC-PINV-.2023.-\nACC-PINV-.2024.-\nAFMS-PINV-RET-.YYYY.-\nWSDC-PINV-RET-.YYYY.-\nMDL-PINV-RET-.YYYY.-\nAFMM-PINV-RET-.YYYY.-\nANMS-PINV-RET-.YYYY.-"
+   "options": "ACC-PINV-.YYYY.-\nWSDC-PINV-.YYYY.-\nAFMS-PINV-.YYYY.-\nAFMM-PINV-.2025.-\nAFMM-PINV-.YYYY.-\nANMS-PINV-.YYYY.-\nMDL-PINV-.YYYY.-\nACC-PINV-RET-.YYYY.-\nACC-PINV-.2021.-\nACC-PINV-.2022.-\nACC-PINV-.2023.-\nACC-PINV-.2024.-\nAFMS-PINV-RET-.YYYY.-\nWSDC-PINV-RET-.YYYY.-\nMDL-PINV-RET-.YYYY.-\nAFMM-PINV-RET-.YYYY.-\nANMS-PINV-RET-.YYYY.-"
   },
   {
    "fieldname": "sales_order_series",
    "fieldtype": "Select",
    "label": "Sales Order Series",
-   "options": "SAL-ORD-.YYYY.-\nSAL-ORD-.2023.-"
+   "options": "SAL-ORD-.YYYY.-\nSAL-ORD-.2023.-\nAFMM-SAL-ORD-.2025.-\nAFMM-SAL-ORD-.YYYY.-"
   },
   {
    "fieldname": "delivery_note_series",
    "fieldtype": "Select",
    "label": "Delivery Note Series",
-   "options": "MAT-DN-.YYYY.-\nMAT-DN-RET-.YYYY.-"
+   "options": "MAT-DN-.YYYY.-\nMAT-DN-RET-.YYYY.-\nAFMM-MAT-DN-.2025.-\nAFMM-MAT-DN-.YYYY.-"
   },
   {
    "fieldname": "sales_invoice_series",
    "fieldtype": "Select",
    "label": "Sales Invoice Series",
-   "options": "SINV-.YYYY.-\nSINV-RET-.YYYY.-\nSINV-.2023.-\nAFMM-SINV-.YYYY.-"
+   "options": "SINV-.YYYY.-\nSINV-RET-.YYYY.-\nSINV-.2023.-\nAFMM-SINV-.2025.-\nAFMM-SINV-.YYYY.-"
   },
   {
    "fieldname": "section_break_be3ob",
@@ -277,37 +277,31 @@
  "is_submittable": 1,
  "links": [
   {
-   "custom": 1,
    "link_doctype": "Purchase Invoice",
    "link_fieldname": "custom_lexer_link_in_pi"
   },
   {
-   "custom": 1,
    "link_doctype": "Purchase Order",
    "link_fieldname": "custom_lexer_doc"
   },
   {
-   "custom": 1,
    "link_doctype": "Purchase Receipt",
    "link_fieldname": "custom_lexer_link_pr"
   },
   {
-   "custom": 1,
    "link_doctype": "Sales Order",
    "link_fieldname": "custom_lexer_link_in_so"
   },
   {
-   "custom": 1,
    "link_doctype": "Delivery Note",
    "link_fieldname": "custom_lexer_link_in_dn"
   },
   {
-   "custom": 1,
    "link_doctype": "Sales Invoice",
    "link_fieldname": "custom_lexer_in_si"
   }
  ],
- "modified": "2026-02-25 10:07:04.167038",
+ "modified": "2026-02-25 17:21:17.047506",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",
