@@ -201,6 +201,16 @@ def duplicate_reference_docs_from_settings(doc):
             "description": "Freight Charges",
             "tax_amount": doc.purchase_tax_amount or 0
         })
+        if doc.get("apply_additional_discount_on"):
+            new_po.apply_discount_on = doc.apply_additional_discount_on
+
+        if doc.get("additional_discount_percentage"):
+            new_po.additional_discount_percentage = doc.additional_discount_percentage
+            new_po.discount_amount = 0
+
+        elif doc.get("additional_discount_amount"):
+            new_po.discount_amount = doc.additional_discount_amount
+            new_po.additional_discount_percentage = 0
         
 
         new_po.set_missing_values()

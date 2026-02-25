@@ -23,6 +23,12 @@
   "sales_invoice_series",
   "section_break_be3ob",
   "items",
+  "additional_discount_section",
+  "apply_additional_discount_on",
+  "additional_discount_amount_company_currency",
+  "column_break_jda4l",
+  "additional_discount_percentage",
+  "additional_discount_amount",
   "linked_documents_tab",
   "purchase_order",
   "purchase_receipt",
@@ -240,6 +246,41 @@
   {
    "fieldname": "section_break_be3ob",
    "fieldtype": "Section Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "additional_discount_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Discount"
+  },
+  {
+   "default": "Grand Total",
+   "fieldname": "apply_additional_discount_on",
+   "fieldtype": "Select",
+   "label": "Apply Additional Discount On",
+   "options": "\nGrand Total\nNet Total"
+  },
+  {
+   "fieldname": "additional_discount_amount_company_currency",
+   "fieldtype": "Currency",
+   "label": "Additional Discount Amount (Company Currency)",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_jda4l",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "additional_discount_percentage",
+   "fieldtype": "Float",
+   "label": "Additional Discount Percentage"
+  },
+  {
+   "fieldname": "additional_discount_amount",
+   "fieldtype": "Currency",
+   "label": "Additional Discount Amount",
+   "options": "currency"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -276,7 +317,7 @@
    "link_fieldname": "custom_lexer_in_si"
   }
  ],
- "modified": "2026-02-20 17:24:52.676475",
+ "modified": "2026-02-25 10:07:04.167038",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",
