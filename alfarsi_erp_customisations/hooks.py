@@ -32,9 +32,14 @@ app_license = "MIT"
 doctype_js = {
 				"Delivery Note": "public/js/delivery_note.js",
                 "Quotation": "public/js/quotation.js",
-                "Purchase Order": "public/js/purchase_order.js"
+                "Purchase Order": "public/js/purchase_order.js",
+                "MOH Automation": "public/js/moh_automation.js"
 			}
+
+
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+doctype_list_js = {"Item" : "public/js/item_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -138,7 +143,8 @@ scheduler_events = {
 	],
 	"cron": {
         "0 8 * * SAT": [
-            "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
+            "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email",
+            "alfarsi_erp_customisations.alfarsi_erp_customisations.scheduler_events.sales_person_yearly_report.send_sales_person_yearly_report"
 		],
         "0 20 * * *": [
 			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
