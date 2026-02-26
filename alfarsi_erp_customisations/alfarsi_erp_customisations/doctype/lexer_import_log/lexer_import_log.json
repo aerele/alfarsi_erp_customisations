@@ -14,7 +14,21 @@
   "po_no",
   "vatin_number",
   "purchase_tax_amount",
+  "naming_column_break_column",
+  "purchase_order_series",
+  "purchase_receipt_series",
+  "purchase_invoice_series",
+  "sales_order_series",
+  "delivery_note_series",
+  "sales_invoice_series",
+  "section_break_be3ob",
   "items",
+  "additional_discount_section",
+  "apply_additional_discount_on",
+  "additional_discount_amount_company_currency",
+  "column_break_jda4l",
+  "additional_discount_percentage",
+  "additional_discount_amount",
   "linked_documents_tab",
   "purchase_order",
   "purchase_receipt",
@@ -122,6 +136,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "po_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -129,6 +144,7 @@
    "options": "Purchase Order"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pr_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -136,6 +152,7 @@
    "options": "Purchase Receipt"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "pi_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -143,6 +160,7 @@
    "options": "Purchase Invoice"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "so_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -150,6 +168,7 @@
    "options": "Sales Order"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "dn_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -157,6 +176,7 @@
    "options": "Delivery Note"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "si_link",
    "fieldtype": "Link",
    "hidden": 1,
@@ -174,51 +194,114 @@
    "search_index": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Lexer Import Log",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
+   "fieldname": "naming_column_break_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "purchase_order_series",
+   "fieldtype": "Select",
+   "label": "Purchase Order Series",
+   "options": "PUR-ORD-.YYYY.-\nPUR-ORD-.2023.-\nPUR-ORD-.2025.-\nAFMM-PUR-ORD-.2025.-\nAFMM-PUR-ORD-.YYYY.-\nMDL-PUR-ORD-.YYYY.-\nWSDC-PUR-ORD-.YYYY.-\nAFMS-PUR-ORD-.YYYY.-\nANMS-PUR-ORD-.YYYY.-"
+  },
+  {
+   "fieldname": "purchase_receipt_series",
+   "fieldtype": "Select",
+   "label": "Purchase Receipt Series",
+   "options": "MAT-PRE-.YYYY.-\nMAT-PR-RET-.YYYY.-\nAFMM-MAT-PRE-.2025.-\nAFMM-MAT-PRE-.YYYY.-"
+  },
+  {
+   "fieldname": "purchase_invoice_series",
+   "fieldtype": "Select",
+   "label": "Purchase Invoice Series",
+   "options": "ACC-PINV-.YYYY.-\nWSDC-PINV-.YYYY.-\nAFMS-PINV-.YYYY.-\nAFMM-PINV-.2025.-\nAFMM-PINV-.YYYY.-\nANMS-PINV-.YYYY.-\nMDL-PINV-.YYYY.-\nACC-PINV-RET-.YYYY.-\nACC-PINV-.2021.-\nACC-PINV-.2022.-\nACC-PINV-.2023.-\nACC-PINV-.2024.-\nAFMS-PINV-RET-.YYYY.-\nWSDC-PINV-RET-.YYYY.-\nMDL-PINV-RET-.YYYY.-\nAFMM-PINV-RET-.YYYY.-\nANMS-PINV-RET-.YYYY.-"
+  },
+  {
+   "fieldname": "sales_order_series",
+   "fieldtype": "Select",
+   "label": "Sales Order Series",
+   "options": "SAL-ORD-.YYYY.-\nSAL-ORD-.2023.-\nAFMM-SAL-ORD-.2025.-\nAFMM-SAL-ORD-.YYYY.-"
+  },
+  {
+   "fieldname": "delivery_note_series",
+   "fieldtype": "Select",
+   "label": "Delivery Note Series",
+   "options": "MAT-DN-.YYYY.-\nMAT-DN-RET-.YYYY.-\nAFMM-MAT-DN-.2025.-\nAFMM-MAT-DN-.YYYY.-"
+  },
+  {
+   "fieldname": "sales_invoice_series",
+   "fieldtype": "Select",
+   "label": "Sales Invoice Series",
+   "options": "SINV-.YYYY.-\nSINV-RET-.YYYY.-\nSINV-.2023.-\nAFMM-SINV-.2025.-\nAFMM-SINV-.YYYY.-"
+  },
+  {
+   "fieldname": "section_break_be3ob",
+   "fieldtype": "Section Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "additional_discount_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Discount"
+  },
+  {
+   "default": "Grand Total",
+   "fieldname": "apply_additional_discount_on",
+   "fieldtype": "Select",
+   "label": "Apply Additional Discount On",
+   "options": "\nGrand Total\nNet Total"
+  },
+  {
+   "fieldname": "additional_discount_amount_company_currency",
+   "fieldtype": "Currency",
+   "label": "Additional Discount Amount (Company Currency)",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_jda4l",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "additional_discount_percentage",
+   "fieldtype": "Float",
+   "label": "Additional Discount Percentage"
+  },
+  {
+   "fieldname": "additional_discount_amount",
+   "fieldtype": "Currency",
+   "label": "Additional Discount Amount",
+   "options": "currency"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [
   {
-   "custom": 1,
    "link_doctype": "Purchase Invoice",
    "link_fieldname": "custom_lexer_link_in_pi"
   },
   {
-   "custom": 1,
    "link_doctype": "Purchase Order",
    "link_fieldname": "custom_lexer_doc"
   },
   {
-   "custom": 1,
    "link_doctype": "Purchase Receipt",
    "link_fieldname": "custom_lexer_link_pr"
   },
   {
-   "custom": 1,
    "link_doctype": "Sales Order",
    "link_fieldname": "custom_lexer_link_in_so"
   },
   {
-   "custom": 1,
    "link_doctype": "Delivery Note",
    "link_fieldname": "custom_lexer_link_in_dn"
   },
   {
-   "custom": 1,
    "link_doctype": "Sales Invoice",
    "link_fieldname": "custom_lexer_in_si"
   }
  ],
- "modified": "2025-12-12 18:23:50.501824",
+ "modified": "2026-02-25 17:21:17.047506",
  "modified_by": "Administrator",
  "module": "Alfarsi Erp Customisations",
  "name": "Lexer Import Log",
