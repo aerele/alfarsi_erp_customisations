@@ -93,38 +93,8 @@ def create_documents(docname):
 
         set_item_default(row.item_code, "AL FARSI MEDICAL MANUFACTURING", "default_warehouse", "Stores - AFMM")
 
-    rules = disable_enable_function(1)
-    try:
         duplicate_reference_docs_from_settings(doc)
-    finally:
-        disable_enable_function(0, rules)
 
-def disable_enable_function(value, rules=None):
-    if not rules:
-        rules = frappe.get_all(
-            "Document Naming Rule",
-            filters={
-                "document_type": ["in", ["Purchase Order", "Purchase Receipt", "Purchase Invoice", "Sales Order", "Delivery Note", "Sales Invoice"]]},
-            pluck="name"
-        )
-    for rule in rules:
-        frappe.db.set_value("Document Naming Rule", rule, "disabled", value)
-    return rules
-
-def apply_series(source_doc, new_document, series_field):
-    series = source_doc.get(series_field)
-    if series:
-        series = series.strip()
-        new_document.set("naming_series", series)
-        return series
-    return None
-
-def insert_with_series(source_doc, new_document, series_field):
-    series = apply_series(source_doc, new_document, series_field)
-    if series:
-        new_document.naming_series = series
-        new_document.name = None
-    return new_document.insert(ignore_permissions=True)
 
 def duplicate_reference_docs_from_settings(doc):
     settings = frappe.get_single("Lexer Import Settings")
@@ -139,7 +109,6 @@ def duplicate_reference_docs_from_settings(doc):
 
         new_po = frappe.copy_doc(orig_po)
         new_po.name = None
-        new_po.naming_series = None
         new_po.company = company
         new_po.items = []
         new_po.taxes = []
@@ -216,11 +185,8 @@ def duplicate_reference_docs_from_settings(doc):
         new_po.set_missing_values()
         new_po.calculate_taxes_and_totals()
         new_po.custom_lexer_doc = doc.name
-        insert_with_series(
-            doc,
-            new_po,
-            "purchase_order_series",
-            )
+        new_po.insert(ignore_permissions=True)
+        
         frappe.set_value("Lexer Import Log", doc.name, "po_link", new_po.name)
         new_po.submit()
 
@@ -258,12 +224,8 @@ def duplicate_reference_docs_from_settings(doc):
 
         pr.set_missing_values()
         pr.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            pr,
-            "purchase_receipt_series",
-            )
         pr.custom_lexer_link_pr = doc.name
+        pr.insert()
         frappe.set_value("Lexer Import Log", doc.name, "pr_link", pr.name)
         pr.submit()
 
@@ -314,13 +276,8 @@ def duplicate_reference_docs_from_settings(doc):
 
         pi.set_missing_values()
         pi.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            pi,
-            "purchase_invoice_series",
-            )
         pi.custom_lexer_link_in_pi = doc.name
-        pi.save()
+        pi.insert()
         frappe.set_value("Lexer Import Log", doc.name, "pi_link", pi.name)
 
     if reference_sales_order:
@@ -369,13 +326,8 @@ def duplicate_reference_docs_from_settings(doc):
         new_so.calculate_taxes_and_totals()
 
         new_so.ignore_lexer_validation = 1
-        insert_with_series(
-            doc,
-            new_so,
-            "sales_order_series",
-            )
         new_so.custom_lexer_link_in_so = doc.name
-        new_so.save()
+        new_so.insert(ignore_permissions=True)
 
         frappe.set_value("Lexer Import Log", doc.name, "so_link", new_so.name)
         new_so.submit()
@@ -412,13 +364,8 @@ def duplicate_reference_docs_from_settings(doc):
 
         dn.set_missing_values()
         dn.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            dn,
-            "delivery_note_series",
-            )
         dn.custom_lexer_link_in_dn = doc.name
-        dn.save()
+        dn.insert()
 
         frappe.set_value("Lexer Import Log", doc.name, "dn_link", dn.name)
         dn.submit()
@@ -452,13 +399,8 @@ def duplicate_reference_docs_from_settings(doc):
 
         si.set_missing_values()
         si.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            si,
-            "sales_invoice_series",
-            )
         si.custom_lexer_in_si = doc.name
-        si.save()
+        si.insert()
 
         frappe.set_value("Lexer Import Log", doc.name, "si_link", si.name)
         frappe.msgprint("All Documents Created Successfully!!")
