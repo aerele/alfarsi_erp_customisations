@@ -102,7 +102,8 @@ jinja = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip"
+	"Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
+    "Document Naming Rule": "alfarsi_erp_customisations.overrides.document_naming.CustomDocumentNamingRule",
 }
 
 # Document Events
@@ -120,7 +121,25 @@ override_doctype_class = {
 doc_events = {
 	"Leave Application": {
 		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
-	}
+	},
+    "Purchase Order": {
+        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+    "Purchase Receipt": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Purchase Invoice": {
+        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Sales Order": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Delivery Note": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Sales Invoice": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
 }
 
 # Scheduled Tasks
