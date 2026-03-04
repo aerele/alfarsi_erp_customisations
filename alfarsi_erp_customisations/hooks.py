@@ -1,4 +1,4 @@
-from . import __version__ as app_version
+from . import __version__ as app_version  # noqa: F401
 
 app_name = "alfarsi_erp_customisations"
 app_title = "Alfarsi Erp Customisations"
@@ -30,10 +30,10 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {
-				"Delivery Note": "public/js/delivery_note.js",
-                "Quotation": "public/js/quotation.js",
-                "Purchase Order": "public/js/purchase_order.js"
-			}
+    "Delivery Note": "public/js/delivery_note.js",
+    "Quotation": "public/js/quotation.js",
+    "Purchase Order": "public/js/purchase_order.js",
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -46,7 +46,7 @@ doctype_js = {
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# "Role": "home_page"
 # }
 
 # Generators
@@ -60,12 +60,10 @@ doctype_js = {
 
 # add methods and filters to jinja environment
 # jinja = {
-#	"methods": "alfarsi_erp_customisations.utils.jinja_methods",
-#	"filters": "alfarsi_erp_customisations.utils.jinja_filters"
+# "methods": "alfarsi_erp_customisations.utils.jinja_methods",
+# "filters": "alfarsi_erp_customisations.utils.jinja_filters"
 # }
-jinja = {
-	"methods": "erpnext.accounts.party.get_dashboard_info"
-}
+jinja = {"methods": "erpnext.accounts.party.get_dashboard_info"}
 
 # Installation
 # ------------
@@ -90,11 +88,11 @@ jinja = {
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+# "Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-#	"Event": "frappe.desk.doctype.event.event.has_permission",
+# "Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # DocType Class
@@ -102,7 +100,7 @@ jinja = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
+    "Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
     "Document Naming Rule": "alfarsi_erp_customisations.overrides.document_naming.CustomDocumentNamingRule",
 }
 
@@ -111,44 +109,39 @@ override_doctype_class = {
 # Hook on document methods and events
 
 # doc_events = {
-#	"*": {
-#		"on_update": "method",
-#		"on_cancel": "method",
-#		"on_trash": "method"
-#	}
+# "*": {
+# "on_update": "method",
+# "on_cancel": "method",
+# "on_trash": "method"
+# }
 # }
 
 doc_events = {
-	"Leave Application": {
-		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
-	},
-<<<<<<< HEAD
+    "Leave Application": {
+        "on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
+    },
     "Purchase Order": {
         "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-	},
+    },
     "Purchase Receipt": {
-		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-	},
-	"Purchase Invoice": {
         "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-	},
-	"Sales Order": {
-		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-	},
-	"Delivery Note": {
-		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-	},
-	"Sales Invoice": {
-		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-	},
-=======
+    },
+    "Purchase Invoice": {
+        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+    },
+    "Delivery Note": {
+        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+    },
+    "Sales Invoice": {
+        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+    },
     "Sales Order": {
+        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname",
         "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.credit_sales_order.validate",
-	},
+    },
     "Customer": {
         "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_permission.validate",
-        }
->>>>>>> cab32476771baa4221f0e96de939ff03ca851185
+    },
 }
 
 # Scheduled Tasks
@@ -156,34 +149,34 @@ doc_events = {
 
 scheduler_events = {
     "daily": [
-		"alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"
-	],
-	"cron": {
+        "alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"
+    ],
+    "cron": {
         "0 8 * * SAT": [
             "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
-		],
+        ],
         "0 20 * * *": [
-			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
-		]
-	},
+            "alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
+        ],
+    },
 }
 
 # scheduler_events = {
-#	"all": [
-#		"alfarsi_erp_customisations.tasks.all"
-#	],
-#	"daily": [
-#		"alfarsi_erp_customisations.tasks.daily"
-#	],
-#	"hourly": [
-#		"alfarsi_erp_customisations.tasks.hourly"
-#	],
-#	"weekly": [
-#		"alfarsi_erp_customisations.tasks.weekly"
-#	],
-#	"monthly": [
-#		"alfarsi_erp_customisations.tasks.monthly"
-#	],
+# "all": [
+# "alfarsi_erp_customisations.tasks.all"
+# ],
+# "daily": [
+# "alfarsi_erp_customisations.tasks.daily"
+# ],
+# "hourly": [
+# "alfarsi_erp_customisations.tasks.hourly"
+# ],
+# "weekly": [
+# "alfarsi_erp_customisations.tasks.weekly"
+# ],
+# "monthly": [
+# "alfarsi_erp_customisations.tasks.monthly"
+# ],
 # }
 
 # Testing
@@ -195,14 +188,14 @@ scheduler_events = {
 # ------------------------------
 #
 # override_whitelisted_methods = {
-#	"frappe.desk.doctype.event.event.get_events": "alfarsi_erp_customisations.event.get_events"
+# "frappe.desk.doctype.event.event.get_events": "alfarsi_erp_customisations.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-#	"Task": "alfarsi_erp_customisations.task.get_dashboard_data"
+# "Task": "alfarsi_erp_customisations.task.get_dashboard_data"
 # }
 
 # exempt linked doctypes from being automatically cancelled
@@ -214,29 +207,29 @@ scheduler_events = {
 # --------------------
 
 # user_data_fields = [
-#	{
-#		"doctype": "{doctype_1}",
-#		"filter_by": "{filter_by}",
-#		"redact_fields": ["{field_1}", "{field_2}"],
-#		"partial": 1,
-#	},
-#	{
-#		"doctype": "{doctype_2}",
-#		"filter_by": "{filter_by}",
-#		"partial": 1,
-#	},
-#	{
-#		"doctype": "{doctype_3}",
-#		"strict": False,
-#	},
-#	{
-#		"doctype": "{doctype_4}"
-#	}
+# {
+# "doctype": "{doctype_1}",
+# "filter_by": "{filter_by}",
+# "redact_fields": ["{field_1}", "{field_2}"],
+# "partial": 1,
+# },
+# {
+# "doctype": "{doctype_2}",
+# "filter_by": "{filter_by}",
+# "partial": 1,
+# },
+# {
+# "doctype": "{doctype_3}",
+# "strict": False,
+# },
+# {
+# "doctype": "{doctype_4}"
+# }
 # ]
 
 # Authentication and authorization
 # --------------------------------
 
 # auth_hooks = [
-#	"alfarsi_erp_customisations.auth.validate"
+# "alfarsi_erp_customisations.auth.validate"
 # ]
