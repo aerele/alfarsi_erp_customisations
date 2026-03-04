@@ -9,6 +9,7 @@ from erpnext.stock.doctype.item.item import set_item_default
 from frappe.model.document import Document
 from frappe.utils import getdate
 
+
 class LexerImportLog(Document):
     pass
 
@@ -26,7 +27,7 @@ def validate_items(docname):
             "Item",
             {
                 "item_name": ["like", "Trusta%"],
-                "description": ["like", f"%{part_number}%"]
+                "description": ["like", f"%{part_number}%"],
             },
             ["name", "item_name"],
             as_dict=True,
@@ -43,7 +44,7 @@ def validate_items(docname):
                 FROM `tabItem`
                 WHERE item_code LIKE '383%'
                 """,
-                as_list=True
+                as_list=True,
             )
 
             next_number = (last_code[0][0] or 0) + 1 if last_code else 1
@@ -65,14 +66,16 @@ def validate_items(docname):
                     "has_batch_no": 1,
                     "create_new_batch": 1,
                     "batch_number_series": "YYYY.#######",
-                    "brand": "Trusta"
+                    "brand": "Trusta",
                 }
             )
 
             row.item_code = new_item_code
             row.db_update()
             new_item.insert()
-            frappe.msgprint(f"New Item {new_item_code} created for part number {part_number}.")
+            frappe.msgprint(
+                f"New Item {new_item_code} created for part number {part_number}."
+            )
 
     doc.save()
     doc.reload()
@@ -85,46 +88,25 @@ def create_documents(docname):
 
     for row in doc.items:
         if not frappe.db.exists("Item", row.item_code):
-            frappe.throw(f"Item {row.item_name} not found. Please validate the items first.")
+            frappe.throw(
+                f"Item {row.item_name} not found. Please validate the items first."
+            )
 
         item_doc = frappe.get_doc("Item", row.item_code)
         if item_doc.get("workflow_state") and item_doc.workflow_state != "Approved":
-            frappe.throw("Some items are not approved. Please approve them before continuing.")
+            frappe.throw(
+                "Some items are not approved. Please approve them before continuing."
+            )
 
-        set_item_default(row.item_code, "AL FARSI MEDICAL MANUFACTURING", "default_warehouse", "Stores - AFMM")
-
-    rules = disable_enable_function(1)
-    try:
-        duplicate_reference_docs_from_settings(doc)
-    finally:
-        disable_enable_function(0, rules)
-
-def disable_enable_function(value, rules=None):
-    if not rules:
-        rules = frappe.get_all(
-            "Document Naming Rule",
-            filters={
-                "document_type": ["in", ["Purchase Order", "Purchase Receipt", "Purchase Invoice", "Sales Order", "Delivery Note", "Sales Invoice"]]},
-            pluck="name"
+        set_item_default(
+            row.item_code,
+            "AL FARSI MEDICAL MANUFACTURING",
+            "default_warehouse",
+            "Stores - AFMM",
         )
-    for rule in rules:
-        frappe.db.set_value("Document Naming Rule", rule, "disabled", value)
-    return rules
 
-def apply_series(source_doc, new_document, series_field):
-    series = source_doc.get(series_field)
-    if series:
-        series = series.strip()
-        new_document.set("naming_series", series)
-        return series
-    return None
+        duplicate_reference_docs_from_settings(doc)
 
-def insert_with_series(source_doc, new_document, series_field):
-    series = apply_series(source_doc, new_document, series_field)
-    if series:
-        new_document.naming_series = series
-        new_document.name = None
-    return new_document.insert(ignore_permissions=True)
 
 def duplicate_reference_docs_from_settings(doc):
     settings = frappe.get_single("Lexer Import Settings")
@@ -139,7 +121,6 @@ def duplicate_reference_docs_from_settings(doc):
 
         new_po = frappe.copy_doc(orig_po)
         new_po.name = None
-        new_po.naming_series = None
         new_po.company = company
         new_po.items = []
         new_po.taxes = []
@@ -186,7 +167,7 @@ def duplicate_reference_docs_from_settings(doc):
                     {
                         "supplier": new_po.supplier,
                         "supplier_part_no": f"ANE - {row.part_number}",
-                    }
+                    },
                 )
             supplier_item.save()
 
@@ -194,13 +175,16 @@ def duplicate_reference_docs_from_settings(doc):
         new_po.schedule_date = getdate(doc.get("purchase_date"))
         new_po.payment_schedule = []
 
-        new_po.append("taxes", {
-            "charge_type": "Actual",
-            "account_head": "Freight Inward - AFMM",
-            "cost_center": frappe.db.get_value("Company", company, "cost_center"),
-            "description": "Freight Charges",
-            "tax_amount": doc.purchase_tax_amount or 0
-        })
+        new_po.append(
+            "taxes",
+            {
+                "charge_type": "Actual",
+                "account_head": "Freight Inward - AFMM",
+                "cost_center": frappe.db.get_value("Company", company, "cost_center"),
+                "description": "Freight Charges",
+                "tax_amount": doc.purchase_tax_amount or 0,
+            },
+        )
         if doc.get("apply_additional_discount_on"):
             new_po.apply_discount_on = doc.apply_additional_discount_on
 
@@ -211,16 +195,12 @@ def duplicate_reference_docs_from_settings(doc):
         elif doc.get("additional_discount_amount"):
             new_po.discount_amount = doc.additional_discount_amount
             new_po.additional_discount_percentage = 0
-        
 
         new_po.set_missing_values()
         new_po.calculate_taxes_and_totals()
         new_po.custom_lexer_doc = doc.name
-        insert_with_series(
-            doc,
-            new_po,
-            "purchase_order_series",
-            )
+        new_po.insert(ignore_permissions=True)
+
         frappe.set_value("Lexer Import Log", doc.name, "po_link", new_po.name)
         new_po.submit()
 
@@ -248,22 +228,22 @@ def duplicate_reference_docs_from_settings(doc):
                 "items": pr_items,
             }
         )
-        pr.append("taxes", {
-            "charge_type": "Actual",
-            "account_head": "Freight Inward - AFMM",
-            "cost_center": pr.cost_center or frappe.db.get_value("Company", pr.company, "cost_center"),
-            "description": "Freight Charges",
-            "tax_amount": doc.purchase_tax_amount 
-        })
+        pr.append(
+            "taxes",
+            {
+                "charge_type": "Actual",
+                "account_head": "Freight Inward - AFMM",
+                "cost_center": pr.cost_center
+                or frappe.db.get_value("Company", pr.company, "cost_center"),
+                "description": "Freight Charges",
+                "tax_amount": doc.purchase_tax_amount,
+            },
+        )
 
         pr.set_missing_values()
         pr.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            pr,
-            "purchase_receipt_series",
-            )
         pr.custom_lexer_link_pr = doc.name
+        pr.insert()
         frappe.set_value("Lexer Import Log", doc.name, "pr_link", pr.name)
         pr.submit()
 
@@ -285,7 +265,9 @@ def duplicate_reference_docs_from_settings(doc):
             )
 
         cost_center = frappe.db.get_value("Company", company, "cost_center")
-        custom_purchase_invoice_type = new_po.get("custom_purchase_invoice_type") or "Import Purchase - Supplier"
+        custom_purchase_invoice_type = (
+            new_po.get("custom_purchase_invoice_type") or "Import Purchase - Supplier"
+        )
 
         pi = frappe.get_doc(
             {
@@ -304,23 +286,21 @@ def duplicate_reference_docs_from_settings(doc):
             }
         )
 
-        pi.append("taxes", {
-            "charge_type": "Actual",
-            "account_head": "Freight Inward - AFMM",
-            "cost_center": cost_center,
-            "description": "Freight Charges",
-            "tax_amount": doc.purchase_tax_amount or 0
-        })
+        pi.append(
+            "taxes",
+            {
+                "charge_type": "Actual",
+                "account_head": "Freight Inward - AFMM",
+                "cost_center": cost_center,
+                "description": "Freight Charges",
+                "tax_amount": doc.purchase_tax_amount or 0,
+            },
+        )
 
         pi.set_missing_values()
         pi.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            pi,
-            "purchase_invoice_series",
-            )
         pi.custom_lexer_link_in_pi = doc.name
-        pi.save()
+        pi.insert()
         frappe.set_value("Lexer Import Log", doc.name, "pi_link", pi.name)
 
     if reference_sales_order:
@@ -369,13 +349,8 @@ def duplicate_reference_docs_from_settings(doc):
         new_so.calculate_taxes_and_totals()
 
         new_so.ignore_lexer_validation = 1
-        insert_with_series(
-            doc,
-            new_so,
-            "sales_order_series",
-            )
         new_so.custom_lexer_link_in_so = doc.name
-        new_so.save()
+        new_so.insert(ignore_permissions=True)
 
         frappe.set_value("Lexer Import Log", doc.name, "so_link", new_so.name)
         new_so.submit()
@@ -383,7 +358,9 @@ def duplicate_reference_docs_from_settings(doc):
         dn_items = []
 
         for item in new_so.items:
-            matched = next((i for i in new_so.items if i.item_code == item.item_code), None)
+            matched = next(
+                (i for i in new_so.items if i.item_code == item.item_code), None
+            )
 
             dn_items.append(
                 {
@@ -394,7 +371,9 @@ def duplicate_reference_docs_from_settings(doc):
                     "sales_order": new_so.name,
                     "so_detail": matched.name,
                     "against_sales_order": new_so.name,
-                    "expiry_date": frappe.db.get_value("Item", item.item_code, "end_of_life"),
+                    "expiry_date": frappe.db.get_value(
+                        "Item", item.item_code, "end_of_life"
+                    ),
                 }
             )
 
@@ -412,13 +391,8 @@ def duplicate_reference_docs_from_settings(doc):
 
         dn.set_missing_values()
         dn.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            dn,
-            "delivery_note_series",
-            )
         dn.custom_lexer_link_in_dn = doc.name
-        dn.save()
+        dn.insert()
 
         frappe.set_value("Lexer Import Log", doc.name, "dn_link", dn.name)
         dn.submit()
@@ -452,13 +426,8 @@ def duplicate_reference_docs_from_settings(doc):
 
         si.set_missing_values()
         si.calculate_taxes_and_totals()
-        insert_with_series(
-            doc,
-            si,
-            "sales_invoice_series",
-            )
         si.custom_lexer_in_si = doc.name
-        si.save()
+        si.insert()
 
         frappe.set_value("Lexer Import Log", doc.name, "si_link", si.name)
         frappe.msgprint("All Documents Created Successfully!!")
