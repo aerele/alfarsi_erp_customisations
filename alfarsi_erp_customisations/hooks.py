@@ -122,6 +122,7 @@ doc_events = {
 	"Leave Application": {
 		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
 	},
+<<<<<<< HEAD
     "Purchase Order": {
         "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
 	},
@@ -140,6 +141,14 @@ doc_events = {
 	"Sales Invoice": {
 		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
 	},
+=======
+    "Sales Order": {
+        "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.credit_sales_order.validate",
+	},
+    "Customer": {
+        "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_permission.validate",
+        }
+>>>>>>> cab32476771baa4221f0e96de939ff03ca851185
 }
 
 # Scheduled Tasks
