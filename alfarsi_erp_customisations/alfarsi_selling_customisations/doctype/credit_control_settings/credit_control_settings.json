@@ -11,9 +11,7 @@
   "default_credit_days",
   "default_credit_limit_tolerance",
   "default_credit_days_tolerance",
-  "default_approval_role",
-  "column_break_rai7f",
-  "enable"
+  "default_approval_role"
  ],
  "fields": [
   {
@@ -41,23 +39,12 @@
    "fieldname": "default_credit_days_tolerance",
    "fieldtype": "Int",
    "label": "Default Credit Days Tolerance"
-  },
-  {
-   "fieldname": "column_break_rai7f",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "description": "If enabled, the system will enforce credit limit and credit days validation during Sales Order processing.",
-   "fieldname": "enable",
-   "fieldtype": "Check",
-   "label": "Enable"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-05 13:52:18.375860",
+ "modified": "2026-02-18 21:25:34.328985",
  "modified_by": "Administrator",
  "module": "Alfarsi Selling Customisations",
  "name": "Credit Control Settings",
