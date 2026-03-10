@@ -13,7 +13,8 @@
   "default_credit_days_tolerance",
   "default_approval_role",
   "column_break_rai7f",
-  "enable"
+  "enable",
+  "customers"
  ],
  "fields": [
   {
@@ -52,12 +53,19 @@
    "fieldname": "enable",
    "fieldtype": "Check",
    "label": "Enable"
+  },
+  {
+   "description": "Specify customers to be excluded from credit control validation.",
+   "fieldname": "customers",
+   "fieldtype": "Table MultiSelect",
+   "label": "Customers",
+   "options": "Credit Control Customer"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-05 13:52:18.375860",
+ "modified": "2026-03-10 14:13:11.732147",
  "modified_by": "Administrator",
  "module": "Alfarsi Selling Customisations",
  "name": "Credit Control Settings",
