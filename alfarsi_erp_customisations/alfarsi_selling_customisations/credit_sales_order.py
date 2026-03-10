@@ -3,8 +3,13 @@ from frappe.utils import getdate, nowdate
 
 
 def validate(doc, method):
-    if frappe.db.get_single_value("Credit Control Settings", "enable"):
-        SellingCreditControl(doc).validate()
+    settings = frappe.get_single("Credit Control Settings")
+    if not settings.enable:
+        return
+    selected_customers = [row.customers for row in settings.customers]
+    if selected_customers and doc.customer in selected_customers:
+        return
+    SellingCreditControl(doc).validate()
 
 
 class SellingCreditControl:
