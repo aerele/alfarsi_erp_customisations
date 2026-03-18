@@ -1,5 +1,6 @@
 frappe.ui.form.on("Purchase Order", {
     refresh: function(frm) {
+
         if (frm.doc.docstatus === 0) {
             frm.add_custom_button(__('Sales Order'), function() {
 
@@ -84,7 +85,6 @@ frappe.ui.form.on("Purchase Order", {
                             child.uom = row.uom;
                         });
 
-                        // Remove empty rows
                         frm.doc.items = frm.doc.items.filter(item => item.item_code);
 
                         frm.refresh_field("items");
@@ -93,7 +93,6 @@ frappe.ui.form.on("Purchase Order", {
                 });
 
                 d.show();
-
                 fetch_sales_order_items(frm, d);
 
                 function fetch_sales_order_items(frm, dialog) {
@@ -130,5 +129,132 @@ frappe.ui.form.on("Purchase Order", {
 
             }, __('Get Items From'));
         }
-    }
-});
+
+        frm.add_custom_button(__('Validate'), function () {
+            let item_missing = [];
+            let po_missing = [];
+            let promises = [];
+
+            if (!frm.doc.items || frm.doc.items.length === 0) {
+                item_missing.push("No items found in Purchase Order");
+            } else {
+
+                frm.doc.items.forEach((row, index) => {
+
+                    if (!row.item_code) return;
+
+                    let p = frappe.call({
+                        method: "frappe.client.get",
+                        args: {
+                            doctype: "Item",
+                            name: row.item_code
+                        }
+                    }).then(r => {
+
+                        let item = r.message;
+                        let row_missing = [];
+
+                        if (!item.custom_medical_device_model) {
+                            row_missing.push("Medical Device Model");
+                        }
+
+                        if (!item.custom_medical_device_classification) {
+                            row_missing.push("Medical Device Classification");
+                        }
+
+                        if (!item.custom_medical_device_category) {
+                            row_missing.push("Medical Device Category");
+                        }
+
+                        if (!item.customs_tariff_number) {
+                            row_missing.push("HS Code");
+                        }
+
+                        if (row_missing.length > 0) {
+                            item_missing.push(
+                                `<b>Item Row ${index + 1} (${row.item_code})</b><br> - ` +
+                                row_missing.join("<br> - ")
+                            );
+                        }
+
+                    });
+
+                    promises.push(p);
+                });
+            }
+
+            Promise.all(promises).then(() => {
+
+                if (!frm.doc.custom_port_of_entry)
+                    po_missing.push("Port of Entry");
+
+                if (!frm.doc.custom_invoice_number)
+                    po_missing.push("Invoice Number");
+
+                if (!frm.doc.custom_sample_doc)
+                    po_missing.push("Airway Bill / Bill of Lading");
+
+                if (!frm.doc.custom_coo)
+                    po_missing.push("Certificate of Origin");
+
+                if (!frm.doc.custom_mdc_invoice)
+                    po_missing.push("Medical Device Clearance Invoice");
+
+                if (!frm.doc.custom_packing_list)
+                    po_missing.push("Packing List");
+
+                if (item_missing.length === 0 && po_missing.length === 0) {
+
+                    frappe.msgprint({
+                        title: __('Validation Successful'),
+                        message: __('All required MOH fields are filled.'),
+                        indicator: 'green'
+                    });
+
+                    return;
+                }
+
+                let message = "";
+
+                if (item_missing.length > 0) {
+                    message += `<h4 style="color:red;">Missing Item Requirements</h4>`;
+                    message += item_missing.join("<br><br>");
+                    message += "<br><br>";
+                }
+
+                if (po_missing.length > 0) {
+                    message += `<h4 style="color:red;">Missing Purchase Order Requirements</h4>`;
+                    message += " - " + po_missing.join("<br> - ");
+                }
+
+                frappe.msgprint({
+                    title: __('MOH Validation Report'),
+                    message: message,
+                    indicator: 'red',
+                    wide: true
+                });
+
+            });
+
+        }, __('MOH'));
+
+
+        frm.add_custom_button(__('Go To MOH Automation'), function () {
+            frappe.new_doc('MOH Automation', {
+                source_purchase_order: frm.doc.name
+            });
+        }, __('MOH'));
+
+
+        frm.add_custom_button(__('Go To MOH Clearance'), function () {
+            frappe.call({
+                method: 'alfarsi_erp_customisations.alfarsi_erp_customisations.doctype.moh_automation.moh_automation.trigger_po',
+                args: { po: frm.doc.name }
+            });
+        }, __('MOH'));
+        
+    }  
+});  
+
+        
+
