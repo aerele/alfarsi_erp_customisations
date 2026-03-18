@@ -147,6 +147,12 @@ doc_events = {
     "Sales Invoice": {
         "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
     },
+    "Expense Claim": {
+        "validate": "alfarsi_erp_customisations.alfarsi_erp_customisations.expense_claim_validation.validate_expense_claim_accounts",
+    },
+    "GL Entry": {
+        "validate": "alfarsi_erp_customisations.alfarsi_erp_customisations.gl_validation.restrict_expense_accounts"
+    },
 }
 
 # Scheduled Tasks
