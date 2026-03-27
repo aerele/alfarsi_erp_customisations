@@ -1,4 +1,4 @@
-from . import __version__ as app_version  # noqa: F401
+from . import __version__ as app_version
 
 app_name = "alfarsi_erp_customisations"
 app_title = "Alfarsi Erp Customisations"
@@ -105,8 +105,8 @@ jinja = {"methods": "erpnext.accounts.party.get_dashboard_info"}
 # Override standard doctype classes
 
 override_doctype_class = {
-    "Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
-    "Document Naming Rule": "alfarsi_erp_customisations.overrides.document_naming.CustomDocumentNamingRule",
+	"Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
+	"Document Naming Rule": "alfarsi_erp_customisations.overrides.document_naming.CustomDocumentNamingRule",
 }
 
 # Document Events
@@ -127,6 +127,7 @@ doc_events = {
     },
     "Customer": {
         "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_permission.validate",
+        "on_update": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_hooks.customer_on_update",
     },
     "Purchase Order": {
         "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
