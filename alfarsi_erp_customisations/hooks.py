@@ -1,4 +1,4 @@
-from . import __version__ as app_version  # noqa: F401
+from . import __version__ as app_version
 
 app_name = "alfarsi_erp_customisations"
 app_title = "Alfarsi Erp Customisations"
@@ -30,9 +30,9 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {
-    "Delivery Note": "public/js/delivery_note.js",
-    "Quotation": "public/js/quotation.js",
-    "Purchase Order": "public/js/purchase_order.js",
+	"Delivery Note": "public/js/delivery_note.js",
+	"Quotation": "public/js/quotation.js",
+	"Purchase Order": "public/js/purchase_order.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -100,8 +100,8 @@ jinja = {"methods": "erpnext.accounts.party.get_dashboard_info"}
 # Override standard doctype classes
 
 override_doctype_class = {
-    "Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
-    "Document Naming Rule": "alfarsi_erp_customisations.overrides.document_naming.CustomDocumentNamingRule",
+	"Packing Slip": "alfarsi_erp_customisations.overrides.packing_slip.CustomPackingSlip",
+	"Document Naming Rule": "alfarsi_erp_customisations.overrides.document_naming.CustomDocumentNamingRule",
 }
 
 # Document Events
@@ -117,48 +117,47 @@ override_doctype_class = {
 # }
 
 doc_events = {
-    "Leave Application": {
-        "on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
-    },
-    "Customer": {
-        "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_permission.validate",
-    },
-    "Purchase Order": {
-        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-    },
-    "Purchase Receipt": {
-        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-    },
-    "Purchase Invoice": {
-        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-    },
-    "Sales Order": {
-        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname",
-        "validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.credit_sales_order.validate",
-    },
-    "Delivery Note": {
-        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-    },
-    "Sales Invoice": {
-        "autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
-    },
+	"Leave Application": {
+		"on_update_after_submit": "alfarsi_erp_customisations.public.py.leave_application_mark_as_joined.mark_rejoined",
+	},
+	"Customer": {
+		"validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_permission.validate",
+		"on_update": "alfarsi_erp_customisations.alfarsi_selling_customisations.customer_hooks.customer_on_update",
+	},
+	"Purchase Order": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Purchase Receipt": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Purchase Invoice": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Sales Order": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname",
+		"validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.credit_sales_order.validate",
+	},
+	"Delivery Note": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
+	"Sales Invoice": {
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+	},
 }
 
 # Scheduled Tasks
 # ---------------
 
 scheduler_events = {
-    "daily": [
-        "alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"
-    ],
-    "cron": {
-        "0 8 * * SAT": [
-            "alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
-        ],
-        "0 20 * * *": [
-            "alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
-        ],
-    },
+	"daily": ["alfarsi_erp_customisations.public.py.brand_sellout_automail.send_scheduled_sellout_mails"],
+	"cron": {
+		"0 8 * * SAT": [
+			"alfarsi_erp_customisations.public.py.pending_sales_orders_notification.send_notification_email"
+		],
+		"0 20 * * *": [
+			"alfarsi_erp_customisations.public.py.daily_customer_visit_report_email.send_daily_customer_visit_reports"
+		],
+	},
 }
 
 # scheduler_events = {
