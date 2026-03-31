@@ -57,7 +57,7 @@
   {
    "description": "Specify customers to be excluded from credit control validation.",
    "fieldname": "customers",
-   "fieldtype": "Table MultiSelect",
+   "fieldtype": "Table",
    "label": "Customers",
    "options": "Credit Control Customer"
   }
@@ -65,7 +65,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-10 14:13:11.732147",
+ "modified": "2026-03-31 11:13:30.670801",
  "modified_by": "Administrator",
  "module": "Alfarsi Selling Customisations",
  "name": "Credit Control Settings",
