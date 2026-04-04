@@ -13,6 +13,15 @@
 			"fieldtype": "Check",
 			"insert_after": "custom_within_tolerance_amount",
 			"module": "Alfarsi Selling Customisations"
+        },
+        {
+            "label": "Override Applied",
+			"fieldname": "custom_override_applied",
+			"fieldtype": "Check",
+			"default": 0,
+			"hidden": 1,
+			"insert_after": "custom_within_tolerance_days",
+			"module": "Alfarsi Selling Customisations"
         }
     ]
 }
