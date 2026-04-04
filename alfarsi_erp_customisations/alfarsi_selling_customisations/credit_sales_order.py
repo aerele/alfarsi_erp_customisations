@@ -6,21 +6,34 @@ def validate(doc, method):
 	settings = frappe.get_single("Credit Control Settings")
 	if not settings.enable:
 		return
-	for row in settings.customers:
-		if row.customers == doc.customer:
-			if row.exclude_from_credit_control:
-				return
-			if row.override_used < row.override_limit:
-				new_used = row.override_used + 1
+	if doc.is_new() and doc.custom_override_applied:
+		doc.custom_override_applied = 0
+	row = next((r for r in settings.customers if r.customers == doc.customer), None)
+	if not row:
+		SellingCreditControl(doc).validate()
+		return
+	if row.exclude_from_credit_control:
+		return
+	if doc.custom_override_applied:
+		return
+	try:
+		SellingCreditControl(doc).validate()
+	except frappe.ValidationError:
+		current_used = frappe.db.get_value(row.doctype, row.name, "override_used")
+		if current_used < row.override_limit:
+			if doc.is_new():
+				new_used = current_used + 1
 				frappe.db.set_value(row.doctype, row.name, "override_used", new_used)
+				doc.custom_override_applied = 1
 				remaining = row.override_limit - new_used
+				frappe.clear_messages()
 				frappe.msgprint(
 					f"Credit control skipped for {doc.customer}. "
 					f"Override used: {new_used} out of {row.override_limit}. "
 					f"Remaining overrides: {remaining}"
 				)
-				return
-	SellingCreditControl(doc).validate()
+			return
+		raise
 
 
 class SellingCreditControl:
@@ -243,8 +256,12 @@ class SellingCreditControl:
 		return
 
 	def reset_override_used(self):
-		settings = frappe.get_single("Credit Control Settings")
-
-		for row in settings.customers:
-			if row.customers == self.customer and row.override_used > 0:
-				frappe.db.set_value(row.doctype, row.name, "override_used", 0)
+		row = frappe.db.get_value(
+			"Credit Control Customer",
+			{"customers": self.customer, "override_used": (">", 0)},
+			["name"],
+			as_dict=True,
+		)
+		if not row:
+			return
+		frappe.db.set_value("Credit Control Customer", row.name, "override_used", 0)

@@ -20,3 +20,6 @@ class CreditControlSettings(Document):
 				frappe.throw(f"Override limit cannot be negative for {row.customers}")
 			if row.override_limit > 10:
 				frappe.throw(f"Override limit cannot exceed 10 for {row.customers}")
+
+			if row.override_used > row.override_limit:
+				frappe.throw(f"Override limit cannot be less than overrides already used for {row.customers}")
