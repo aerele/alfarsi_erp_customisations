@@ -20,6 +20,8 @@
 			"fieldtype": "Check",
 			"default": 0,
 			"hidden": 1,
+			"No Copy": 1,
+			"read_only": 1,
 			"insert_after": "custom_within_tolerance_days",
 			"module": "Alfarsi Selling Customisations"
         }

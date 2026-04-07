@@ -3,12 +3,15 @@ from frappe.utils import getdate, nowdate
 
 
 def validate(doc, method):
-	settings = frappe.get_single("Credit Control Settings")
-	if not settings.enable:
+	enable = frappe.db.get_single_value("Credit Control Settings", "enable")
+	if not enable:
 		return
-	if doc.is_new() and doc.custom_override_applied:
-		doc.custom_override_applied = 0
-	row = next((r for r in settings.customers if r.customers == doc.customer), None)
+	row = frappe.db.get_value(
+		"Credit Control Customer",
+		{"customers": doc.customer},
+		["name", "override_used", "override_limit", "exclude_from_credit_control"],
+		as_dict=True,
+	)
 	if not row:
 		SellingCreditControl(doc).validate()
 		return
@@ -19,11 +22,11 @@ def validate(doc, method):
 	try:
 		SellingCreditControl(doc).validate()
 	except frappe.ValidationError:
-		current_used = frappe.db.get_value(row.doctype, row.name, "override_used")
+		current_used = row.override_used
 		if current_used < row.override_limit:
 			if doc.is_new():
 				new_used = current_used + 1
-				frappe.db.set_value(row.doctype, row.name, "override_used", new_used)
+				frappe.db.set_value("Credit Control Customer", row.name, "override_used", new_used)
 				doc.custom_override_applied = 1
 				remaining = row.override_limit - new_used
 				frappe.clear_messages()
