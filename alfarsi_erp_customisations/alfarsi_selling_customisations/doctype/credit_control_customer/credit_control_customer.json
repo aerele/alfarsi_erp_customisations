@@ -6,7 +6,10 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "customers"
+  "customers",
+  "exclude_from_credit_control",
+  "override_limit",
+  "override_used"
  ],
  "fields": [
   {
@@ -14,12 +17,33 @@
    "fieldtype": "Link",
    "label": "Customers",
    "options": "Customer"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:!doc.exclude_from_credit_control",
+   "fieldname": "override_limit",
+   "fieldtype": "Int",
+   "label": "Override Limit"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:!doc.exclude_from_credit_control",
+   "fieldname": "override_used",
+   "fieldtype": "Int",
+   "label": "Override Used",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "exclude_from_credit_control",
+   "fieldtype": "Check",
+   "label": "Exclude from Credit Control"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-09 14:58:14.804704",
+ "modified": "2026-04-02 09:50:09.109268",
  "modified_by": "Administrator",
  "module": "Alfarsi Selling Customisations",
  "name": "Credit Control Customer",
