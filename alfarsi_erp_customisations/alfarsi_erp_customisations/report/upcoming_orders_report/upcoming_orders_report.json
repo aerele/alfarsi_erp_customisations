@@ -1,0 +1,66 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2026-04-21 23:46:12.962814",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Al Farsi Medical Supplies",
+ "modified": "2026-04-21 23:46:12.962814",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Upcoming orders report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Sales Order",
+ "report_name": "Upcoming orders report",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Maintenance User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Support Team"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Free Item Approval"
+  },
+  {
+   "role": "Sales Coordinator"
+  },
+  {
+   "role": "Sales person"
+  },
+  {
+   "role": "Chief Mentor"
+  },
+  {
+   "role": "Finance Manager"
+  }
+ ]
+}
