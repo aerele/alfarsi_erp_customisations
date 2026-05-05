@@ -41,7 +41,7 @@ frappe.query_reports["Medical Team Sales Report"] = {
 			fieldname: "based_on",
 			label: "Based On",
 			fieldtype: "Select",
-			options: "\nCustomer\nSales Person\nBrand",
+			options: "\nCustomer wise\nSales Person wise\nBrand Total wise\nBrand wise",
 			default: "Customer",
 			reqd: 1,
 			on_change: function (report) {
