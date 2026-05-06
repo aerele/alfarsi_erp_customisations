@@ -13,19 +13,19 @@ def execute(filters=None):
 def get_columns(filters):
 	based_on = filters.get("based_on")
 
-	if based_on == "Sales Person":
+	if based_on == "Sales Person wise":
 		return [
 			{"label": "Sales Person", "fieldname": "sales_person", "fieldtype": "Data", "width": 200},
 			{"label": "Total Sales", "fieldname": "total", "fieldtype": "Currency", "width": 150},
 		]
 
-	elif based_on == "Brand Total":
+	elif based_on == "Brand wise Total":
 		return [
 			{"label": "Brand", "fieldname": "brand", "fieldtype": "Data", "width": 200},
 			{"label": "Total Sales", "fieldname": "total", "fieldtype": "Currency", "width": 150},
 		]
 
-	elif based_on == "Brand":
+	elif based_on == "Brand wise":
 		return [
 			{"label": "Brand", "fieldname": "brand", "fieldtype": "Data", "width": 200},
 			{"label": "Month", "fieldname": "month", "fieldtype": "Data", "width": 150},
@@ -43,13 +43,13 @@ def get_columns(filters):
 def get_data(filters):
 	based_on = filters.get("based_on")
 
-	if based_on == "Sales Person":
+	if based_on == "Sales Person wise":
 		return get_sales_person_data(filters)
 
-	elif based_on == "Brand Total":
+	elif based_on == "Brand wise Total":
 		return get_brand_total_data(filters)
 
-	elif based_on == "Brand":
+	elif based_on == "Brand wise":
 		return get_brand_data(filters)
 
 	else:
