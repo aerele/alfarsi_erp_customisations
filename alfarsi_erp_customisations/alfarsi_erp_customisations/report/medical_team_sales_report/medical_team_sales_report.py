@@ -10,6 +10,20 @@ def execute(filters=None):
 	return columns, data
 
 
+@frappe.whitelist()
+def get_medical_sales_person_options():
+	return frappe.get_all(
+		"Sales Person",
+		filters={
+			"department": "Medical Department - AFMS",
+			"is_group": 0,
+			"enabled": 1,
+		},
+		pluck="name",
+		order_by="name asc",
+	)
+
+
 def get_columns(filters):
 	based_on = filters.get("based_on")
 
@@ -113,7 +127,7 @@ def get_sales_person_data(filters):
         ORDER BY
             sp.name
     """,
-		filters,
+		{**filters},
 		as_dict=True,
 	)
 
@@ -132,6 +146,13 @@ def get_brand_total_data(filters):
             si.docstatus = 1
             AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
             AND (%(company)s IS NULL OR si.company = %(company)s)
+            AND EXISTS (
+                SELECT 1
+                FROM `tabSales Team` st2
+                JOIN `tabSales Person` sp2 ON sp2.name = st2.sales_person
+                WHERE st2.parent = si.name
+                  AND sp2.department = 'Medical Department - AFMS'
+            )
         GROUP BY
             sii.brand
         ORDER BY
