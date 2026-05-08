@@ -6,6 +6,14 @@ def validate(doc, method):
 	enable = frappe.db.get_single_value("Credit Control Settings", "enable")
 	if not enable:
 		return
+	customer_group = frappe.db.get_value(
+		"Customer",
+		doc.customer,
+		"customer_group",
+	)
+	if customer_group == "Ecommerce Customer":
+		return
+
 	row = frappe.db.get_value(
 		"Credit Control Customer",
 		{"customers": doc.customer},
