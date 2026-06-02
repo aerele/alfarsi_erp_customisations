@@ -151,8 +151,6 @@ doc_events = {
 	},
 }
 
-fixtures = [{"dt": "DocType", "filters": [["name", "=", "Forwarder Quotation"]]}]
-
 # Scheduled Tasks
 # ---------------
 
