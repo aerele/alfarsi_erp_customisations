@@ -1,0 +1,42 @@
+{
+	"Customer": [
+		{
+			"label": "Credit Control Settings",
+			"fieldname": "credit_section",
+			"fieldtype": "Tab Break",
+			"insert_after": "custom_sales_person",
+			"module": "Alfarsi Selling Customisations"
+		},
+		{
+			"label": "Credit Limit",
+			"fieldname": "credit_limit",
+			"fieldtype": "Currency",
+			"insert_after": "credit_section",
+			"module": "Alfarsi Selling Customisations",
+			"min value": 0
+		},
+		{
+			"label": "Credit Days",
+			"fieldname": "credit_days",
+			"fieldtype": "Int",
+			"insert_after": "credit_limit",
+			"module": "Alfarsi Selling Customisations",
+			"min value": 0
+		},
+		{
+			"label": "Credit Limit Tolerance",
+			"fieldname": "credit_limit_tolerance",
+			"fieldtype": "Percent",
+			"insert_after": "credit_days",
+			"module": "Alfarsi Selling Customisations"
+		},
+		{
+			"label": "Approval Role",
+			"fieldname": "customer_approval_role",
+			"fieldtype": "Link",
+			"options": "Role",
+			"insert_after": "credit_limit_tolerance",
+			"module": "Alfarsi Selling Customisations"
+		}
+	]
+}

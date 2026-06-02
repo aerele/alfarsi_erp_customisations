@@ -1,0 +1,274 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-05-30 18:36:09",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "shipment",
+  "shipment_name",
+  "currency",
+  "dimensions",
+  "section_break_5nzlu",
+  "purchase_order",
+  "address",
+  "reference",
+  "invoice_value",
+  "hs_code",
+  "column_break_xcyjx",
+  "shipment_status",
+  "contact",
+  "date",
+  "amended_from",
+  "invoice_value_omr",
+  "return",
+  "final_confirmation_column",
+  "forwarder_confirmed",
+  "column_break_cghh1",
+  "forwarder_name",
+  "column_break_y9gpa",
+  "quote_confirmed",
+  "section_break_p3jrj",
+  "air_freight",
+  "column_break_v9sh8",
+  "courier",
+  "column_break_d50r6",
+  "sea_freight",
+  "section_break_6yhoe",
+  "contains_dg_goods",
+  "section_break_9mvnr",
+  "contains_temp_controlled_items"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "FWD-QTN-.#####"
+  },
+  {
+   "fetch_from": "purchase_order.supplier",
+   "fieldname": "shipment",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Shipment",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "shipment.supplier_name",
+   "fetch_if_empty": 1,
+   "fieldname": "shipment_name",
+   "fieldtype": "Data",
+   "label": "Shipment Name"
+  },
+  {
+   "fetch_from": "shipment.default_currency",
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "label": "Supplier Currency"
+  },
+  {
+   "fieldname": "dimensions",
+   "fieldtype": "Small Text",
+   "label": "Dimensions",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_5nzlu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order"
+  },
+  {
+   "fetch_from": "shipment.primary_address",
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Supplier Address"
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Reference"
+  },
+  {
+   "fetch_from": "purchase_order.grand_total",
+   "fieldname": "invoice_value",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Invoice Value",
+   "mandatory_depends_on": "eval:doc.return == \"0\""
+  },
+  {
+   "fieldname": "hs_code",
+   "fieldtype": "Small Text",
+   "label": "HS Code"
+  },
+  {
+   "fieldname": "column_break_xcyjx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "shipment_status",
+   "fieldtype": "Select",
+   "label": "Shipment Status",
+   "options": "\nQtn Requested\nIn Transit\nIn clearance\nDelivered"
+  },
+  {
+   "fetch_from": "shipment.mobile_no",
+   "fieldname": "contact",
+   "fieldtype": "Data",
+   "label": "Contact "
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Forwarder Quotation",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fetch_from": "purchase_order.base_grand_total",
+   "fieldname": "invoice_value_omr",
+   "fieldtype": "Data",
+   "label": "Invoice Value (OMR)",
+   "mandatory_depends_on": "eval:doc.return == \"0\""
+  },
+  {
+   "default": "0",
+   "fieldname": "return",
+   "fieldtype": "Check",
+   "label": "Return"
+  },
+  {
+   "fieldname": "final_confirmation_column",
+   "fieldtype": "Section Break",
+   "label": "Final Confirmation"
+  },
+  {
+   "fieldname": "forwarder_confirmed",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Forwarder Confirmed",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_cghh1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "forwarder_confirmed.supplier_name",
+   "fetch_if_empty": 1,
+   "fieldname": "forwarder_name",
+   "fieldtype": "Data",
+   "label": "Forwarder Name"
+  },
+  {
+   "fieldname": "column_break_y9gpa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quote_confirmed",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Quote Confirmed (Amount)"
+  },
+  {
+   "fieldname": "section_break_p3jrj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "air_freight",
+   "fieldtype": "Check",
+   "label": "Air Freight "
+  },
+  {
+   "fieldname": "column_break_v9sh8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "courier",
+   "fieldtype": "Check",
+   "label": "Courier"
+  },
+  {
+   "fieldname": "column_break_d50r6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "sea_freight",
+   "fieldtype": "Check",
+   "label": "Sea Freight"
+  },
+  {
+   "fieldname": "section_break_6yhoe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "contains_dg_goods",
+   "fieldtype": "Check",
+   "label": "Contains DG Goods"
+  },
+  {
+   "fieldname": "section_break_9mvnr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "contains_temp_controlled_items",
+   "fieldtype": "Check",
+   "label": "Contains Temp. Controlled Items"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Purchase Order",
+   "link_fieldname": "supplier"
+  }
+ ],
+ "modified": "2026-06-02 10:56:19.524592",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "Forwarder Quotation",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

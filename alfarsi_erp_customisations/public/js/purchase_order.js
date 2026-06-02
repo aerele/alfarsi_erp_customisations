@@ -1,6 +1,5 @@
 frappe.ui.form.on("Purchase Order", {
     refresh: function(frm) {
-
         if (frm.doc.docstatus === 0) {
             frm.add_custom_button(__('Sales Order'), function() {
 
