@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:source_purchase_order",
+ "creation": "2025-12-29 13:56:47.962060",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "supplier",
+  "manufacturer_name",
+  "manufacturer_country",
+  "medical_devices",
+  "source_purchase_order"
+ ],
+ "fields": [
+  {
+   "fetch_from": "supplier.supplier_name",
+   "fieldname": "manufacturer_name",
+   "fieldtype": "Data",
+   "label": "Manufacturer Name",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "supplier.country",
+   "fieldname": "manufacturer_country",
+   "fieldtype": "Data",
+   "label": "Manufacturer Country"
+  },
+  {
+   "fieldname": "source_purchase_order",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Source Purchase Order",
+   "options": "Purchase Order",
+   "unique": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "medical_devices",
+   "fieldtype": "Table",
+   "label": "Medical Devices",
+   "options": "MOH Automation Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-03 17:59:36.062586",
+ "modified_by": "Administrator",
+ "module": "Alfarsi Erp Customisations",
+ "name": "MOH Automation",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
