@@ -328,7 +328,10 @@ def duplicate_reference_docs_from_settings(doc):
 				{
 					"item_code": item_code,
 					"qty": row.qty,
+					# Pin price_list_rate so set_missing_values() can't re-price the line.
 					"rate": row.sales_rate,
+					"price_list_rate": row.sales_rate,
+					"discount_percentage": 0,
 					"warehouse": wh,
 				},
 			)
@@ -337,6 +340,7 @@ def duplicate_reference_docs_from_settings(doc):
 		new_so.transaction_date = getdate(doc.get("sale_date"))
 		new_so.delivery_date = getdate(doc.get("sale_date"))
 		new_so.payment_schedule = []
+		new_so.ignore_pricing_rule = 1
 
 		new_so.set_missing_values()
 		new_so.calculate_taxes_and_totals()
@@ -357,7 +361,10 @@ def duplicate_reference_docs_from_settings(doc):
 				{
 					"item_code": item.item_code,
 					"qty": item.qty,
+					# Pin price_list_rate to the SO rate (Maintain Same Rate check).
 					"rate": item.rate,
+					"price_list_rate": item.rate,
+					"discount_percentage": 0,
 					"warehouse": wh,
 					"sales_order": new_so.name,
 					"so_detail": matched.name,
@@ -374,6 +381,7 @@ def duplicate_reference_docs_from_settings(doc):
 				"currency": new_so.currency,
 				"set_posting_time": 1,
 				"posting_date": getdate(doc.get("sale_date")),
+				"ignore_pricing_rule": 1,
 				"items": dn_items,
 			}
 		)
@@ -393,7 +401,10 @@ def duplicate_reference_docs_from_settings(doc):
 				{
 					"item_code": item["item_code"],
 					"qty": item["qty"],
+					# Pin price_list_rate to the DN rate (Maintain Same Rate check).
 					"rate": item["rate"],
+					"price_list_rate": item["rate"],
+					"discount_percentage": 0,
 					"sales_order": new_so.name,
 					"delivery_note": dn.name,
 					"expiry_date": item["expiry_date"],
@@ -410,6 +421,7 @@ def duplicate_reference_docs_from_settings(doc):
 				"currency": new_so.currency,
 				"set_posting_time": 1,
 				"posting_date": getdate(doc.get("sale_date")),
+				"ignore_pricing_rule": 1,
 			}
 		)
 
