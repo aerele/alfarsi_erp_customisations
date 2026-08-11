@@ -129,7 +129,8 @@ doc_events = {
 		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
 	},
 	"Purchase Receipt": {
-		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
+		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname",
+		"on_submit": "alfarsi_erp_customisations.alfarsi_erp_customisations.batch_update.update_from_purchase_receipt",
 	},
 	"Purchase Invoice": {
 		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname"
