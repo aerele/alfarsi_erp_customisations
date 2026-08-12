@@ -35,20 +35,27 @@ frappe.query_reports["Medical Team Sales Report"] = {
 			fieldname: "based_on",
 			label: "Based On",
 			fieldtype: "Select",
-			options: "\nCustomer wise\nSales Person wise\nBrand wise Total\nBrand wise",
+			options: "\nCustomer wise\nSales Person wise\nBrand wise Total\nBrand wise\nItem Department wise",
 			default: "Customer wise",
 			reqd: 1,
 			on_change: function (report) {
 				toggle_sales_person_reqd(report);
+				toggle_tree_view(report);
 				report.refresh();
 			},
 		},
 	],
 	onload: function (report) {
 		toggle_sales_person_reqd(report);
+		toggle_tree_view(report);
 		load_medical_sales_person_options(report);
 	},
 };
+
+function toggle_tree_view(report) {
+	frappe.query_reports["Medical Team Sales Report"].tree =
+		report.get_filter_value("based_on") === "Item Department wise";
+}
 
 function toggle_sales_person_reqd(report) {
 	let based_on = report.get_filter_value("based_on");
