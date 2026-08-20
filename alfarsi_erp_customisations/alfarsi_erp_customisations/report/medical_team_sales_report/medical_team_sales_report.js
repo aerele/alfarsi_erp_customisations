@@ -53,8 +53,9 @@ frappe.query_reports["Medical Team Sales Report"] = {
 };
 
 function toggle_tree_view(report) {
-	frappe.query_reports["Medical Team Sales Report"].tree =
-		report.get_filter_value("based_on") === "Item Department wise";
+	let is_tree = report.get_filter_value("based_on") === "Item Department wise";
+	frappe.query_reports["Medical Team Sales Report"].tree = is_tree;
+	frappe.query_reports["Medical Team Sales Report"].parent_field = is_tree ? "parent" : undefined;
 }
 
 function toggle_sales_person_reqd(report) {
