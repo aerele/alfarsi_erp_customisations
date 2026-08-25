@@ -215,11 +215,11 @@ def get_item_department_data(filters):
             i.custom_item_department AS item_department,
             sp.name AS sales_person,
             ROUND(SUM(
-                sii.base_net_amount * (st.allocated_percentage / 100.0)
+                (st.allocated_amount / si.base_net_total) * sii.base_net_amount
             ), 3) AS sales_amount,
             ROUND(SUM(
                 CASE WHEN si.customer = 'C02279'
-                THEN sii.base_net_amount * (st.allocated_percentage / 100.0)
+                THEN (st.allocated_amount / si.base_net_total) * sii.base_net_amount
                 ELSE 0 END
             ), 3) AS customer_c02279_amount,
             MAX(CASE WHEN si.customer = 'C02279' THEN c.customer_name END) AS customer_c02279_name
@@ -239,6 +239,7 @@ def get_item_department_data(filters):
             si.docstatus = 1
             AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
             AND (%(company)s IS NULL OR si.company = %(company)s)
+            AND si.base_net_total != 0
             AND sp.department = 'Medical Department - AFMS'
         GROUP BY
             i.custom_item_department, sp.name
