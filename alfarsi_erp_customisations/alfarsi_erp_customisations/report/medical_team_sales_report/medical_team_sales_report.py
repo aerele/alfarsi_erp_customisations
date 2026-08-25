@@ -216,13 +216,21 @@ def get_item_department_data(filters):
             sp.name AS sales_person,
             ROUND(SUM(
                 (st.allocated_amount / si.base_net_total) * sii.base_net_amount
-            ), 3) AS sales_amount
+            ), 3) AS sales_amount,
+            ROUND(SUM(
+                CASE WHEN si.customer = 'C02279'
+                THEN (st.allocated_amount / si.base_net_total) * sii.base_net_amount
+                ELSE 0 END
+            ), 3) AS customer_c02279_amount,
+            MAX(CASE WHEN si.customer = 'C02279' THEN c.customer_name END) AS customer_c02279_name
         FROM
             `tabSales Invoice` si
         JOIN
             `tabSales Invoice Item` sii ON sii.parent = si.name
         JOIN
             `tabItem` i ON i.name = sii.item_code
+        JOIN
+            `tabCustomer` c ON c.name = si.customer
         JOIN
             `tabSales Team` st ON st.parent = si.name
         JOIN
@@ -231,10 +239,8 @@ def get_item_department_data(filters):
             si.docstatus = 1
             AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
             AND (%(company)s IS NULL OR si.company = %(company)s)
-            AND si.customer = 'C02279'
-            AND i.custom_item_department IN ('Medical Laboratory IVD', 'Pharma', 'Medicine', 'Special Import')
+            AND si.base_net_total != 0
             AND sp.department = 'Medical Department - AFMS'
-            AND si.base_net_total > 0
         GROUP BY
             i.custom_item_department, sp.name
         ORDER BY
@@ -250,30 +256,50 @@ def get_item_department_data(filters):
 		"Medicine": "Pharmacy",
 		"Special Import": "Special Import",
 	}
-	department_order = ["Medical Laboratory IVD", "Pharmacy", "Special Import"]
+	department_order = ["Medical Laboratory IVD", "Pharmacy", "Special Import", "Other Groups"]
 
 	grouped = {}
 	for row in rows:
-		label = department_label.get(row.item_department, row.item_department)
+		label = department_label.get(row.item_department, "Other Groups")
 		person = grouped.setdefault(row.sales_person, {})
-		person[label] = person.get(label, 0.0) + row.sales_amount
+		department = person.setdefault(
+			label,
+			{"sales_amount": 0.0, "customer_c02279_amount": 0.0, "customer_c02279_name": None},
+		)
+		department["sales_amount"] += row.sales_amount
+		department["customer_c02279_amount"] += row.customer_c02279_amount
+		if row.customer_c02279_name:
+			department["customer_c02279_name"] = row.customer_c02279_name
 
 	tree = []
-	for sales_person, dept_totals in grouped.items():
+	for sales_person, departments in grouped.items():
 		tree.append(
 			{
 				"category": sales_person,
-				"sales_amount": round(sum(dept_totals.values()), 3),
+				"sales_amount": round(sum(row["sales_amount"] for row in departments.values()), 3),
 				"indent": 0,
 			}
 		)
 		for label in department_order:
-			if label in dept_totals:
+			if label not in departments:
+				continue
+			department = departments[label]
+			tree.append(
+				{
+					"category": label,
+					"sales_amount": round(department["sales_amount"], 3),
+					"indent": 1,
+					"parent": sales_person,
+				}
+			)
+			if department["customer_c02279_amount"]:
+				customer_name = department["customer_c02279_name"] or "C02279"
 				tree.append(
 					{
-						"category": label,
-						"sales_amount": round(dept_totals[label], 3),
-						"indent": 1,
+						"category": f"C02279 - {customer_name}",
+						"sales_amount": round(department["customer_c02279_amount"], 3),
+						"indent": 2,
+						"parent": label,
 					}
 				)
 
