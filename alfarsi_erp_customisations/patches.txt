@@ -5,3 +5,4 @@ alfarsi_erp_customisations.alfarsi_selling_customisations.patches.create_roles_c
 alfarsi_erp_customisations.alfarsi_selling_customisations.patches.setup_credit_control_roles
 
 alfarsi_erp_customisations.alfarsi_selling_customisations.patches.backfill_loan_repayment_schedules # v14-to-v16 lending data migration
+alfarsi_erp_customisations.alfarsi_selling_customisations.patches.backfill_loan_products # v14-to-v16 loan product data migration
