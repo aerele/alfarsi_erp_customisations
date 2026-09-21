@@ -34,7 +34,7 @@ doctype_js = {
 	"Quotation": "public/js/quotation.js",
 	"Purchase Order": "public/js/purchase_order.js",
 	"Sales Order": "public/js/ecom_sales_order.js",
-    "MOH Automation": "public/js/moh_automation.js",
+	"MOH Automation": "public/js/moh_automation.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -146,9 +146,13 @@ doc_events = {
 	"Sales Invoice": {
 		"autoname": "alfarsi_erp_customisations.alfarsi_erp_customisations.lexer_naming.lexer_autoname",
 		"validate": "alfarsi_erp_customisations.alfarsi_selling_customisations.so_validation.block_unpaid_website_so",
+		"on_submit": "alfarsi_erp_customisations.alfarsi_erp_customisations.customer_document_email.queue_customer_document_email",
 	},
 	"Payment Entry": {
-		"on_submit": "alfarsi_erp_customisations.alfarsi_selling_customisations.unpaid_payment_entry.update_so_payment_status",
+		"on_submit": [
+			"alfarsi_erp_customisations.alfarsi_selling_customisations.unpaid_payment_entry.update_so_payment_status",
+			"alfarsi_erp_customisations.alfarsi_erp_customisations.customer_document_email.queue_customer_document_email",
+		],
 		"on_cancel": "alfarsi_erp_customisations.alfarsi_selling_customisations.unpaid_payment_entry.update_so_payment_status",
 	},
 }

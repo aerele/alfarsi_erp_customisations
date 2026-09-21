@@ -1,0 +1,125 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "pilot_mode",
+  "sender",
+  "documents_section",
+  "send_sales_invoices",
+  "invoice_email_template",
+  "invoice_print_format",
+  "document_column_break",
+  "send_payment_receipts",
+  "payment_receipt_email_template",
+  "payment_receipt_print_format",
+  "pilot_section",
+  "pilot_customers"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "default": "1",
+   "fieldname": "pilot_mode",
+   "fieldtype": "Check",
+   "label": "Pilot Mode",
+   "depends_on": "eval:doc.enabled"
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Link",
+   "label": "Sender Email Account",
+   "options": "Email Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "documents_section",
+   "fieldtype": "Section Break",
+   "label": "Document Configuration"
+  },
+  {
+   "default": "1",
+   "fieldname": "send_sales_invoices",
+   "fieldtype": "Check",
+   "label": "Send Sales Invoices"
+  },
+  {
+   "fieldname": "invoice_email_template",
+   "fieldtype": "Link",
+   "label": "Invoice Email Template",
+   "options": "Email Template"
+  },
+  {
+   "default": "Alfarsi Invoice Print",
+   "fieldname": "invoice_print_format",
+   "fieldtype": "Link",
+   "label": "Invoice Print Format",
+   "options": "Print Format"
+  },
+  {
+   "fieldname": "document_column_break",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "send_payment_receipts",
+   "fieldtype": "Check",
+   "label": "Send Payment Receipts"
+  },
+  {
+   "fieldname": "payment_receipt_email_template",
+   "fieldtype": "Link",
+   "label": "Payment Receipt Email Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "payment_receipt_print_format",
+   "fieldtype": "Link",
+   "label": "Payment Receipt Print Format",
+   "options": "Print Format"
+  },
+  {
+   "fieldname": "pilot_section",
+   "fieldtype": "Section Break",
+   "label": "Pilot Customers",
+   "depends_on": "eval:doc.enabled && doc.pilot_mode"
+  },
+  {
+   "fieldname": "pilot_customers",
+   "fieldtype": "Table",
+   "label": "Pilot Customers",
+   "options": "Customer Document Email Pilot Customer",
+   "depends_on": "eval:doc.enabled && doc.pilot_mode"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "module": "Alfarsi Erp Customisations",
+ "name": "Customer Document Email Settings",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
