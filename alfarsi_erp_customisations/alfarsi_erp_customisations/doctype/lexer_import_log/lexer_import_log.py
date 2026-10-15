@@ -5,6 +5,7 @@
 # For license information, please see license.txt
 
 import frappe
+from erpnext.stock.doctype.batch.batch import make_batch
 from erpnext.stock.doctype.item.item import set_item_default
 from frappe.model.document import Document
 from frappe.utils import getdate
@@ -92,6 +93,7 @@ def create_documents(docname):
 		if item_doc.get("workflow_state") and item_doc.workflow_state != "Approved":
 			frappe.throw("Some items are not approved. Please approve them before continuing.")
 
+		validate_item_tracking_for_lexer(item_doc)
 		set_item_default(
 			row.item_code,
 			"AL FARSI MEDICAL MANUFACTURING",
@@ -102,6 +104,58 @@ def create_documents(docname):
 	duplicate_reference_docs_from_settings(doc)
 
 
+def validate_item_tracking_for_lexer(item_doc):
+	if item_doc.has_serial_no:
+		frappe.throw(
+			f"Item {item_doc.name} uses Serial Numbers. "
+			"Lexer imports currently support batch-tracked items only."
+		)
+
+	if item_doc.has_batch_no:
+		if not item_doc.create_new_batch:
+			frappe.throw(
+				f"Item {item_doc.name} is batch-tracked but is not configured to create a new batch."
+			)
+
+		if not item_doc.batch_number_series and not frappe.get_single_value(
+			"Stock Settings", "naming_series_prefix"
+		):
+			frappe.throw(f"Item {item_doc.name} is batch-tracked but has no Batch Number Series.")
+
+
+def prepare_purchase_receipt_batches(purchase_receipt):
+	for item in purchase_receipt.items:
+		item_details = frappe.get_cached_value(
+			"Item", item.item_code, ["has_batch_no", "has_serial_no"], as_dict=True
+		)
+
+		if not item_details.has_batch_no:
+			continue
+
+		if item_details.has_serial_no:
+			frappe.throw(
+				f"Item {item.item_code} uses Serial Numbers. "
+				"Lexer imports currently support batch-tracked items only."
+			)
+
+		batch_no = make_batch(
+			frappe._dict(
+				{
+					"item": item.item_code,
+					"supplier": purchase_receipt.supplier,
+					"reference_doctype": purchase_receipt.doctype,
+					"reference_name": purchase_receipt.name,
+				}
+			)
+		)
+		if not batch_no:
+			frappe.throw(f"Could not create a Batch for Item {item.item_code}.")
+
+		item.db_set({"batch_no": batch_no, "use_serial_batch_fields": 1})
+		item.batch_no = batch_no
+		item.use_serial_batch_fields = 1
+
+
 def duplicate_reference_docs_from_settings(doc):
 	settings = frappe.get_single("Lexer Import Settings")
 	reference_purchase_order = settings.reference_purchase_order
@@ -109,6 +163,7 @@ def duplicate_reference_docs_from_settings(doc):
 
 	wh = "Stores - AFMM"
 	company = "AL FARSI MEDICAL MANUFACTURING"
+	inward_batch_by_row = {}
 
 	if reference_purchase_order:
 		orig_po = frappe.get_doc("Purchase Order", reference_purchase_order)
@@ -237,10 +292,13 @@ def duplicate_reference_docs_from_settings(doc):
 		pr.calculate_taxes_and_totals()
 		pr.custom_lexer_link_pr = doc.name
 		pr.insert()
+		prepare_purchase_receipt_batches(pr)
 		frappe.set_value("Lexer Import Log", doc.name, "pr_link", pr.name)
 		pr.submit()
+		pr.reload()
 
-		for pr_item in pr.items:
+		for row_index, pr_item in enumerate(pr.items):
+			inward_batch_by_row[row_index] = pr_item.batch_no
 			if pr_item.batch_no:
 				frappe.db.set_value("Batch", pr_item.batch_no, "batch_qty", pr_item.qty)
 
@@ -354,24 +412,24 @@ def duplicate_reference_docs_from_settings(doc):
 
 		dn_items = []
 
-		for item in new_so.items:
-			matched = next((i for i in new_so.items if i.item_code == item.item_code), None)
+		for row_index, item in enumerate(new_so.items):
+			dn_item = {
+				"item_code": item.item_code,
+				"qty": item.qty,
+				# Pin price_list_rate to the SO rate (Maintain Same Rate check).
+				"rate": item.rate,
+				"price_list_rate": item.rate,
+				"discount_percentage": 0,
+				"warehouse": wh,
+				"sales_order": new_so.name,
+				"so_detail": item.name,
+				"against_sales_order": new_so.name,
+				"expiry_date": frappe.db.get_value("Item", item.item_code, "end_of_life"),
+			}
+			if batch_no := inward_batch_by_row.get(row_index):
+				dn_item.update({"batch_no": batch_no, "use_serial_batch_fields": 1})
 
-			dn_items.append(
-				{
-					"item_code": item.item_code,
-					"qty": item.qty,
-					# Pin price_list_rate to the SO rate (Maintain Same Rate check).
-					"rate": item.rate,
-					"price_list_rate": item.rate,
-					"discount_percentage": 0,
-					"warehouse": wh,
-					"sales_order": new_so.name,
-					"so_detail": matched.name,
-					"against_sales_order": new_so.name,
-					"expiry_date": frappe.db.get_value("Item", item.item_code, "end_of_life"),
-				}
-			)
+			dn_items.append(dn_item)
 
 		dn = frappe.get_doc(
 			{
