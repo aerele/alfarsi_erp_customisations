@@ -27,7 +27,7 @@ def get_medical_sales_person_options():
 def get_columns(filters):
 	based_on = filters.get("based_on")
 
-	if based_on == "Item Department wise":
+	if based_on in ("Item Department wise", "Item Department by Sales Person"):
 		return [
 			{"label": "Category", "fieldname": "category", "fieldtype": "Data", "width": 300},
 			{"label": "Sales Amount", "fieldname": "sales_amount", "fieldtype": "Currency", "width": 150},
@@ -65,6 +65,8 @@ def get_data(filters):
 
 	if based_on == "Item Department wise":
 		return get_item_department_data(filters)
+	if based_on == "Item Department by Sales Person":
+		return get_department_sales_person_data(filters)
 
 	if based_on == "Sales Person wise":
 		return get_sales_person_data(filters)
@@ -209,46 +211,7 @@ def get_brand_data(filters):
 
 
 def get_item_department_data(filters):
-	rows = frappe.db.sql(
-		"""
-        SELECT
-            i.custom_item_department AS item_department,
-            sp.name AS sales_person,
-            ROUND(SUM(
-                (st.allocated_amount / si.base_net_total) * sii.base_net_amount
-            ), 3) AS sales_amount,
-            ROUND(SUM(
-                CASE WHEN si.customer = 'C02279'
-                THEN (st.allocated_amount / si.base_net_total) * sii.base_net_amount
-                ELSE 0 END
-            ), 3) AS customer_c02279_amount,
-            MAX(CASE WHEN si.customer = 'C02279' THEN c.customer_name END) AS customer_c02279_name
-        FROM
-            `tabSales Invoice` si
-        JOIN
-            `tabSales Invoice Item` sii ON sii.parent = si.name
-        JOIN
-            `tabItem` i ON i.name = sii.item_code
-        JOIN
-            `tabCustomer` c ON c.name = si.customer
-        JOIN
-            `tabSales Team` st ON st.parent = si.name
-        JOIN
-            `tabSales Person` sp ON sp.name = st.sales_person
-        WHERE
-            si.docstatus = 1
-            AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
-            AND (%(company)s IS NULL OR si.company = %(company)s)
-            AND si.base_net_total != 0
-            AND sp.department = 'Medical Department - AFMS'
-        GROUP BY
-            i.custom_item_department, sp.name
-        ORDER BY
-            sp.name, i.custom_item_department
-    """,
-		filters,
-		as_dict=True,
-	)
+	rows = get_item_department_sales_person_rows(filters)
 
 	department_label = {
 		"Medical Laboratory IVD": "Medical Laboratory IVD",
@@ -304,3 +267,106 @@ def get_item_department_data(filters):
 				)
 
 	return tree
+
+
+def get_department_sales_person_data(filters):
+	rows = get_item_department_sales_person_rows(filters)
+	department_label = {
+		"Medical Laboratory IVD": "Medical Laboratory IVD",
+		"Pharma": "Pharmacy",
+		"Medicine": "Pharmacy",
+		"Special Import": "Special Import",
+	}
+	department_order = ["Medical Laboratory IVD", "Pharmacy", "Special Import", "Other Groups"]
+
+	grouped = {}
+	for row in rows:
+		department = department_label.get(row.item_department, "Other Groups")
+		person = grouped.setdefault(
+			department,
+			{},
+		).setdefault(
+			row.sales_person,
+			{"sales_amount": 0.0, "customer_c02279_amount": 0.0, "customer_c02279_name": None},
+		)
+		person["sales_amount"] += row.sales_amount
+		person["customer_c02279_amount"] += row.customer_c02279_amount
+		if row.customer_c02279_name:
+			person["customer_c02279_name"] = row.customer_c02279_name
+
+	tree = []
+	for department in department_order:
+		people = grouped.get(department)
+		if not people:
+			continue
+		tree.append(
+			{
+				"category": department,
+				"sales_amount": round(sum(person["sales_amount"] for person in people.values()), 3),
+				"indent": 0,
+			}
+		)
+		for sales_person, person in sorted(people.items()):
+			tree.append(
+				{
+					"category": sales_person,
+					"sales_amount": round(person["sales_amount"], 3),
+					"indent": 1,
+					"parent": department,
+				}
+			)
+			if person["customer_c02279_amount"]:
+				customer_name = person["customer_c02279_name"] or "C02279"
+				tree.append(
+					{
+						"category": f"C02279 - {customer_name}",
+						"sales_amount": round(person["customer_c02279_amount"], 3),
+						"indent": 2,
+						"parent": sales_person,
+					}
+				)
+
+	return tree
+
+
+def get_item_department_sales_person_rows(filters):
+	return frappe.db.sql(
+		"""
+        SELECT
+            i.custom_item_department AS item_department,
+            sp.name AS sales_person,
+            ROUND(SUM(
+                (st.allocated_amount / si.base_net_total) * sii.base_net_amount
+            ), 3) AS sales_amount,
+            ROUND(SUM(
+                CASE WHEN si.customer = 'C02279'
+                THEN (st.allocated_amount / si.base_net_total) * sii.base_net_amount
+                ELSE 0 END
+            ), 3) AS customer_c02279_amount,
+            MAX(CASE WHEN si.customer = 'C02279' THEN c.customer_name END) AS customer_c02279_name
+        FROM
+            `tabSales Invoice` si
+        JOIN
+            `tabSales Invoice Item` sii ON sii.parent = si.name
+        JOIN
+            `tabItem` i ON i.name = sii.item_code
+        JOIN
+            `tabCustomer` c ON c.name = si.customer
+        JOIN
+            `tabSales Team` st ON st.parent = si.name
+        JOIN
+            `tabSales Person` sp ON sp.name = st.sales_person
+        WHERE
+            si.docstatus = 1
+            AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
+            AND (%(company)s IS NULL OR si.company = %(company)s)
+            AND si.base_net_total != 0
+            AND sp.department = 'Medical Department - AFMS'
+        GROUP BY
+            i.custom_item_department, sp.name
+        ORDER BY
+            sp.name, i.custom_item_department
+    """,
+		filters,
+		as_dict=True,
+	)
