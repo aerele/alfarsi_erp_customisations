@@ -35,7 +35,8 @@ frappe.query_reports["Medical Team Sales Report"] = {
 			fieldname: "based_on",
 			label: "Based On",
 			fieldtype: "Select",
-			options: "\nCustomer wise\nSales Person wise\nBrand wise Total\nBrand wise\nItem Department wise",
+			options:
+				"\nCustomer wise\nSales Person wise\nBrand wise Total\nBrand wise\nItem Department wise\nItem Department by Sales Person",
 			default: "Customer wise",
 			reqd: 1,
 			on_change: function (report) {
@@ -53,7 +54,8 @@ frappe.query_reports["Medical Team Sales Report"] = {
 };
 
 function toggle_tree_view(report) {
-	let is_tree = report.get_filter_value("based_on") === "Item Department wise";
+	let based_on = report.get_filter_value("based_on");
+	let is_tree = ["Item Department wise", "Item Department by Sales Person"].includes(based_on);
 	frappe.query_reports["Medical Team Sales Report"].tree = is_tree;
 	frappe.query_reports["Medical Team Sales Report"].parent_field = is_tree ? "parent" : undefined;
 }
